@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+    <!-- ROLE -->
+    <role id="1" role_name="ALUNO"/>
+    <role id="2" role_name="DEPARTAMENTO"/>
+
+    <!-- USUARIO -->
+    <usuario id="1" email="teste1@if" senha="plain" id_role="1" />
+    <usuario id="2" email="teste2@if" senha="plain" id_role="2" />
+    <usuario id="3" email="testeAlunoRequerimento@if" senha="plain" id_role="1" />
+
+    <!-- VERIFICATION TOKEN-->
+    <verification_token token="abcdefgh" expiry_date="2002-02-02" verified="1" id_usuario="1"/>
+
+    <!-- ALUNO -->
+    <curso id="1" nome="INFO"/>
+    <aluno id="1"
+           nome="Student"
+           rg="123456"
+           data_nasc="2000-01-01 00:00:01"
+           matricula="ABC1234"
+           telefone="1111-0000"
+           id_usuario="1"
+           id_curso="1"
+    />
+    <aluno id="2"
+           nome="Student"
+           rg="123456"
+           data_nasc="2000-01-01 00:00:01"
+           matricula="ABC1454"
+           telefone="1111-0000"
+           id_usuario="3"
+           id_curso="1"
+    />
+
+    <!-- DEPARTAMENTO -->
+    <departamento
+            id="1"
+            nome="ifsulll"
+            id_usuario="2"
+    />
+
+    <!-- REQUERIMENTO -->
+    <requerimento
+            id="1"
+            justificativa="good to go"
+            tipo="good to go"
+            requerimento="good to go"
+            data="1999-03-23"
+            id_aluno="1"
+            id_departamento_atual="1"
+    />
+    <requerimento
+            id="2"
+            justificativa="good to go"
+            tipo="good to go"
+            requerimento="good to go"
+            data="1999-03-23"
+            id_aluno="2"
+            id_departamento_atual="1"
+    />
+
+    <!-- PARECER -->
+    <parecer
+        id="1"
+        parecer="A lot of info"
+        deferido="1"
+        id_requerimento="1"
+        id_departamento="1"
+    />
+</dataset>

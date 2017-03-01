@@ -1,0 +1,56 @@
+input{
+  background: none;
+  border: solid 2px #21a1e1;
+  color: #000;
+  padding: 15px 40px;
+  font-size: 18px;
+  display: inline-block;
+
+  &:focus,
+  &:active{
+    outline: none;
+  }
+
+  &[type="text"],
+  &[type="password"],
+  &[type="email"]{
+    border: none;
+    border-bottom: solid 2px #4c8833;
+  }
+}
+
+.input-group {
+  display: inline-block;
+  margin-right: 20px;
+  position: relative;
+  width: 100%;
+
+  input {
+    padding: 0 3px 0 0;
+    margin-top: 10px;
+    margin-bottom: 13px;
+    width: 100%;
+  }
+  label{
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    font {
+      family: "Georgia", "Cambria", "Times New Roman", "Times", serif;
+      style: italic;
+      size: 18px;
+    }
+    color: #999;
+    pointer-events: none;
+    -webkit-transition: all 0.15s ease-out 0s;
+    transition: all 0.15s ease-out 0s;
+  }
+
+  input:focus + label,
+  input.has-value + label{
+    top: -2px;
+    font-size: 12px;
+    color: #aaa;
+  }
+}

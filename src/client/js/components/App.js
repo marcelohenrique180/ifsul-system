@@ -1,0 +1,18 @@
+import React from 'react';
+require('../../scss/style.scss');
+import Navbar from './Navbar'
+
+export default class App extends React.Component{
+    render (){
+        return (
+            <div>
+                <Navbar/>
+                <div className="container-fluid">
+                    <div className="row">
+                        {this.props.children}
+                    </div>
+                </div>
+            </div>
+        );
+    }
+}
