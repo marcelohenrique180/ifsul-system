@@ -5,6 +5,7 @@ import br.com.ifsul.system.application.service.VerificationTokenService;
 import br.com.ifsul.system.infrastructure.database.dao.AlunoDAO;
 import br.com.ifsul.system.infrastructure.errorhandling.ApiError;
 import br.com.ifsul.system.pojo.Aluno;
+import br.com.ifsul.system.pojo.Usuario;
 import br.com.ifsul.system.pojo.VerificationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,17 @@ public class AlunoController {
     public Aluno cadastrarAluno(@RequestBody Aluno aluno){
         cadastroService.cadastrarAluno(aluno);
         return aluno;
+    }
+
+    @RequestMapping(value = "/api/cadastro/aluno/usuario", method = RequestMethod.POST)
+    public Usuario cadastrarAlunoUsuario(@RequestBody Usuario usuario, HttpServletRequest request, BindingResult result){
+        String token = request.getHeader("VerificationToken");
+        verificationTokenService.setResult(result);
+        VerificationToken tokenFromDB = verificationTokenService.verificar(token);
+        tokenFromDB.getUsuario().setSenha(usuario.getSenha());
+
+        cadastroService.cadastrarAluno(tokenFromDB);
+        return usuario;
     }
 
     @RequestMapping(value = "/api/aluno", method = RequestMethod.GET)

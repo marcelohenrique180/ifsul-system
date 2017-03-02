@@ -1,9 +1,11 @@
 package br.com.ifsul.system.application.service;
 
 import br.com.ifsul.system.infrastructure.database.dao.AlunoDAO;
+import br.com.ifsul.system.infrastructure.database.dao.UsuarioDAO;
 import br.com.ifsul.system.infrastructure.database.dao.VerificationTokenDAO;
 import br.com.ifsul.system.infrastructure.errorhandling.ApiError;
 import br.com.ifsul.system.pojo.Aluno;
+import br.com.ifsul.system.pojo.Usuario;
 import br.com.ifsul.system.pojo.VerificationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,13 @@ public class AlunoCadastroService {
     private AlunoDAO alunoDAO;
     private VerificationTokenDAO tokenDAO;
     private SendConfirmEmail sender;
+    private UsuarioDAO usuarioDAO;
+
+    public void cadastrarAluno(VerificationToken token){
+        usuarioDAO.save(token.getUsuario());
+        token.setVerified(true);
+        tokenDAO.save(token);
+    }
 
     public void cadastrarAluno(Aluno aluno){
         aluno = alunoDAO.findByMatricula(aluno.getMatricula());
@@ -66,5 +75,10 @@ public class AlunoCadastroService {
     @Autowired
     public void setSender(SendConfirmEmail sender) {
         this.sender = sender;
+    }
+
+    @Autowired
+    public void setUsuarioDAO(UsuarioDAO usuarioDAO) {
+        this.usuarioDAO = usuarioDAO;
     }
 }

@@ -27,7 +27,7 @@ public class VerificationTokenService {
         validator.validate(verificationToken, result);
 
         if (result.hasErrors()){
-            throw new ApiError(HttpStatus.BAD_REQUEST, "Erro ao Validar token", result.getAllErrors().get(0).getDefaultMessage());
+            throw new ApiError(HttpStatus.BAD_REQUEST, result.getAllErrors().get(0).getDefaultMessage(),"Erro ao Validar token");
         }
         return verificationToken;
     }
