@@ -3,7 +3,7 @@ import React, {PropTypes} from 'react';
 class AuthorizedContainer extends React.Component {
 
     componentWillMount() {
-        const { authorize } = this.props.routes[0].childRoutes[0];
+        const { authorize } = this.props.route;
         const { router } = this.context;
 
         const role = localStorage.getItem('role');
@@ -12,6 +12,8 @@ class AuthorizedContainer extends React.Component {
             if (authorize.indexOf(role) === -1) {
                 router.push('/nao-autorizado');
             }
+        }else {
+            router.push('/nao-autorizado');
         }
     }
 }

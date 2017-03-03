@@ -6,6 +6,7 @@ import {
 
 export function matriculaReducer(state = {
     isFetching: false,
+    error: false,
     errorMessage: ''
 }, action){
 
@@ -23,7 +24,8 @@ export function matriculaReducer(state = {
         case FAILURE_SEND_ALUNO_MATRICULA:
             return Object.assign({}, state, {
                 isFetching: false,
-                errorMessage: action.error
+                error: true,
+                errorMessage: action.errorMessage
             });
         default:
             return state

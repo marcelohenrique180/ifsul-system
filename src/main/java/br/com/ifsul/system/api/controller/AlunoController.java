@@ -1,6 +1,7 @@
 package br.com.ifsul.system.api.controller;
 
 import br.com.ifsul.system.application.service.AlunoCadastroService;
+import br.com.ifsul.system.application.service.AlunoConfirmarService;
 import br.com.ifsul.system.application.service.VerificationTokenService;
 import br.com.ifsul.system.infrastructure.database.dao.AlunoDAO;
 import br.com.ifsul.system.infrastructure.errorhandling.ApiError;
@@ -21,25 +22,24 @@ import java.util.Map;
 @RestController
 public class AlunoController {
 
+    private AlunoCadastroService cadastroService;
     private VerificationTokenService verificationTokenService;
+    private AlunoConfirmarService confirmarService;
+
     private AlunoDAO alunoDAO;
 
-    private AlunoCadastroService cadastroService;
 
     @RequestMapping(value = "/api/cadastro/aluno", method = RequestMethod.POST)
     public Aluno cadastrarAluno(@RequestBody Aluno aluno){
-        cadastroService.cadastrarAluno(aluno);
+        cadastroService.confirmarAluno(aluno);
         return aluno;
     }
 
     @RequestMapping(value = "/api/cadastro/aluno/usuario", method = RequestMethod.POST)
-    public Usuario cadastrarAlunoUsuario(@RequestBody Usuario usuario, HttpServletRequest request, BindingResult result){
+    public Usuario cadastrarAlunoUsuario(@RequestBody Usuario usuario, HttpServletRequest request, BindingResult errors){
         String token = request.getHeader("VerificationToken");
-        verificationTokenService.setResult(result);
-        VerificationToken tokenFromDB = verificationTokenService.verificar(token);
-        tokenFromDB.getUsuario().setSenha(usuario.getSenha());
 
-        cadastroService.cadastrarAluno(tokenFromDB);
+        confirmarService.confirmarAluno(token, usuario, errors);
         return usuario;
     }
 
@@ -88,5 +88,10 @@ public class AlunoController {
     @Autowired
     public void setCadastroService(AlunoCadastroService cadastroService) {
         this.cadastroService = cadastroService;
+    }
+
+    @Autowired
+    public void setConfirmarService(AlunoConfirmarService confirmarService) {
+        this.confirmarService = confirmarService;
     }
 }

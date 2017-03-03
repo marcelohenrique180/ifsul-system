@@ -1,6 +1,7 @@
 import React from 'react'
+import AuthorizedContainer from './AuthorizedContainer'
 
-class AdminMenu extends React.Component {
+class AdminMenu extends AuthorizedContainer {
 
     render(){
         return (

@@ -49,7 +49,7 @@ public class TestAlunoCadastroService extends TestCase{
     public void testAlunoNaoEncontrado(){
         when(alunoDAO.findByMatricula(anyString())).thenReturn(null);
 
-        service.cadastrarAluno(aluno);
+        service.confirmarAluno(aluno);
     }
 
     @Test(expected = ApiError.class)
@@ -62,7 +62,7 @@ public class TestAlunoCadastroService extends TestCase{
         when(alunoDAO.findByMatricula(anyString())).thenReturn(aluno);
         when(tokenDAO.save(any(VerificationToken.class))).thenThrow(new HibernateException(""));
 
-        service.cadastrarAluno(aluno);
+        service.confirmarAluno(aluno);
     }
 
     @Test(expected = ApiError.class)
@@ -77,7 +77,7 @@ public class TestAlunoCadastroService extends TestCase{
         when(alunoDAO.findByMatricula(anyString())).thenReturn(aluno);
         when(tokenDAO.findTokenByUsuario(anyString())).thenReturn(token);
 
-        service.cadastrarAluno(aluno);
+        service.confirmarAluno(aluno);
     }
 
     @Test
@@ -92,6 +92,6 @@ public class TestAlunoCadastroService extends TestCase{
         when(alunoDAO.findByMatricula(anyString())).thenReturn(aluno);
         when(tokenDAO.findTokenByUsuario(anyString())).thenReturn(token);
 
-        service.cadastrarAluno(aluno);
+        service.confirmarAluno(aluno);
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class HomeController {
-    @GetMapping({"/"})
+    @GetMapping({"/", "/cadastro/aluno/**", "/menu/**"})
     public String greeting(Model model) {
         return "index";
     }

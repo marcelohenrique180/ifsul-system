@@ -92,7 +92,7 @@ public class TestAlunoController extends BaseDAOTest{
 
     @Test
     public void testCadastrarAluno() throws Exception {
-        doAnswer(invocationOnMock -> (Aluno) invocationOnMock.getArguments()[0]).when(alunoCadastroService).cadastrarAluno(any(Aluno.class));
+        doAnswer(invocationOnMock -> (Aluno) invocationOnMock.getArguments()[0]).when(alunoCadastroService).confirmarAluno(any(Aluno.class));
 
         mvcResult = mvc.perform(post("/api/cadastro/aluno")
                 .contentType(MediaType.APPLICATION_JSON)

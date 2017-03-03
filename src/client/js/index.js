@@ -16,12 +16,13 @@ import App from './components/App'
 import NaoAutorizado from './components/NaoAutorizado'
 import Cadastro from './components/cadastro/Cadastro'
 import AlunoCadastro from './containers/cadastro/AlunoCadastro'
+import AlunoConfirmar from './containers/cadastro/AlunoConfirmar'
 import AlunoMenu from './containers/AlunoMenu'
 import Menu from './containers/Menu'
 import AdminMenu from './containers/AdminMenu'
 import Login from './containers/Login'
 
-require('bootstrap');
+require('bootstrap-loader');
 require('../scss/floating-label.scss')
 
 const logger = createLogger();
@@ -46,12 +47,13 @@ ReactDOM.render(
         <Router history={browserHistory}>
             <Route path="/" component={App}>
                 <IndexRedirect to={index} />
-                <Route path="menu" authorize={['CORDCURSO', 'ALUNO']} component={Menu} onEnter={requireAuth}>
-                    <Route path="cordcurso" component={AdminMenu} />
-                    <Route path="aluno" component={AlunoMenu} />
+                <Route path="menu" component={Menu} onEnter={requireAuth}>
+                    <Route path="cordcurso" authorize={['CORDCURSO']} component={AdminMenu} />
+                    <Route path="aluno" authorize={['ALUNO']} component={AlunoMenu} />
                 </Route>
                 <Route path="cadastro" component={Cadastro}>
                     <Route path="aluno" component={AlunoCadastro}/>
+                    <Route path="aluno/:token" component={AlunoConfirmar}/>
                 </Route>
                 <Route path="/nao-autorizado" component={NaoAutorizado} />
                 <Route path="/login" component={Login} />

@@ -49,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/", "/api/aluno").permitAll()
                 .antMatchers(HttpMethod.POST, "/login", "/api/cadastro/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/cadastro/aluno/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/cadastro/aluno/**", "/menu/**").permitAll()
                 .antMatchers("/css/**", "/js/**", "/img/**", "/favicon.ico").permitAll()
                 .anyRequest().authenticated()
                     .and()

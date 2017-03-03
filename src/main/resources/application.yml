@@ -20,3 +20,5 @@ spring:
       username: root
       password: toor
       driver-class-name: com.mysql.jdbc.Driver
+    thymeleaf:
+      cache: false

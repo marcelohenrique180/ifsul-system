@@ -1,11 +1,12 @@
 $primary: #dfeadf;
+//$primary: #f0556f;
 
 body {
-  background-color: $primary;
+  background-color: $primary !important;
 }
 
 .navbar {
-  border-radius: 0;
+  border-radius: 0 !important;
 }
 
 .nav-item a{

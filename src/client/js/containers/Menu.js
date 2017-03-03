@@ -1,8 +1,7 @@
 import React from 'react'
-import AuthorizedContainer from './AuthorizedContainer'
 import RouterHandler from './RouterHandler'
 
-class Menu extends AuthorizedContainer {
+class Menu extends React.Component {
     render(){
         return (
             <div>

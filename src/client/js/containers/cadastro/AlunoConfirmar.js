@@ -2,35 +2,36 @@ import React from 'react'
 import {connect} from 'react-redux'
 import FloatInput from '../../components/FloatInput'
 import {handleChange} from '../../util'
-import {sendAlunoMatricula} from '../../actions/aluno'
+import {sendAlunoSenha} from '../../actions/aluno'
 
 class AlunoCadastro extends React.Component {
     constructor(props){
         super(props);
 
-        this.state = {matricula: ""};
+        this.state = {senha: ""};
         this.handleChange = handleChange.bind(this);
-        this.handleClickMatricula = this.handleClickMatricula.bind(this);
+        this.handleClickSenha = this.handleClickSenha.bind(this);
     }
 
     handleChange(event) {}
 
-    handleClickMatricula(){
+    handleClickSenha(){
         const { dispatch } = this.props;
-        const {matricula} = this.state;
+        const {senha} = this.state;
+        const token = this.props.params["token"];
 
-        dispatch(sendAlunoMatricula(matricula));
+        dispatch(sendAlunoSenha({senha, token}));
     }
 
     render (){
-        const matriculaRequest = this.props.matricula;
-        const {matricula} = this.state;
-        const {error, errorMessage} = this.props.matricula;
+        const {senha} = this.state;
+        const {error, errorMessage} = this.props.usuario;
+        const usuario = this.props.usuario;
 
         return (
             <div className="form-group col-centered">
                 <div className="input-group">
-                    <FloatInput name="matricula" value={matricula} textLabel="Matrícula"
+                    <FloatInput name="senha" value={senha} textLabel="Senha"
                                 handleChange={this.handleChange}/>
                 </div>
                 {
@@ -41,8 +42,8 @@ class AlunoCadastro extends React.Component {
                 }
                 <div className="input-group text-center">
                     {
-                        !matriculaRequest.isFetching ?
-                            <button onClick={this.handleClickMatricula} className="btn btn-primary">
+                        !usuario.isFetching ?
+                            <button onClick={this.handleClickSenha} className="btn btn-primary">
                                 Enviar
                             </button>
                             :
@@ -50,13 +51,13 @@ class AlunoCadastro extends React.Component {
                     }
                 </div>
             </div>
-        )
+        );
     }
 }
 
 function mapStateToProps(state) {
     return {
-        matricula: state.matricula
+        usuario: state.aluno_usuario
     };
 }
 

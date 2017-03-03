@@ -10,6 +10,7 @@ import br.com.ifsul.system.pojo.VerificationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -20,15 +21,8 @@ public class AlunoCadastroService {
     private AlunoDAO alunoDAO;
     private VerificationTokenDAO tokenDAO;
     private SendConfirmEmail sender;
-    private UsuarioDAO usuarioDAO;
 
-    public void cadastrarAluno(VerificationToken token){
-        usuarioDAO.save(token.getUsuario());
-        token.setVerified(true);
-        tokenDAO.save(token);
-    }
-
-    public void cadastrarAluno(Aluno aluno){
+    public void confirmarAluno(Aluno aluno){
         aluno = alunoDAO.findByMatricula(aluno.getMatricula());
         if (aluno == null){
             throw new ApiError(HttpStatus.NOT_FOUND, "Aluno não encontrado", "Aluno");
@@ -75,10 +69,5 @@ public class AlunoCadastroService {
     @Autowired
     public void setSender(SendConfirmEmail sender) {
         this.sender = sender;
-    }
-
-    @Autowired
-    public void setUsuarioDAO(UsuarioDAO usuarioDAO) {
-        this.usuarioDAO = usuarioDAO;
     }
 }
