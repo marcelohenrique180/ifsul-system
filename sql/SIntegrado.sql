@@ -28,7 +28,13 @@ CREATE TABLE notificacao(
   id BIGINT NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
   mensagem VARCHAR(40) NOT NULL,
   usuario BIGINT NOT NULL,
+  recebida TINYINT NOT NULL,
   FOREIGN KEY (usuario) REFERENCES usuario(id)
+);
+
+CREATE TABLE tipo(
+  id BIGINT NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
+  tipo VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE departamento(
@@ -36,6 +42,13 @@ CREATE TABLE departamento(
   nome VARCHAR(100) NOT NULL UNIQUE,
   usuario BIGINT NOT NULL UNIQUE,
   FOREIGN KEY (usuario) REFERENCES usuario(id)
+);
+
+CREATE TABLE departamento_tipo(
+  id_tipo BIGINT NOT NULL,
+  id_departamento BIGINT NOT NULL,
+  FOREIGN KEY (id_departamento) REFERENCES departamento(id),
+  FOREIGN KEY (id_tipo) REFERENCES tipo(id)
 );
 
 CREATE TABLE curso(
@@ -59,15 +72,16 @@ CREATE TABLE aluno(
 CREATE TABLE requerimento(
   id BIGINT NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
   justificativa VARCHAR(500) NOT NULL,
-  tipo VARCHAR(50) NOT NULL,
   requerimento VARCHAR(80) NOT NULL,
   data DATE NOT NULL,
   id_aluno BIGINT NOT NULL,
   id_departamento_deferinte BIGINT,
-  id_departamento_atual BIGINT NOT NULL,
+  id_departamento_atual BIGINT,
+  id_tipo BIGINT NOT NULL,
   FOREIGN KEY (id_aluno) REFERENCES aluno(id),
   FOREIGN KEY (id_departamento_deferinte) REFERENCES departamento(id),
-  FOREIGN KEY (id_departamento_atual) REFERENCES departamento(id)
+  FOREIGN KEY (id_departamento_atual) REFERENCES departamento(id),
+  FOREIGN KEY (id_tipo) REFERENCES tipo(id)
 );
 
 CREATE TABLE parecer(
