@@ -1,23 +1,14 @@
 package br.com.ifsul.system.application.events;
 
 import br.com.ifsul.system.infrastructure.database.dao.NotificacaoDAO;
-import br.com.ifsul.system.infrastructure.database.dao.TipoDAO;
 import br.com.ifsul.system.infrastructure.errorhandling.ApiError;
-import br.com.ifsul.system.pojo.Departamento;
 import br.com.ifsul.system.pojo.Notificacao;
 import br.com.ifsul.system.pojo.Requerimento;
-import br.com.ifsul.system.pojo.Tipo;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 @RepositoryEventHandler(Requerimento.class)

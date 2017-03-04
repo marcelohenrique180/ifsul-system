@@ -3,10 +3,7 @@ package br.com.ifsul.system.infrastructure.rest;
 import br.com.ifsul.system.application.events.BeforeSaveRequerimento;
 import br.com.ifsul.system.infrastructure.dao.BaseDAOTest;
 import br.com.ifsul.system.infrastructure.database.dao.NotificacaoDAO;
-import br.com.ifsul.system.infrastructure.errorhandling.ApiError;
-import br.com.ifsul.system.pojo.Departamento;
 import br.com.ifsul.system.pojo.Notificacao;
-import br.com.ifsul.system.pojo.Tipo;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
@@ -17,16 +14,13 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.support.ManagedSet;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.util.NestedServletException;
 
 import java.io.UnsupportedEncodingException;
 

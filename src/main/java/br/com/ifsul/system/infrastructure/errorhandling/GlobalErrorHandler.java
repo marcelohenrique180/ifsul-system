@@ -1,6 +1,5 @@
 package br.com.ifsul.system.infrastructure.errorhandling;
 
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
