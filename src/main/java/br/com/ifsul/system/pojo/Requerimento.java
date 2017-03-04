@@ -18,8 +18,9 @@ public class Requerimento {
     private String justificativa;
 
     @NotNull
-    @Size(min = 1, max = 50)
-    private String tipo;
+    @ManyToOne
+    @JoinColumn(name = "id_tipo")
+    private Tipo tipo;
 
     @NotNull
     @Size(min = 1, max = 80)
@@ -40,12 +41,11 @@ public class Requerimento {
 
     @ManyToOne
     @JoinColumn(name = "id_departamento_atual")
-    @NotNull
     private Departamento departamentoAtual;
 
     public Requerimento(Long id) {
         this.id = id;
-        data = DateTime.now().toDate();
+        setDataToNow();
     }
 
     public Requerimento() {
@@ -92,14 +92,6 @@ public class Requerimento {
         this.departamentoAtual = departamentoAtual;
     }
 
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
     public String getRequerimento() {
         return requerimento;
     }
@@ -115,5 +107,16 @@ public class Requerimento {
     public void setData(String data) {
         DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern("dd/MM/yyyy");
         this.data = dateTimeFormat.parseDateTime(data).toDate();
+    }
+    public void setDataToNow() {
+        this.data = DateTime.now().toDate();
+    }
+
+    public Tipo getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(Tipo tipo) {
+        this.tipo = tipo;
     }
 }
