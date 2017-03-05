@@ -2,6 +2,7 @@ package br.com.ifsul.system.api.controller;
 
 import br.com.ifsul.system.application.service.AlunoCadastroService;
 import br.com.ifsul.system.application.service.AlunoConfirmarService;
+import br.com.ifsul.system.application.service.SendConfirmEmail;
 import br.com.ifsul.system.application.service.VerificationTokenService;
 import br.com.ifsul.system.infrastructure.database.dao.AlunoDAO;
 import br.com.ifsul.system.infrastructure.errorhandling.ApiError;
@@ -9,6 +10,7 @@ import br.com.ifsul.system.pojo.Aluno;
 import br.com.ifsul.system.pojo.Usuario;
 import br.com.ifsul.system.pojo.VerificationToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -26,11 +28,17 @@ public class AlunoController {
     private VerificationTokenService verificationTokenService;
     private AlunoConfirmarService confirmarService;
 
+    @Value("${spring.local.host}")
+    private String url;
+    private SendConfirmEmail sender;
+
     private AlunoDAO alunoDAO;
 
 
     @RequestMapping(value = "/api/cadastro/aluno", method = RequestMethod.POST)
     public Aluno cadastrarAluno(@RequestBody Aluno aluno){
+        sender.setUrl(url);
+        cadastroService.setSender(sender);
         cadastroService.confirmarAluno(aluno);
         return aluno;
     }
@@ -93,5 +101,10 @@ public class AlunoController {
     @Autowired
     public void setConfirmarService(AlunoConfirmarService confirmarService) {
         this.confirmarService = confirmarService;
+    }
+
+    @Autowired
+    public void setSender(SendConfirmEmail sender) {
+        this.sender = sender;
     }
 }

@@ -32,7 +32,6 @@ public class VerificationToken {
     }
 
     public VerificationToken(String token, Usuario usuario) {
-        super();
         this.token = token;
         this.usuario = usuario;
         this.expiryDate = calculateExpiryDate(EXPIRATION).toDate();
@@ -41,7 +40,7 @@ public class VerificationToken {
 
     private DateTime calculateExpiryDate(int expiryTimeInMinutes) {
         DateTime cal = DateTime.now();
-        cal.plusMinutes(expiryTimeInMinutes);
+        cal = cal.plusMinutes(expiryTimeInMinutes);
         return cal;
     }
 
