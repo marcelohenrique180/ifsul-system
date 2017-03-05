@@ -52,6 +52,7 @@ public class AlunoCadastroService {
             throw e;
         }
         catch (Exception e) {
+            e.printStackTrace();
             throw new ApiError(HttpStatus.NOT_FOUND, "Não foi possível criar Token", "Aluno");
         }
     }
