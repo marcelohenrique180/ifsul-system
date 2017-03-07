@@ -34,3 +34,7 @@ export function indexRoute() {
     }
     return "login"
 }
+
+export function areFieldsEmpty(notNullFields) {
+    return (notNullFields.filter((field) => {return (field.length == 0)}).length > 0)
+}

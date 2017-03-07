@@ -11,6 +11,12 @@ import br.com.ifsul.system.pojo.Usuario;
 import br.com.ifsul.system.pojo.VerificationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.rest.webmvc.PersistentEntityResource;
+import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
+import org.springframework.data.rest.webmvc.support.RepositoryEntityLinks;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.ResourceProcessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +33,9 @@ public class AlunoController {
     private AlunoCadastroService cadastroService;
     private VerificationTokenService verificationTokenService;
     private AlunoConfirmarService confirmarService;
+
+    @Autowired
+    private RepositoryEntityLinks entityLinks;
 
     @Value("${spring.local.host}")
     private String url;
@@ -49,15 +58,6 @@ public class AlunoController {
 
         confirmarService.confirmarAluno(token, usuario, errors);
         return usuario;
-    }
-
-    @RequestMapping(value = "/api/aluno", method = RequestMethod.GET)
-    public Aluno getAluno(){
-        Aluno aluno = alunoDAO.findAlunobyUsuarioEmail();
-        if (aluno == null){
-            throw new ApiError(HttpStatus.NOT_FOUND, "Aluno não encontrado", "Aluno");
-        }
-        return aluno;
     }
 
     //@RequestMapping(value = "/api/aluno", method = RequestMethod.POST)

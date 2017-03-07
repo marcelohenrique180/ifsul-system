@@ -26,6 +26,7 @@ public class BeforeSaveRequerimento {
                     notificacaoDAO.save( new Notificacao("Novo Requerimento do tipo "+ requerimento.getTipo().getTipo()+ " foi feito.", departamento.getUsuario()) )
             );
         } catch (Exception e) {
+            e.printStackTrace();
             throw new ApiError(HttpStatus.BAD_REQUEST, "Houve algo de errado com seu pedido", "Erro");
         }
 

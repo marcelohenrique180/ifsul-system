@@ -1,5 +1,5 @@
 import React from 'react'
-import RouterHandler from './RouterHandler'
+import RouterHandler from '../RouterHandler'
 
 class Menu extends React.Component {
     render(){
