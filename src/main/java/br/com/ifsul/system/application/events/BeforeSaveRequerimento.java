@@ -18,12 +18,13 @@ public class BeforeSaveRequerimento {
 
     @HandleBeforeCreate
     public void beforeCreate(Requerimento requerimento){
+        System.out.println("Deve notificar Departamentos");
         try {
             requerimento.setDataToNow();
 
             //Notifica todos os departamentos do novo requerimento
             requerimento.getTipo().getDepartamentos().forEach(departamento ->
-                    notificacaoDAO.save( new Notificacao("Novo Requerimento do tipo "+ requerimento.getTipo().getTipo()+ " foi feito.", departamento.getUsuario()) )
+                    notificacaoDAO.save(new Notificacao("Novo Requerimento do tipo " + requerimento.getTipo().getTipo() + " foi feito.", departamento.getUsuario()))
             );
         } catch (Exception e) {
             e.printStackTrace();

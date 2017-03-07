@@ -26,10 +26,10 @@ CREATE TABLE verification_token(
 
 CREATE TABLE notificacao(
   id BIGINT NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
-  mensagem VARCHAR(40) NOT NULL,
-  usuario BIGINT NOT NULL,
+  mensagem VARCHAR(200) NOT NULL,
+  id_usuario BIGINT NOT NULL,
   recebida TINYINT NOT NULL,
-  FOREIGN KEY (usuario) REFERENCES usuario(id)
+  FOREIGN KEY (id_usuario) REFERENCES usuario(id)
 );
 
 CREATE TABLE tipo(

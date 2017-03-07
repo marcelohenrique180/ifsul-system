@@ -11,7 +11,7 @@ public class Notificacao {
     private Long id;
 
     @NotNull
-    @Size(max = 40)
+    @Size(max = 200)
     private String mensagem;
 
     @NotNull
@@ -53,4 +53,12 @@ public class Notificacao {
     }
 
     public Notificacao(){}
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 }
