@@ -1,7 +1,7 @@
 import React from 'react'
 import {Link} from 'react-router'
-import RouterHandler from './RouterHandler'
-import AuthorizedContainer from './AuthorizedContainer'
+import RouterHandler from '../RouterHandler'
+import AuthorizedContainer from '../AuthorizedContainer'
 
 class AlunoMenu extends AuthorizedContainer {
 
@@ -16,15 +16,22 @@ class AlunoMenu extends AuthorizedContainer {
                         </div>
                     </div>
                     <div className="panel panel-default">
-                        <div className="panel-heading">Ações</div>
-                        <div className="panel-body">
+                        <div className="panel-heading">
+                            Ações
+                        </div>
+                        <div className="panel-body side-menu">
                             <ul className="list-group">
-                                <li className="list-group-item"><Link to="/menu/aluno/requerimento">Requerimento</Link></li>
+                                <li className="list-group-item side-item">
+                                    <span className="glyphicon glyphicon-arrow-right" />
+                                    <Link to="/menu/aluno/requerimento">
+                                        Requerimento
+                                    </Link>
+                                </li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <div className="col-xs-12 col-sm-6 col-md-6 col-sm-offset-1 col-md-offset-1">
+                <div className="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-sm-offset-1 col-md-offset-1 col-lg-offset-2">
                     <RouterHandler {...this.props} />
                 </div>
             </div>

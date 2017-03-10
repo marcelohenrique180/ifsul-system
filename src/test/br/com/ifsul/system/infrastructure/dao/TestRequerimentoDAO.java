@@ -1,5 +1,6 @@
 package br.com.ifsul.system.infrastructure.dao;
 
+import br.com.ifsul.system.pojo.Tipo;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
@@ -27,7 +28,7 @@ public class TestRequerimentoDAO extends BaseDAOTest {
         requerimento = new Requerimento();
         requerimento.setJustificativa("teste");
         requerimento.setRequerimento("teste");
-        requerimento.setTipo("teste");
+        requerimento.setTipo(new Tipo(1L));
         requerimento.setAluno(new Aluno(2L));
         requerimento.setDepartamentoAtual(new Departamento(1L));
         requerimento.setDepartamentoDeferinte(new Departamento(1L));

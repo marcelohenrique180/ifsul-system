@@ -1,5 +1,5 @@
 import React from 'react'
-import AuthorizedContainer from './AuthorizedContainer'
+import AuthorizedContainer from '../AuthorizedContainer'
 
 class AdminMenu extends AuthorizedContainer {
 
