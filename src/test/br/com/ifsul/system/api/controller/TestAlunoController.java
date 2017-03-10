@@ -1,6 +1,7 @@
 package br.com.ifsul.system.api.controller;
 
 import br.com.ifsul.system.application.service.AlunoCadastroService;
+import br.com.ifsul.system.application.service.SendConfirmEmail;
 import br.com.ifsul.system.application.service.VerificationTokenService;
 import br.com.ifsul.system.infrastructure.dao.BaseDAOTest;
 import br.com.ifsul.system.infrastructure.database.dao.AlunoDAO;
@@ -35,20 +36,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class TestAlunoController extends BaseDAOTest{
+public class TestAlunoController{
 
     // criar mock do serviço
     @Mock
     VerificationTokenService mockVerificationTokenService;
 
     @Mock
-    AlunoDAO mockAlunoDAO;
-
-    @Mock
     Authentication authentication;
 
     @Mock
     AlunoCadastroService alunoCadastroService;
+
+    @Mock
+    SendConfirmEmail mockSender;
 
     // injetar no controller
     @InjectMocks
@@ -62,32 +63,10 @@ public class TestAlunoController extends BaseDAOTest{
     @Before
     public void setup() throws ApiError{
         MockitoAnnotations.initMocks(this);
-        controller.setVerificationTokenService(mockVerificationTokenService);
-        controller.setAlunoDAO(mockAlunoDAO);
-        controller.setCadastroService(alunoCadastroService);
 
         mvc = MockMvcBuilders
                 .standaloneSetup(controller)
                 .build();
-
-        /* Setup Properties
-        Usuario usuario = new Usuario(1L);
-
-        VerificationToken verificationToken = new VerificationToken();
-        verificationToken.setUsuario(usuario);
-        verificationToken.setId(1L);
-
-        when(mockAlunoDAO.save(any(Aluno.class)))
-                .then(new Answer<Aluno>() {
-                    @Override
-                    public Aluno answer(InvocationOnMock invocationOnMock) throws Throwable {
-                        Aluno aluno = (Aluno) invocationOnMock.getArguments()[0];
-                        aluno.setId(1L);
-                        return aluno;
-                    }
-                });
-
-        when(mockVerificationTokenService.verificar("123")).thenReturn(verificationToken); */
     }
 
     @Test
@@ -106,21 +85,14 @@ public class TestAlunoController extends BaseDAOTest{
     @Test
     public void testGetAlunoNotFound() throws Exception {
         when(authentication.getName()).thenReturn("outro@if");
+        doThrow(new ApiError(HttpStatus.NOT_FOUND, "Aluno não encontrado", "Aluno")).when(alunoCadastroService).confirmarAluno(any(Aluno.class));
 
-        mvcResult = mvc.perform(get("/api/aluno").with(SecurityMockMvcRequestPostProcessors.authentication(authentication)))
+        mvcResult = mvc.perform(post("/api/cadastro/aluno").with(SecurityMockMvcRequestPostProcessors.authentication(authentication))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"matricula\": \"test\"}")
+        )
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(containsString("Aluno não encontrado")))
-        .andReturn();
-    }
-
-    @Test
-    public void testGetAluno() throws Exception {
-        when(authentication.getName()).thenReturn("teste1@if");
-        when(mockAlunoDAO.findAlunobyUsuarioEmail()).thenReturn(new Aluno(1L));
-
-        mvcResult = mvc.perform(get("/api/aluno").with(SecurityMockMvcRequestPostProcessors.authentication(authentication)))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("\"id\":1")))
         .andReturn();
     }
 
