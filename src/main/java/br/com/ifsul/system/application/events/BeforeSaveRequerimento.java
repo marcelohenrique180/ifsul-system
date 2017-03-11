@@ -24,7 +24,7 @@ public class BeforeSaveRequerimento {
 
             //Notifica todos os departamentos do novo requerimento
             requerimento.getTipo().getDepartamentos().forEach(departamento ->
-                    notificacaoDAO.save(new Notificacao("Novo Requerimento do tipo " + requerimento.getTipo().getTipo() + " foi feito.", departamento.getUsuario()))
+                    notificacaoDAO.save(new Notificacao("Novo Requerimento do tipo " + requerimento.getTipo().getTipo() + " foi feito.", departamento.getUsuario(), "#D8D8EF"))
             );
         } catch (Exception e) {
             e.printStackTrace();

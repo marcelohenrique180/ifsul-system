@@ -14,6 +14,13 @@ public class Notificacao {
     @Size(max = 200)
     private String mensagem;
 
+    @Size(max = 100)
+    private String link;
+
+    @NotNull
+    @Size(max = 7)
+    private String color;
+
     @NotNull
     private Boolean recebida;
 
@@ -46,9 +53,18 @@ public class Notificacao {
         this.recebida = recebida;
     }
 
-    public Notificacao(String mensagem, Usuario usuario){
+    public Notificacao(String mensagem, Usuario usuario, String color, String link){
         this.mensagem = mensagem;
         this.usuario = usuario;
+        this.link = link;
+        this.color = color;
+        this.recebida = false;
+    }
+
+    public Notificacao(String mensagem, Usuario usuario, String color){
+        this.mensagem = mensagem;
+        this.usuario = usuario;
+        this.color = color;
         this.recebida = false;
     }
 
@@ -60,5 +76,21 @@ public class Notificacao {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }

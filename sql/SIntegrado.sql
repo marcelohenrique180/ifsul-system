@@ -28,6 +28,8 @@ CREATE TABLE notificacao(
   id BIGINT NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
   mensagem VARCHAR(200) NOT NULL,
   id_usuario BIGINT NOT NULL,
+  link VARCHAR(100),
+  color VARCHAR(7) NOT NULL,
   recebida TINYINT NOT NULL,
   FOREIGN KEY (id_usuario) REFERENCES usuario(id)
 );
