@@ -6,7 +6,7 @@ import {CALL_API} from './middleware/api'
 export function requestNotificacao() {
     return {
         [CALL_API]: {
-            endpoint: "notificacoes?size=2",
+            endpoint: "notificacoes/search/findAllNotRead",
             authenticated: true,
             types: [REQUEST_SEND_NOTIFICACAO, RECEIVE_SEND_NOTIFICACAO, FAILURE_SEND_NOTIFICACAO],
             config: {
