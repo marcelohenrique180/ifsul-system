@@ -90,6 +90,7 @@ CREATE TABLE parecer(
   id BIGINT NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
   deferido TINYINT NOT NULL,
   parecer VARCHAR(500),
+  memorando varchar(500),
   id_requerimento BIGINT NOT NULL UNIQUE,
   id_departamento BIGINT NOT NULL,
   FOREIGN KEY (id_requerimento) REFERENCES requerimento(id),
