@@ -12,7 +12,6 @@ import org.springframework.data.rest.core.annotation.RestResource;
 @RepositoryRestResource(path = "notificacoes", collectionResourceRel = "notificacoes")
 public interface NotificacaoDAO extends PagingAndSortingRepository<Notificacao, Long> {
 
-    @RestResource(exported = false)
     @Override
     Notificacao findOne(Long aLong);
 
