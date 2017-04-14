@@ -20,9 +20,8 @@ class AlunoRequerimento extends React.Component {
         this.state = defaultState;
         const {dispatch} = this.props;
 
-        if(this.props.tipos.fetched === false){
-            dispatch(requestTipos())
-        }
+        dispatch(requestTipos());
+
         if (this.props.aluno.fetched === false){
             dispatch(requestAluno()).then(
                 aluno => dispatch(requestCursos(aluno.response._links.curso.href))
