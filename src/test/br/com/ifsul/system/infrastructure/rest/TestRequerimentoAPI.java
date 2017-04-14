@@ -27,7 +27,6 @@ import java.io.UnsupportedEncodingException;
 import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -72,13 +71,14 @@ public class TestRequerimentoAPI extends BaseDAOTest{
     @Test
     public void sendRequerimentoInvalidTipo() throws Exception {
 
-        mvcResult = mvc.perform(post("/api/requerimentos")
-                .content("{ \"tipo\": \"/api/tipo/99999\", \"justificativa\": \"good to go\", \"requerimento\": \"good to goto\", \"aluno\": \"/api/aluno/1\"}")
-                .contentType(MediaType.APPLICATION_JSON)
-        )
-                .andExpect(status().isBadRequest()).andReturn();
-
-        verify(notificacaoDAO, never()).save(any(Notificacao.class));
+        try {
+            mvc.perform(post("/api/requerimentos")
+                    .content("{ \"tipo\": \"/api/tipo/9999\", \"justificativa\": \"good to go\", \"requerimento\": \"good to goto\", \"aluno\": \"/api/aluno/1\"}")
+                    .contentType(MediaType.APPLICATION_JSON)
+            );
+        }catch (Exception success){
+            verify(notificacaoDAO, never()).save(any(Notificacao.class));
+        }
     }
 
     @After
