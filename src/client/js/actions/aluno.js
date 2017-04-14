@@ -64,24 +64,18 @@ export function requestAluno() {
     }
 }
 
-/*
-export const REQUEST_SEND_ALUNOS = "REQUEST_SEND_ALUNOS";
-export const RECEIVE_SEND_ALUNOS = "RECEIVE_SEND_ALUNOS";
-export const FAILURE_SEND_ALUNOS = "FAILURE_SEND_ALUNOS";
-export function sendAluno(aluno) {
+export function getAluno(url) {
     return {
         [CALL_API]: {
-            endpoint: "alunos",
-            types: [REQUEST_SEND_ALUNOS, RECEIVE_SEND_ALUNOS, FAILURE_SEND_ALUNOS],
+            endpoint: url || 'alunos',
+            authenticated: true,
+            types: [REQUEST_SEND_ALUNO, RECEIVE_SEND_ALUNO, FAILURE_SEND_ALUNO],
             config: {
-                body: JSON.stringify(aluno),
-                method: "POST",
                 headers: {
-                    'token': findGetParameter("token"),
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
+                    'Accept': 'application/json'
+                },
+                method: "GET",
             }
         }
     }
-}*/
+}
