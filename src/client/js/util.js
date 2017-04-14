@@ -25,3 +25,7 @@ export function indexRoute() {
 export function areFieldsEmpty(notNullFields) {
     return (notNullFields.filter((field) => {return (field.length == 0)}).length > 0)
 }
+
+export function getId(entity) {
+    return entity._links.self.href.match(/\/(\d)/)[0]
+}
