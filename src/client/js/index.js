@@ -55,7 +55,7 @@ ReactDOM.render(
                         <Route path="requerimento/:id" component={CordRequerimento} />
                     </Route>
                     <Route path="aluno" authorize={['ALUNO']} component={AlunoMenu} >
-                        <Route path="requerimento" component={AlunoRequerimento} />
+                        <Route path="requerimento/solicitar" component={AlunoRequerimento} />
                     </Route>
                 </Route>
                 <Route path="cadastro" component={Cadastro}>
