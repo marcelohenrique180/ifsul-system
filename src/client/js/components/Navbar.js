@@ -2,9 +2,12 @@ import React, {Component} from 'react'
 import {Link} from 'react-router'
 import {connect} from 'react-redux'
 import {logoutUser} from '../actions/index'
+import {indexRoute} from '../util'
 
 class Navbar extends Component {
     render(){
+        const {isAuthenticated} = this.props;
+
         return (
             <nav className="navbar navbar-inverse">
                 <div className="container-fluid">
@@ -15,7 +18,7 @@ class Navbar extends Component {
                             <span className="icon-bar" />
                             <span className="icon-bar" />
                         </button>
-                        <Link to="/" className="navbar-brand">LOGO</Link>
+                        <Link to={indexRoute()} className="navbar-brand">LOGO</Link>
                     </div>
 
                     <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -26,11 +29,19 @@ class Navbar extends Component {
                                 </a>
                             </li>
                             <li>
-                                <Link className="nav-link" to="/login"
-                                   onClick={ () => { this.props.dispatch(logoutUser())
-                                   }} >
-                                    <img src="img/glyphicons-388-log-out.png" alt="" /> Logout
-                                </Link>
+                                {
+                                    isAuthenticated ?
+                                        <Link className="nav-link" to="/login"
+                                              onClick={ () => {
+                                                  this.props.dispatch(logoutUser())
+                                              }}>
+                                            <img src="img/glyphicons-388-log-out.png" alt=""/> Logout
+                                        </Link>
+                                        :
+                                        <Link className="nav-link" to="/login">
+                                            <img src="img/glyphicons-388-log-out.png" alt=""/> Login
+                                        </Link>
+                                }
                             </li>
                         </ul>
                     </div>
