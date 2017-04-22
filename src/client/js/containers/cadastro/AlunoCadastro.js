@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import FloatInput from '../../components/FloatInput'
 import {handleChange} from '../../util'
 import {sendAlunoMatricula} from '../../actions/aluno'
+import {novaMatricula} from '../../actions/matricula'
 
 class AlunoCadastro extends React.Component {
     constructor(props){
@@ -10,9 +11,14 @@ class AlunoCadastro extends React.Component {
 
         this.state = {matricula: ""};
         this.handleChange = handleChange.bind(this);
+        this.novaMatricula = this.novaMatricula.bind(this);
         this.handleClickMatricula = this.handleClickMatricula.bind(this);
     }
 
+    novaMatricula(){
+        this.props.dispatch(novaMatricula());
+        this.setState({matricula: ""});
+    }
     handleChange(event) {}
 
     handleClickMatricula(){
@@ -28,28 +34,34 @@ class AlunoCadastro extends React.Component {
         const {error, errorMessage} = this.props.matricula;
 
         return (
-            <form target="#" className="form-group col-centered">
-                <div className="input-group">
-                    <FloatInput name="matricula" value={matricula} textLabel="Insira sua matrícula"
-                                handleChange={this.handleChange}/>
+            matriculaRequest.fetched ?
+                <div className="text-center">
+                    <h5 className="text-success">Brevemente será enviado um e-mail à você com o link de cadastro!</h5>
+                    <button onClick={this.novaMatricula} className="btn btn-success">Novo Cadastro</button>
                 </div>
-                {
-                    error === true &&
-                    <div className="alert alert-danger text-center col-xs-8 col-xs-offset-2" role="alert">
-                        {errorMessage}
+                :
+                <form target="#" className="form-group col-centered">
+                    <div className="input-group">
+                        <FloatInput name="matricula" value={matricula} textLabel="Insira sua matrícula"
+                                    handleChange={this.handleChange}/>
                     </div>
-                }
-                <div className="input-group text-center">
                     {
-                        !matriculaRequest.isFetching ?
-                            <button onClick={this.handleClickMatricula} type="submit" className="btn btn-primary">
-                                Enviar
-                            </button>
-                            :
-                            <img src="img/loading-big.gif" className="center-block"/>
+                        error === true &&
+                        <div className="alert alert-danger text-center col-xs-8 col-xs-offset-2" role="alert">
+                            {errorMessage}
+                        </div>
                     }
-                </div>
-            </form>
+                    <div className="input-group text-center">
+                        {
+                            !matriculaRequest.isFetching ?
+                                <button onClick={this.handleClickMatricula} type="submit" className="btn btn-primary">
+                                    Enviar
+                                </button>
+                                :
+                                <img src="img/loading-big.gif" className="center-block"/>
+                        }
+                    </div>
+                </form>
         )
     }
 }
