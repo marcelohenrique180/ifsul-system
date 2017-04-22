@@ -5,6 +5,7 @@ import br.com.ifsul.system.infrastructure.errorhandling.ApiError;
 import br.com.ifsul.system.pojo.Notificacao;
 import br.com.ifsul.system.pojo.Requerimento;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.core.annotation.HandleAfterCreate;
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
 import org.springframework.http.HttpStatus;
@@ -18,19 +19,20 @@ public class BeforeSaveRequerimento {
 
     @HandleBeforeCreate
     public void beforeCreate(Requerimento requerimento){
-        System.out.println("Deve notificar Departamentos");
-        try {
-            requerimento.setDataToNow();
+        requerimento.setDataToNow();
+    }
 
+    @HandleAfterCreate
+    public void afterCreate(Requerimento requerimento){
+        try {
             //Notifica todos os departamentos do novo requerimento
             requerimento.getTipo().getDepartamentos().forEach(departamento ->
-                    notificacaoDAO.save(new Notificacao("Novo Requerimento do tipo " + requerimento.getTipo().getTipo() + " foi feito.", departamento.getUsuario()))
+                    notificacaoDAO.save(new Notificacao("Novo Requerimento do tipo " + requerimento.getTipo().getTipo() + " foi feito.", departamento.getUsuario(), "#D8D8EF", "/requerimento/"+requerimento.getId()))
             );
         } catch (Exception e) {
             e.printStackTrace();
             throw new ApiError(HttpStatus.BAD_REQUEST, "Houve algo de errado com seu pedido", "Erro");
         }
-
     }
 
     @Autowired

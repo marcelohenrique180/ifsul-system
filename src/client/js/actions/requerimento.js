@@ -20,3 +20,20 @@ export function sendRequeirmento(requerimento) {
         }
     }
 }
+
+export function getRequerimento(id) {
+    return {
+        [CALL_API]: {
+            endpoint: 'requerimentos/'+id,
+            authenticated: true,
+            types: [REQUEST_SEND_REQUERIMENTO, RECEIVE_SEND_REQUERIMENTO, FAILURE_SEND_REQUERIMENTO],
+            config: {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                method: "GET",
+            }
+        }
+    }
+}

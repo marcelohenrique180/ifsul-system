@@ -11,6 +11,9 @@ public class Parecer {
     @Size(max = 500)
     private String parecer;
 
+    @Size(max = 500)
+    private String memorando;
+
     private Boolean deferido;
 
     @ManyToOne
@@ -61,5 +64,13 @@ public class Parecer {
 
     public void setRequerimento(Requerimento requerimento) {
         this.requerimento = requerimento;
+    }
+
+    public String getMemorando() {
+        return memorando;
+    }
+
+    public void setMemorando(String memorando) {
+        this.memorando = memorando;
     }
 }
