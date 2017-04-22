@@ -22,7 +22,7 @@ class Login extends Component {
 
         return (
             <div>
-                <div id="login-form" className="form-group col-centered">
+                <form id="login-form" className="form-group col-centered">
                     <div className="input-group">
                         <FloatInput name="email" value={email} textLabel="E-mail" handleChange={this.handleChange} />
                     </div>
@@ -34,7 +34,7 @@ class Login extends Component {
                             Login
                         </button>
                     </div>
-                </div>
+                </form>
                 {
                     errorMessage != "" &&
                     <div className="alert alert-danger text-center col-xs-8 col-xs-offset-2" role="alert">
@@ -52,7 +52,8 @@ class Login extends Component {
         )
     }
 
-    handleClick() {
+    handleClick(e) {
+        e.preventDefault();
         const { dispatch } = this.props;
         const {email, senha} = this.state;
 
