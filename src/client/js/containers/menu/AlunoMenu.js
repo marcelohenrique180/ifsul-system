@@ -9,22 +9,22 @@ class AlunoMenu extends AuthorizedContainer {
         return (
             <div>
                 <div className="col-xs-10 col-sm-4 col-lg-2 col-xs-offset-1 col-sm-offset-0">
-                    <div className="panel panel-info">
-                        <div className="panel-heading">Notificações</div>
-                        <div className="panel-body">
-                            Sem novas Notificações!
-                        </div>
-                    </div>
                     <div className="panel panel-default">
                         <div className="panel-heading">
-                            Ações
+                            Requerimentos
                         </div>
                         <div className="panel-body side-menu">
                             <ul className="list-group">
                                 <li className="list-group-item side-item">
-                                    <span className="glyphicon glyphicon-arrow-right" />
+                                    <span className="glyphicon glyphicon glyphicon-plus" />
+                                    <Link to="/menu/aluno/requerimento/solicitar">
+                                        Solicitar
+                                    </Link>
+                                </li>
+                                <li className="list-group-item side-item">
+                                    <span className="glyphicon glyphicon glyphicon-search" />
                                     <Link to="/menu/aluno/requerimento">
-                                        Requerimento
+                                        Visualizar
                                     </Link>
                                 </li>
                             </ul>
