@@ -28,9 +28,9 @@ class AlunoCadastro extends React.Component {
         const {error, errorMessage} = this.props.matricula;
 
         return (
-            <div className="form-group col-centered">
+            <form target="#" className="form-group col-centered">
                 <div className="input-group">
-                    <FloatInput name="matricula" value={matricula} textLabel="Matrícula"
+                    <FloatInput name="matricula" value={matricula} textLabel="Insira sua matrícula"
                                 handleChange={this.handleChange}/>
                 </div>
                 {
@@ -42,14 +42,14 @@ class AlunoCadastro extends React.Component {
                 <div className="input-group text-center">
                     {
                         !matriculaRequest.isFetching ?
-                            <button onClick={this.handleClickMatricula} className="btn btn-primary">
+                            <button onClick={this.handleClickMatricula} type="submit" className="btn btn-primary">
                                 Enviar
                             </button>
                             :
                             <img src="img/loading-big.gif" className="center-block"/>
                     }
                 </div>
-            </div>
+            </form>
         )
     }
 }
