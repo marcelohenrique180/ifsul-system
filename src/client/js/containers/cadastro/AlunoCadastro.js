@@ -9,7 +9,7 @@ class AlunoCadastro extends React.Component {
     constructor(props){
         super(props);
 
-        this.state = {matricula: ""};
+        this.state = {matricula: "", empty: ""};
         this.handleChange = handleChange.bind(this);
         this.novaMatricula = this.novaMatricula.bind(this);
         this.handleClickMatricula = this.handleClickMatricula.bind(this);
@@ -21,16 +21,22 @@ class AlunoCadastro extends React.Component {
     }
     handleChange(event) {}
 
-    handleClickMatricula(){
+    handleClickMatricula(e){
+        e.preventDefault();
         const { dispatch } = this.props;
         const {matricula} = this.state;
 
-        dispatch(sendAlunoMatricula(matricula));
+        if (matricula === "") {
+            this.setState({empty: true})
+        }else{
+            this.setState({empty: false});
+            dispatch(sendAlunoMatricula(matricula));
+        }
     }
 
     render (){
         const matriculaRequest = this.props.matricula;
-        const {matricula} = this.state;
+        const {matricula, empty} = this.state;
         const {error, errorMessage} = this.props.matricula;
 
         return (
@@ -46,10 +52,15 @@ class AlunoCadastro extends React.Component {
                                     handleChange={this.handleChange}/>
                     </div>
                     {
-                        error === true &&
-                        <div className="alert alert-danger text-center col-xs-8 col-xs-offset-2" role="alert">
-                            {errorMessage}
-                        </div>
+                        empty ?
+                            <div className="alert alert-danger text-center col-xs-8 col-xs-offset-2" role="alert">
+                                Favor, insira a Matrícula.
+                            </div>
+                            :
+                            error === true &&
+                            <div className="alert alert-danger text-center col-xs-8 col-xs-offset-2" role="alert">
+                                {errorMessage}
+                            </div>
                     }
                     <div className="input-group text-center">
                         {
