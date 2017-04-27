@@ -23,7 +23,7 @@ class AlunoMenu extends AuthorizedContainer {
                                 </li>
                                 <li className="list-group-item side-item">
                                     <span className="glyphicon glyphicon glyphicon-search" />
-                                    <Link to="/menu/aluno/requerimento">
+                                    <Link to="/menu/aluno/requerimento/visualizar">
                                         Visualizar
                                     </Link>
                                 </li>
