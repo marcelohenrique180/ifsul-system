@@ -27,7 +27,7 @@ export function notificacaoReducer(
                 isFetching: false,
                 error: false,
                 fetched: true,
-                notificacao: action.response,
+                notificacao: action.response._embedded,
                 errorMessage: ""
             });
         case FAILURE_SEND_NOTIFICACAO:
