@@ -6,6 +6,7 @@ import {alunoReducer} from './reducer-aluno'
 import {tiposReducer} from './reducer-tipos'
 import {cursosReducer} from './reducer-curso'
 import {requerimentoReducer} from './reducer-requerimento'
+import {requerimentoPageReducer} from './reducer-requerimento-page'
 import {notificacaoReducer} from './reducer-notificacao'
 /*
  * We combine all reducers into a single object before updated data is dispatched (sent) to store
@@ -20,6 +21,7 @@ const allReducers = combineReducers({
     tipos: tiposReducer,
     curso: cursosReducer,
     requerimento: requerimentoReducer,
+    requerimentoPage: requerimentoPageReducer,
     notificacao: notificacaoReducer
 });
 

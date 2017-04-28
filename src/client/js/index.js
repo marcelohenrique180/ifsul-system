@@ -18,6 +18,7 @@ import Cadastro from './components/cadastro/Cadastro'
 
 import CordRequerimento from './containers/requerimento/CordRequerimento'
 import AlunoRequerimento from './containers/requerimento/AlunoRequerimento'
+import AlunoVisualizarRequerimento from './containers/requerimento/AlunoVisualizarRequerimento'
 import AlunoCadastro from './containers/cadastro/AlunoCadastro'
 import AlunoConfirmar from './containers/cadastro/AlunoConfirmar'
 import AlunoMenu from './containers/menu/AlunoMenu'
@@ -56,6 +57,7 @@ ReactDOM.render(
                     </Route>
                     <Route path="aluno" authorize={['ALUNO']} component={AlunoMenu} >
                         <Route path="requerimento/solicitar" component={AlunoRequerimento} />
+                        <Route path="requerimento/visualizar" component={AlunoVisualizarRequerimento} />
                     </Route>
                 </Route>
                 <Route path="cadastro" component={Cadastro}>
