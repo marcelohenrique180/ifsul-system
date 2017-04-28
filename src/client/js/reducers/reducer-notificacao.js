@@ -3,6 +3,7 @@ import {
     RECEIVE_SEND_NOTIFICACAO,
     REQUEST_SEND_NOTIFICACAO
 } from '../actions/notificacao'
+import {extractEmbedded} from '../util'
 
 export function notificacaoReducer(
     state = {
@@ -27,7 +28,7 @@ export function notificacaoReducer(
                 isFetching: false,
                 error: false,
                 fetched: true,
-                notificacao: action.response._embedded,
+                notificacao: extractEmbedded(action.response),
                 errorMessage: ""
             });
         case FAILURE_SEND_NOTIFICACAO:

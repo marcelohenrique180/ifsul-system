@@ -3,6 +3,7 @@ import {
     RECEIVE_SEND_TIPO,
     FAILURE_SEND_TIPO
 } from '../actions/tipo'
+import {extractEmbedded} from '../util'
 
 export function tiposReducer(
     state = {
@@ -27,7 +28,7 @@ export function tiposReducer(
                 isFetching: false,
                 error: false,
                 fetched: true,
-                tipo: action.response._embedded,
+                tipo: extractEmbedded(action.response),
                 errorMessage: ''
             });
         case REQUEST_SEND_TIPO:
