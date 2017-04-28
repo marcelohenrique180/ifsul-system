@@ -27,7 +27,7 @@ export function tiposReducer(
                 isFetching: false,
                 error: false,
                 fetched: true,
-                tipo: action.response,
+                tipo: action.response._embedded,
                 errorMessage: ''
             });
         case REQUEST_SEND_TIPO:

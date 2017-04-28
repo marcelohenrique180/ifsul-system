@@ -31,9 +31,7 @@ function doFetch(endpoint, config) {
             return Promise.reject(text)
         }
 
-        if (text._embedded != undefined) {
-            return text._embedded
-        }
+
         return text
     })
 }
