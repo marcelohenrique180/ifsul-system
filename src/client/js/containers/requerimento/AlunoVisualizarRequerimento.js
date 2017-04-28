@@ -32,10 +32,10 @@ class AlunoVisualizarRequerimento extends React.Component {
     renderLines(){
         const {requerimentos} = this.props.requerimentos.requerimento._embedded;
 
-        return requerimentos.map((requerimento) => {
+        return requerimentos.map((requerimento, i) => {
 
             return (
-                <tr>
+                <tr key={i}>
                     <td>{requerimento.requerimento}</td>
                     <td></td>
                     <td></td>
