@@ -2,7 +2,6 @@ target/
 node_modules/
 src/main/resources/static/js/bundle.min.js
 !.mvn/wrapper/maven-wrapper.jar
-src/main/resources/email.properties
 src/main/resources/static/css/
 
 ### STS ###
