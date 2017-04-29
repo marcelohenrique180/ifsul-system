@@ -122,8 +122,8 @@ class AlunoVisualizarRequerimento extends React.Component {
                                 <thead>
                                 <tr>
                                     <th>Requerimento</th>
-                                    <th>Status</th>
                                     <th>Deferido</th>
+                                    <th>Status</th>
                                     <th>Parecer</th>
                                 </tr>
                                 </thead>
