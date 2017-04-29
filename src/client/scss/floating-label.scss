@@ -5,6 +5,12 @@ input{
   padding: 15px 40px;
   font-size: 18px;
   display: inline-block;
+  margin-bottom: 20px !important;
+
+  &:read-only{
+    color: #797d85;
+    border-bottom: solid 2px #828188 !important;
+  }
 
   &:focus,
   &:active{
@@ -33,7 +39,7 @@ input{
   }
   label{
     position: absolute;
-    top: 50%;
+    top: 40%;
     left: 0;
     transform: translateY(-50%);
     font {

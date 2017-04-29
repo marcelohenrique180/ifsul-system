@@ -1,11 +1,12 @@
 $primary: #dfeadf;
+//$primary: #f0556f;
 
 body {
-  background-color: $primary;
+  background-color: $primary !important;
 }
 
 .navbar {
-  border-radius: 0;
+  border-radius: 0 !important;
 }
 
 .nav-item a{
@@ -17,10 +18,9 @@ body {
 }
 
 @mixin myButton{
-  color: #fff;
+  color: #fff !important;
   background-color: #368e2b;
   border-color: #5b695b;
-  margin-bottom: 10px;
 }
 
 .btn-custom {
@@ -33,7 +33,7 @@ body {
 .col-centered{
   float: none;
   margin: 0 auto 15px auto;
-  width: 60%;
+  width: 85%;
 }
 
 input:-webkit-autofill {
@@ -43,4 +43,13 @@ input:-webkit-autofill {
 #login-form{
   margin-top: 90px;
   max-width: 500px;
+}
+
+.side-menu {
+  span {
+    float: left;
+  }
+  .side-item {
+    text-align: center;
+  }
 }

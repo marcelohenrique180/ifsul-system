@@ -2,7 +2,7 @@ const BASE_URL = 'http://localhost:8080/api/';
 
 export const CALL_API = Symbol('Call API');
 
-function callApi(endpoint, customConfig, authenticated) {
+export function callApi(endpoint, customConfig, authenticated) {
 
     let token = localStorage.getItem('id_token') || null;
     let config = customConfig || {};
@@ -23,7 +23,7 @@ function callApi(endpoint, customConfig, authenticated) {
 
 // Realiza Fetch
 function doFetch(endpoint, config) {
-    return fetch(BASE_URL + endpoint, config)
+    return fetch(BASE_URL + endpoint.replace(BASE_URL, ""), config)
         .then(response => response.json()
             .then(text => ({ text, response }))
         ).then(({ text, response }) => {
@@ -31,9 +31,7 @@ function doFetch(endpoint, config) {
             return Promise.reject(text)
         }
 
-        if (text._embedded != undefined) {
-            return text._embedded
-        }
+
         return text
     })
 }
