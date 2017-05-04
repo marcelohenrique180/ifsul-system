@@ -2,6 +2,8 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router'
 import {getRequerimentoByPage} from '../../actions/requerimento'
+import {requestTipos} from '../../actions/tipo'
+import {callApi} from '../../actions/middleware/api'
 
 const requerimentoApi = "requerimentos?size=5&";
 
@@ -9,15 +11,42 @@ class AlunoVisualizarRequerimento extends React.Component {
 
     constructor(props){
         super(props);
-        this.state = {currentPage: 0};
+        this.state = {currentPage: 0, tipos: [], pareceres: []};
+        const {dispatch} = this.props;
 
-        this.props.dispatch(getRequerimentoByPage(requerimentoApi+"page=0")).then( r =>
-            {}
-        );
+        this.requestTableContent = this.requestTableContent.bind(this);
+        dispatch(getRequerimentoByPage(requerimentoApi+"page=0")).then( this.requestTableContent );
 
         this.getRequerimentoByPage = this.getRequerimentoByPage.bind(this);
         this.renderLines = this.renderLines.bind(this);
         this.renderNavigation = this.renderNavigation.bind(this);
+    }
+
+    requestTableContent(response){
+        const {dispatch} = this.props;
+        const {requerimentos} = response.response._embedded;
+        const tipos = [];
+        const pareceres = [];
+
+        for ( let i = 0; i < requerimentos.length; i++ ){
+
+            dispatch(requestTipos( requerimentos[i]._links.tipo.href )).then( tipo => {
+                tipos[i] = tipo;
+                this.setState({tipos});
+            }).catch( () => {
+                tipos[i] = "";
+                this.setState({tipos})
+            });
+
+            let requerimentoId = requerimentos[i]._links.self.href.match(/\d+$/)[0];
+            callApi( ("pareceres/search/findByRequerimentoId?id="+requerimentoId), {}, true ).then( parecer => {
+                pareceres[i] = parecer;
+                this.setState({pareceres});
+            }).catch( () => {
+                pareceres[i] = "";
+                this.setState({pareceres})
+            })
+        }
     }
 
     getRequerimentoByPage(page){
@@ -25,24 +54,32 @@ class AlunoVisualizarRequerimento extends React.Component {
             const pageNum = page.match(/page=([0-9])+/)[1];
             this.setState( {currentPage: parseInt(pageNum)} );
 
-            this.props.dispatch(getRequerimentoByPage(page))
+            this.props.dispatch(getRequerimentoByPage(page)).then( this.requestTableContent )
         }
     }
 
     renderLines(){
         const {requerimentos} = this.props.requerimentos.requerimento._embedded;
+        const {tipos, pareceres} = this.state;
 
         return requerimentos.map((requerimento, i) => {
+            const tipo = tipos[i] || null;
+            const parecer = pareceres[i] || null;
 
             return (
                 <tr key={i}>
+                    <td>{ tipo === null ? "&nbsp;" : tipo.response.tipo }</td>
                     <td>{requerimento.requerimento}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    {
+                        parecer ?
+                            <td>{ parecer.deferido === true ? "Deferido" : "Não Deferido" }</td>
+                            :
+                            <td>Em Andamento</td>
+                    }
+                    <td>{ parecer === null ? <span>&nbsp;</span> : parecer.parecer }</td>
                 </tr>
             )
-        })
+        });
     }
 
     renderNavigation(){
@@ -107,7 +144,7 @@ class AlunoVisualizarRequerimento extends React.Component {
     }
 
     render() {
-        const {fetched} = this.props.requerimentos;
+        const {page} = this.props.requerimentos.requerimento || undefined;
 
         return (
             <div>
@@ -115,29 +152,39 @@ class AlunoVisualizarRequerimento extends React.Component {
                     <div className="panel-heading">
                         Meus Requerimentos
                     </div>
-                    {
-                        fetched &&
-                        <div className="panel-body table-responsive">
-                            <table className="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th>Requerimento</th>
-                                    <th>Deferido</th>
-                                    <th>Status</th>
-                                    <th>Parecer</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {
-                                    this.renderLines()
-                                }
-                                </tbody>
-                            </table>
+                    <div className="panel-body table-responsive">
+                        <table className="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Requerimento</th>
+                                <th>Status</th>
+                                <th>Parecer</th>
+                            </tr>
+                            </thead>
                             {
-                                this.renderNavigation()
+                                page != undefined ?
+                                    <tbody>
+                                    {
+                                        this.renderLines()
+                                    }
+                                    </tbody>
+                                    :
+                                    <tbody>
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                        </tr>
+                                    </tbody>
                             }
-                        </div>
-                    }
+                        </table>
+                        {
+                            page != undefined &&
+                            this.renderNavigation()
+                        }
+                    </div>
                 </div>
             </div>
         )
