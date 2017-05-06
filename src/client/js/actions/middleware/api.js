@@ -21,19 +21,31 @@ export function callApi(endpoint, customConfig, authenticated) {
     return doFetch(endpoint, config)
 }
 
+function status(response) {
+    if (response.status >= 200 && response.status < 300) {
+        return Promise.resolve(response)
+    } else {
+        return Promise.reject(new Error(response.statusText))
+    }
+}
+
+function json(response) {
+    return response.json()
+}
+
 // Realiza Fetch
 function doFetch(endpoint, config) {
-    return fetch(BASE_URL + endpoint.replace(BASE_URL, ""), config)
-        .then(response => response.json()
-            .then(text => ({ text, response }))
-        ).then(({ text, response }) => {
-        if (!response.ok) {
-            return Promise.reject(text)
-        }
+    const url = BASE_URL + endpoint.replace(BASE_URL, "");
 
-
-        return text
-    })
+    return fetch(url, config)
+        .then(status)
+        .then(json)
+        .then( data => {
+            console.log('Request succeeded with JSON response', data);
+            return data;
+        }).catch( error => {
+            console.log('Request failed', error);
+        });
 }
 
 export default store => next => action => {

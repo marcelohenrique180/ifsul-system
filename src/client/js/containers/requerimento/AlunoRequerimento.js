@@ -1,13 +1,11 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {requestAluno} from '../../actions/aluno'
 import {requestTipos} from '../../actions/tipo'
-import FloatInput from '../../components/FloatInput'
 import {handleChange} from '../../util'
 import {areFieldsEmpty} from '../../util'
-import {requestCursos} from '../../actions/curso'
 import {sendRequeirmento} from '../../actions/requerimento'
 import Alerta from '../../components/Alerta'
+import AlunoInfo from '../../containers/aluno/AlunoInfo'
 
 require('../../../scss/panel-ifsul.scss');
 
@@ -21,12 +19,6 @@ class AlunoRequerimento extends React.Component {
         const {dispatch} = this.props;
 
         dispatch(requestTipos());
-
-        if (this.props.aluno.fetched === false){
-            dispatch(requestAluno()).then(
-                aluno => dispatch(requestCursos(aluno.response._links.curso.href))
-            )
-        }
 
         this.handleChange = handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -63,9 +55,6 @@ class AlunoRequerimento extends React.Component {
     }
 
     render() {
-        const alunoState = this.props.aluno;
-        const aluno = alunoState.aluno;
-        const curso = this.props.curso;
         const tiposState = this.props.tipos;
         const requerimentoProp = this.props.requerimento;
 
@@ -96,29 +85,9 @@ class AlunoRequerimento extends React.Component {
                                 <div className="container-fluid">
                                     <div className="row">
                                         {
-                                            alunoState.fetched && tiposState.fetched && curso.fetched &&
+                                            tiposState.fetched &&
                                             <div className="form-group col-centered">
-                                                <h3 style={{textAlign: "center"}}>Aluno</h3>
-                                                <div>
-                                                    <div className="input-group">
-                                                        <FloatInput name="nome" type="text" value={aluno.nome}
-                                                                    textLabel="Nome"
-                                                                    readOnly="true"/>
-                                                    </div>
-                                                    <div className="input-group">
-                                                        <FloatInput name="nome" type="text" value={aluno.matricula}
-                                                                    textLabel="Matricula" readOnly="true"/>
-                                                    </div>
-                                                    <div className="input-group">
-                                                        <FloatInput name="nome" type="text" value={aluno.telefone}
-                                                                    textLabel="Telefone" readOnly="true"/>
-                                                    </div>
-                                                    <div className="input-group">
-                                                        <FloatInput name="nome" type="text" value={curso.cursos.nome}
-                                                                    textLabel="Curso"
-                                                                    readOnly="true"/>
-                                                    </div>
-                                                </div>
+                                                <AlunoInfo />
                                                 <div className="form-group">
                                                     <div>
                                                         <label htmlFor="tipo">Tipo</label>
