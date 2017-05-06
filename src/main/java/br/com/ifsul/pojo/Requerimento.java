@@ -43,6 +43,9 @@ public class Requerimento {
     @JoinColumn(name = "id_departamento_atual")
     private Departamento departamentoAtual;
 
+    @OneToOne(mappedBy = "requerimento")
+    private Parecer parecer;
+
     public Requerimento(Long id) {
         this.id = id;
         setDataToNow();
@@ -118,5 +121,13 @@ public class Requerimento {
 
     public void setTipo(Tipo tipo) {
         this.tipo = tipo;
+    }
+
+    public Parecer getParecer() {
+        return parecer;
+    }
+
+    public void setParecer(Parecer parecer) {
+        this.parecer = parecer;
     }
 }
