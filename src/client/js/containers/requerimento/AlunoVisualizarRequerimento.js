@@ -4,6 +4,7 @@ import {Link} from 'react-router'
 import {getRequerimentoByPage} from '../../actions/requerimento'
 import {requestTipos} from '../../actions/tipo'
 import {callApi} from '../../actions/middleware/api'
+import {getId} from '../../util'
 
 const requerimentoApi = "requerimentos?size=5&";
 
@@ -65,10 +66,11 @@ class AlunoVisualizarRequerimento extends React.Component {
         return requerimentos.map((requerimento, i) => {
             const tipo = tipos[i] || null;
             const parecer = pareceres[i] || null;
+            const requerimentoId = getId(requerimento);
 
             return (
                 <tr key={i}>
-                    <td>{ tipo === null ? "&nbsp;" : tipo.response.tipo }</td>
+                    <td><Link to={"/menu/aluno/requerimento/visualizar/"+requerimentoId}> { tipo === null ? "&nbsp;" : tipo.response.tipo } </Link></td>
                     <td>{requerimento.requerimento}</td>
                     {
                         parecer ?
