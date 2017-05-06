@@ -25,6 +25,7 @@ import AlunoMenu from './containers/menu/AlunoMenu'
 import CordMenu from './containers/menu/CordMenu'
 import Menu from './containers/menu/Menu'
 import Login from './containers/Login'
+import VisualizarRequerimento from './containers/requerimento/VisualizarRequerimento'
 
 require('bootstrap-loader');
 require('../scss/floating-label.scss');
@@ -58,6 +59,7 @@ ReactDOM.render(
                     <Route path="aluno" authorize={['ALUNO']} component={AlunoMenu} >
                         <Route path="requerimento/solicitar" component={AlunoRequerimento} />
                         <Route path="requerimento/visualizar" component={AlunoVisualizarRequerimento} />
+                        <Route path="requerimento/visualizar/:requerimento" component={VisualizarRequerimento} />
                     </Route>
                 </Route>
                 <Route path="cadastro" component={Cadastro}>
