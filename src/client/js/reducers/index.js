@@ -8,6 +8,7 @@ import {cursosReducer} from './reducer-curso'
 import {requerimentoReducer} from './reducer-requerimento'
 import {requerimentoPageReducer} from './reducer-requerimento-page'
 import {notificacaoReducer} from './reducer-notificacao'
+import {parecerReducer} from './reducer-parecer'
 /*
  * We combine all reducers into a single object before updated data is dispatched (sent) to store
  * Your entire applications state (store) is just whatever gets returned from all your reducers
@@ -22,7 +23,8 @@ const allReducers = combineReducers({
     curso: cursosReducer,
     requerimento: requerimentoReducer,
     requerimentoPage: requerimentoPageReducer,
-    notificacao: notificacaoReducer
+    notificacao: notificacaoReducer,
+    parecer: parecerReducer,
 });
 
 export default allReducers
