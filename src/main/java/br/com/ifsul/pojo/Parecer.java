@@ -16,7 +16,7 @@ public class Parecer {
 
     private Boolean deferido;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "id_requerimento")
     @NotNull
     private Requerimento requerimento;
