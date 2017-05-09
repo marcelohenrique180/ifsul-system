@@ -1,6 +1,8 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {getRequerimento} from '../../actions/requerimento'
+import {requestAluno} from '../../actions/aluno'
+import {requestCursos} from '../../actions/curso'
 import AlunoInfo from '../../containers/aluno/AlunoInfo'
 import ParecerView from '../../containers/parecer/ParecerView'
 
@@ -8,9 +10,14 @@ class VisualizarRequerimento extends React.Component {
 
     constructor(props) {
         super(props);
+        const {dispatch} = this.props;
 
         const reqId = this.props.params["requerimento"];
-        this.props.dispatch(getRequerimento(reqId))
+        dispatch(getRequerimento(reqId));
+
+        dispatch(requestAluno()).then(
+            aluno => dispatch(requestCursos(aluno.response._links.curso.href))
+        );
 
     }
 
@@ -30,7 +37,7 @@ class VisualizarRequerimento extends React.Component {
                             requerimento.fetched &&
                             <div>
                                 <AlunoInfo />
-                                <ParecerView selectedParecer={requerimento} />
+                                <ParecerView />
                             </div>
                         }
                     </div>

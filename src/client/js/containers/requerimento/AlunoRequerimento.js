@@ -4,6 +4,8 @@ import {requestTipos} from '../../actions/tipo'
 import {handleChange} from '../../util'
 import {areFieldsEmpty} from '../../util'
 import {sendRequeirmento} from '../../actions/requerimento'
+import {requestAluno} from '../../actions/aluno'
+import {requestCursos} from '../../actions/curso'
 import Alerta from '../../components/Alerta'
 import AlunoInfo from '../../containers/aluno/AlunoInfo'
 
@@ -18,6 +20,9 @@ class AlunoRequerimento extends React.Component {
         this.state = defaultState;
         const {dispatch} = this.props;
 
+        dispatch(requestAluno()).then(
+            aluno => dispatch(requestCursos(aluno.response._links.curso.href))
+        );
         dispatch(requestTipos());
 
         this.handleChange = handleChange.bind(this);
@@ -59,6 +64,7 @@ class AlunoRequerimento extends React.Component {
         const requerimentoProp = this.props.requerimento;
 
         const {tipo, requerimento, justificativa, erro, enviado} = this.state;
+        const {aluno, curso} = this.props;
 
         return (
             <div>
