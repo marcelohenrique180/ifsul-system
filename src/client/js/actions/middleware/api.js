@@ -41,11 +41,8 @@ function doFetch(endpoint, config) {
         .then(status)
         .then(json)
         .then( data => {
-            console.log('Request succeeded with JSON response', data);
             return data;
-        }).catch( error => {
-            console.log('Request failed', error);
-        });
+        }).catch( error => {});
 }
 
 export default store => next => action => {
