@@ -27,7 +27,7 @@ export function areFieldsEmpty(notNullFields) {
 }
 
 export function getId(entity) {
-    return entity._links.self.href.match(/\/(\d)/)[1]
+    return entity._links.self.href.match(/\/(\d+)/)[1]
 }
 
 export function extractEmbedded(data) {
