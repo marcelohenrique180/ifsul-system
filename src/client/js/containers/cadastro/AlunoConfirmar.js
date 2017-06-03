@@ -31,7 +31,7 @@ class AlunoCadastro extends React.Component {
         return (
             <div className="form-group col-centered">
                 <div className="input-group">
-                    <FloatInput name="senha" value={senha} textLabel="Senha"
+                    <FloatInput name="senha" value={senha} textLabel="Senha" type="password"
                                 handleChange={this.handleChange}/>
                 </div>
                 {
