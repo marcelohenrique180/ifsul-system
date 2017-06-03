@@ -60,28 +60,43 @@ class AlunoVisualizarRequerimento extends React.Component {
     }
 
     renderLines(){
+        let data;
         const {requerimentos} = this.props.requerimentos.requerimento._embedded;
         const {tipos, pareceres} = this.state;
 
-        return requerimentos.map((requerimento, i) => {
-            const tipo = tipos[i] || null;
-            const parecer = pareceres[i] || null;
-            const requerimentoId = getId(requerimento);
-
-            return (
-                <tr key={i}>
-                    <td><Link to={"/menu/aluno/requerimento/visualizar/"+requerimentoId}> { tipo === null ? "&nbsp;" : tipo.response.tipo } </Link></td>
-                    <td>{requerimento.requerimento}</td>
+        if (requerimentos.length > 0){
+            data = (
+                <tbody>
                     {
-                        parecer ?
-                            <td>{ parecer.deferido === true ? "Deferido" : "Não Deferido" }</td>
-                            :
-                            <td>Em Andamento</td>
+                        requerimentos.map((requerimento, i) => {
+                            const tipo = tipos[i] || null;
+                            const parecer = pareceres[i] || null;
+                            const requerimentoId = getId(requerimento);
+
+                            return (
+                                <tr key={i}>
+                                    <td>
+                                        <Link to={"/menu/aluno/requerimento/visualizar/"+requerimentoId}>
+                                            { tipo === null ? "&nbsp;" : tipo.response.tipo }
+                                        </Link>
+                                    </td>
+                                    <td>{requerimento.requerimento}</td>
+                                    {
+                                        parecer ?
+                                            <td>{ parecer.deferido === true ? "Deferido" : "Não Deferido" }</td>
+                                            :
+                                            <td>Em Andamento</td>
+                                    }
+                                    <td>{ parecer === null ? <span>&nbsp;</span> : parecer.parecer }</td>
+                                </tr>
+                            )
+                        })
                     }
-                    <td>{ parecer === null ? <span>&nbsp;</span> : parecer.parecer }</td>
-                </tr>
+                </tbody>
             )
-        });
+        }
+
+        return data
     }
 
     renderNavigation(){
@@ -122,31 +137,85 @@ class AlunoVisualizarRequerimento extends React.Component {
                 for (let i=pageControl.start; i <= pageControl.end; i++){
                     if (i != currentPage){
                         array.push(
-                            <li key={i}><Link to={self} onClick = {this.getRequerimentoByPage(requerimentoApi+"page="+(i))} >{i+1}</Link></li>
+                            <li key={i}>
+                                <Link to={self} onClick = {this.getRequerimentoByPage(requerimentoApi+"page="+(i))} >
+                                    {i+1}
+                                </Link>
+                            </li>
                         )
                     } else {
                         array.push(
-                            <li className="active" key={i}><Link to={self} onClick = {() => { this.getRequerimentoByPage(requerimentoApi+"page="+(i))}} >{i+1}</Link></li>
+                            <li className="active" key={i}>
+                                <Link to={self}
+                                      onClick = {() => { this.getRequerimentoByPage(requerimentoApi+"page="+(i))}} >
+                                    {i+1}
+                                </Link>
+                            </li>
                         )
                     }
                 }
                 return array
             };
-            pagination =
-                <div>
-                    <ul className="pagination">
-                        <li><Link to={self} onClick = {this.getRequerimentoByPage(_links.first.href)} >&laquo;</Link></li>
-                        {itens()}
-                        <li><Link to={self} onClick = {this.getRequerimentoByPage(_links.last.href)} >&raquo;</Link></li>
-                    </ul>
-                </div>
+
+            if (_links.first){
+                pagination =
+                    <div>
+                        <ul className="pagination">
+                            <li>
+                                <Link to={self} onClick = {this.getRequerimentoByPage(_links.first.href)} >
+                                    &laquo;
+                                </Link>
+                            </li>
+                            {itens()}
+                            <li>
+                                <Link to={self} onClick = {this.getRequerimentoByPage(_links.last.href)} >
+                                    &raquo;
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+            }
         }
 
         return pagination
     }
 
     render() {
-        const {page} = this.props.requerimentos.requerimento || undefined;
+        const {page} = this.props.requerimentos.requerimento;
+        let {_embedded} = this.props.requerimentos.requerimento;
+
+        if (_embedded){
+            const {requerimentos} = _embedded;
+            if (requerimentos.length > 0){
+                return (
+                    <div>
+                        <div className="panel panel-default">
+                            <div className="panel-heading">
+
+                                Meus Requerimentos
+                            </div>
+                            {
+                                page !== undefined &&
+                                <div className="panel-body table-responsive">
+                                    <table className="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>Tipo</th>
+                                            <th>Requerimento</th>
+                                            <th>Status</th>
+                                            <th>Parecer</th>
+                                        </tr>
+                                        </thead>
+                                        {this.renderLines()}
+                                    </table>
+                                    {this.renderNavigation()}
+                                </div>
+                            }
+                        </div>
+                    </div>
+                )
+            }
+        }
 
         return (
             <div>
@@ -154,39 +223,9 @@ class AlunoVisualizarRequerimento extends React.Component {
                     <div className="panel-heading">
                         Meus Requerimentos
                     </div>
-                    <div className="panel-body table-responsive">
-                        <table className="table table-hover">
-                            <thead>
-                            <tr>
-                                <th>Tipo</th>
-                                <th>Requerimento</th>
-                                <th>Status</th>
-                                <th>Parecer</th>
-                            </tr>
-                            </thead>
-                            {
-                                page != undefined ?
-                                    <tbody>
-                                    {
-                                        this.renderLines()
-                                    }
-                                    </tbody>
-                                    :
-                                    <tbody>
-                                        <tr>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                        </tr>
-                                    </tbody>
-                            }
-                        </table>
-                        {
-                            page != undefined &&
-                            this.renderNavigation()
-                        }
-                    </div>
+                    <h4>
+                        Nenhum Requerimento Ainda
+                    </h4>
                 </div>
             </div>
         )
