@@ -1,7 +1,5 @@
 import React from 'react';
-import Navbar from './Navbar'
 import RouterHandler from '../containers/RouterHandler'
-require('../../scss/style.scss');
 
 class MenuConfirmar extends React.Component{
     render() {

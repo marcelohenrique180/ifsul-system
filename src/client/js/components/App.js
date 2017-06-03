@@ -1,5 +1,4 @@
 import React from 'react';
-require('../../scss/style.scss');
 import Navbar from './Navbar'
 
 export default class App extends React.Component{
