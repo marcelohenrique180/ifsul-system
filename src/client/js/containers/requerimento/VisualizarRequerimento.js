@@ -5,6 +5,7 @@ import {requestAluno} from '../../actions/aluno'
 import {requestCursos} from '../../actions/curso'
 import AlunoInfo from '../../containers/aluno/AlunoInfo'
 import ParecerView from '../../containers/parecer/ParecerView'
+import RequerimentoView from '../../containers/requerimento/RequerimentoView'
 
 class VisualizarRequerimento extends React.Component {
 
@@ -37,6 +38,7 @@ class VisualizarRequerimento extends React.Component {
                             requerimento.fetched &&
                             <div>
                                 <AlunoInfo />
+                                <RequerimentoView />
                                 <ParecerView />
                             </div>
                         }

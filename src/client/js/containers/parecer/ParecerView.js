@@ -2,7 +2,6 @@ import React from 'react'
 import {connect} from 'react-redux'
 import FloatInput from '../../components/FloatInput'
 import {getParecerByRequerimentoId} from '../../actions/parecer'
-import {getRequerimento} from '../../actions/requerimento'
 
 class ParecerView extends React.Component {
 
@@ -24,7 +23,7 @@ class ParecerView extends React.Component {
 
         return (
             <div>
-                <h4 style={{textAlign: "center"}}>Parecer</h4>
+                <h3 style={{textAlign: "center"}}>Parecer</h3>
                 <div>
                     {
                         parecer.parecer != undefined ?
@@ -45,7 +44,7 @@ class ParecerView extends React.Component {
                             </div>
                             :
                             <div>
-                                <p style={{textAlign: "center"}}>Nenhum parecer foi dado ainda.</p>
+                                <p style={{textAlign: "center"}}>Nenhum parecer foi dado até agora.</p>
                             </div>
                     }
                 </div>
