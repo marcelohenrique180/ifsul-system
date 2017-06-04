@@ -11,7 +11,7 @@ const defaultState = {
     fetched: false,
     error: false,
     errorMessage: ''
-}
+};
 export function matriculaReducer(state = defaultState, action){
 
     switch (action.type) {

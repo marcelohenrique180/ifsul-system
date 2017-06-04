@@ -55,7 +55,7 @@ ReactDOM.render(
                 <IndexRedirect to={index} />
                 <Route path="menu" component={Menu} onEnter={requireAuth}>
                     <Route path="cordcurso" authorize={['CORDCURSO']} component={CordMenu}>
-                        <Route path="requerimento/:id" component={CordRequerimento} />
+                        <Route path="requerimento/:requerimento" component={CordRequerimento} />
                     </Route>
                     <Route path="aluno" authorize={['ALUNO']} component={AlunoMenu} >
                         <Route path="requerimento/solicitar" component={AlunoRequerimento} />
