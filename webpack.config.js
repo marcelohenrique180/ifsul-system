@@ -1,5 +1,5 @@
-var webpack = require('webpack');
-const {join} = require('path')
+const webpack = require('webpack');
+const {join} = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
@@ -42,7 +42,7 @@ module.exports = {
             jQuery: "jquery"
         }),
         new ExtractTextPlugin({
-            filename: 'css/[name]-bundle.css',
+            filename: 'css/[name].css',
             allChunks: true,
             disable: false
         }),

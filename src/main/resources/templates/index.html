@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <base href="/" />
     <!--/*/ <th:block th:include="fragments/header :: head"></th:block> /*/-->
 </head>
 <body>
 
-    <div id="root"/>
-    <script src="js/bundle.min.js"></script>
+    <div id="root" ></div>
+    <script th:src="@{js/bundle.min.js}"></script>
+    <link rel="stylesheet" th:href="@{css/bundle.css}" />
 
 </body>
 </html>
