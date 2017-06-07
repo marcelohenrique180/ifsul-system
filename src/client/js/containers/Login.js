@@ -22,32 +22,30 @@ class Login extends Component {
 
         return (
             <div>
-                <form id="login-form" className="form-group col-centered">
+                <h2 className="text-center">Login</h2>
+                <form id="login-form" className="form-group col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-4">
                     <div className="input-group">
                         <FloatInput name="email" value={email} textLabel="E-mail" handleChange={this.handleChange} />
                     </div>
                     <div className="input-group">
-                        <FloatInput name="senha" value={senha} type="password" textLabel="Senha" handleChange={this.handleChange} />
+                        <FloatInput name="senha" value={senha} type="password" textLabel="Senha"
+                                    handleChange={this.handleChange} />
                     </div>
+                    {
+                        errorMessage !== "" &&
+                        <div className="alert alert-danger text-center col-xs-8 col-xs-offset-2" role="alert">
+                            {errorMessage}
+                        </div>
+                    }
                     <div className="input-group text-center">
                         <button onClick={this.handleClick} className="btn btn-primary">
                             Login
                         </button>
                     </div>
+                    <div className="text-center">
+                        <Link to="/cadastro/aluno" >Ainda não tem conta?</Link>
+                    </div>
                 </form>
-                {
-                    errorMessage != "" &&
-                    <div className="alert alert-danger text-center col-xs-8 col-xs-offset-2" role="alert">
-                        {errorMessage}
-                    </div>
-                }
-                <div className="container">
-                    <div className="row">
-                        <div className="col-xs-4 col-xs-offset-4 text-center">
-                            <Link to="/cadastro/aluno" >Ainda não tem conta?</Link>
-                        </div>
-                    </div>
-                </div>
             </div>
         )
     }

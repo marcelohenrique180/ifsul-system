@@ -46,7 +46,7 @@ class AlunoCadastro extends React.Component {
                     <button onClick={this.novaMatricula} className="btn btn-success">Novo Cadastro</button>
                 </div>
                 :
-                <form target="#" className="form-group col-centered">
+                <form target="#" className="form-group col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-4">
                     <div className="input-group">
                         <FloatInput name="matricula" value={matricula} textLabel="Insira sua matrícula"
                                     handleChange={this.handleChange}/>

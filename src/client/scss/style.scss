@@ -1,8 +1,11 @@
 $primary: #dfeadf;
 
-
 body {
   background-color: $primary;
+}
+
+#mainmenu {
+  margin-top: 2em;
 }
 
 .navbar {
@@ -13,9 +16,6 @@ body {
   color: #fff;
 }
 
-#main-menu {
-  margin-top: 10px;
-}
 
 @mixin myButton{
   color: #fff;
@@ -30,23 +30,8 @@ body {
   }
 }
 
-.col-centered{
-  float: none;
-  margin: 0 auto 15px auto;
-  width: 85%;
-}
-
-h3, h4, h5 {
-  text-align: center;
-}
-
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 1000px #f8ffe4 inset;
-}
-
-#login-form{
-  margin-top: 90px;
-  max-width: 500px;
 }
 
 .side-menu {
@@ -56,4 +41,12 @@ input:-webkit-autofill {
   .side-item {
     text-align: center;
   }
+}
+
+.btn-primary {
+  margin-bottom: 1em;
+}
+
+textarea {
+  resize: vertical;
 }
