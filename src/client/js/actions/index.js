@@ -84,7 +84,7 @@ export function loginUser(creds){
                         localStorage.setItem("role", user.role);
                         dispatch(recieveLogin(user))
                     }
-                }).catch(err => dispatch(failureLogin("Não foi possível Logar"))
+                }).catch(err => dispatch(failureLogin("E-mail ou Senha incorretos."))
             )
         )
     }
