@@ -25,7 +25,7 @@ import static org.mockito.BDDMockito.*;
 public class AlunoCadastroServiceTest extends TestCase{
 
     @Autowired
-    AlunoCadastroService service;
+    private AlunoCadastroService service;
 
     @Mock
     private AlunoDAO alunoDAO;
@@ -39,6 +39,7 @@ public class AlunoCadastroServiceTest extends TestCase{
     @Override
     @Before
     public void setUp() throws Exception {
+        super.setUp();
         service.setAlunoDAO(alunoDAO);
         service.setSender(sender);
         service.setTokenDAO(tokenDAO);
