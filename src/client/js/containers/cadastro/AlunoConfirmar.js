@@ -29,8 +29,8 @@ class AlunoCadastro extends React.Component {
         const usuario = this.props.usuario;
 
         return (
-            <div className="form-group col-centered">
-                <div className="input-group">
+            <div className="form-group col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-4">
+                <div className="input-group ">
                     <FloatInput name="senha" value={senha} textLabel="Senha" type="password"
                                 handleChange={this.handleChange}/>
                 </div>
