@@ -5,6 +5,7 @@ import org.joda.time.DateTime;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 public class VerificationToken {
@@ -42,6 +43,11 @@ public class VerificationToken {
         DateTime cal = DateTime.now();
         cal = cal.plusMinutes(expiryTimeInMinutes);
         return cal;
+    }
+
+    public void renovar(){
+        this.expiryDate = calculateExpiryDate(EXPIRATION).toDate();
+        this.token = UUID.randomUUID().toString();
     }
 
     public Long getId() {

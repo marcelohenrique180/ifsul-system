@@ -35,8 +35,9 @@ public class AlunoCadastroService {
                 if (dbToken.isVerified()){
                     throw new ApiError(HttpStatus.BAD_REQUEST, "Usuário já cadastrado", "Aluno");
                 }else{
-                    // reenvia email
-                    verificationToken = dbToken;
+                    // cria novo token e reenvia email
+                    dbToken.renovar();
+                    verificationToken = tokenDAO.save(dbToken);
                 }
             } else {
                 // cria novo token
