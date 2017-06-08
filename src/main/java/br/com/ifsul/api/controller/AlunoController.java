@@ -3,18 +3,17 @@ package br.com.ifsul.api.controller;
 import br.com.ifsul.application.service.AlunoCadastroService;
 import br.com.ifsul.application.service.AlunoConfirmarService;
 import br.com.ifsul.application.service.SendConfirmEmail;
-import br.com.ifsul.infrastructure.errorhandling.ApiError;
 import br.com.ifsul.pojo.Aluno;
 import br.com.ifsul.pojo.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 public class AlunoController {
@@ -41,16 +40,6 @@ public class AlunoController {
 
         confirmarService.confirmarAluno(token, usuario, errors);
         return usuario;
-    }
-
-    @ExceptionHandler({ ApiError.class })
-    public Map<String, String> handleAccessDeniedException(ApiError ex, HttpServletResponse response) {
-        Map<String, String> errorMap = new HashMap<>();
-        errorMap.put("message",ex.getMessage());
-        errorMap.put("status", ex.getStatus().toString());
-        response.setStatus(ex.getStatus().value());
-
-        return errorMap;
     }
 
     @Autowired

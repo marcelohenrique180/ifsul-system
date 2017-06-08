@@ -2,10 +2,12 @@ package br.com.ifsul.system.api.controller;
 
 import br.com.ifsul.api.controller.AlunoController;
 import br.com.ifsul.application.service.AlunoCadastroService;
+import br.com.ifsul.application.service.AlunoConfirmarService;
 import br.com.ifsul.application.service.SendConfirmEmail;
-import br.com.ifsul.application.service.VerificationTokenService;
 import br.com.ifsul.infrastructure.errorhandling.ApiError;
+import br.com.ifsul.infrastructure.errorhandling.GlobalErrorHandler;
 import br.com.ifsul.pojo.Aluno;
+import br.com.ifsul.pojo.Usuario;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,11 +19,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.validation.BindingResult;
 
 import java.io.UnsupportedEncodingException;
 
@@ -37,20 +39,20 @@ public class AlunoControllerTest {
 
     // criar mock do serviço
     @Mock
-    VerificationTokenService mockVerificationTokenService;
+    private AlunoConfirmarService alunoConfirmarService;
 
     @Mock
-    Authentication authentication;
+    private Authentication authentication;
 
     @Mock
-    AlunoCadastroService alunoCadastroService;
+    private AlunoCadastroService alunoCadastroService;
 
     @Mock
     SendConfirmEmail mockSender;
 
     // injetar no controller
     @InjectMocks
-    AlunoController controller;
+    private AlunoController controller;
 
     // MackMvc Property
     private MockMvc mvc;
@@ -63,12 +65,12 @@ public class AlunoControllerTest {
 
         mvc = MockMvcBuilders
                 .standaloneSetup(controller)
+                .setControllerAdvice(new GlobalErrorHandler())
                 .build();
     }
 
     @Test
     public void testCadastrarAluno() throws Exception {
-        doAnswer(invocationOnMock -> (Aluno) invocationOnMock.getArguments()[0]).when(alunoCadastroService).confirmarAluno(any(Aluno.class));
 
         mvcResult = mvc.perform(post("/api/cadastro/aluno")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -84,13 +86,27 @@ public class AlunoControllerTest {
         when(authentication.getName()).thenReturn("outro@if");
         doThrow(new ApiError(HttpStatus.NOT_FOUND, "Aluno não encontrado", "Aluno")).when(alunoCadastroService).confirmarAluno(any(Aluno.class));
 
-        mvcResult = mvc.perform(post("/api/cadastro/aluno").with(SecurityMockMvcRequestPostProcessors.authentication(authentication))
+        mvcResult = mvc.perform(post("/api/cadastro/aluno")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"matricula\": \"test\"}")
         )
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(containsString("Aluno não encontrado")))
         .andReturn();
+    }
+
+    @Test
+    public void testPostAlunoTokenException() throws Exception {
+        doThrow(new ApiError(HttpStatus.BAD_REQUEST, "erro", "teste")).when(alunoConfirmarService)
+                .confirmarAluno(eq("token_errado"), any(Usuario.class), any(BindingResult.class));
+
+        mvcResult = mvc.perform(post("/api/cadastro/aluno/usuario")
+                .header("VerificationToken", "token_errado")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content("{\"nome\": \"foo\", \"rg\": \"234234\", \"dataNasc\": \"02/02/2000\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("erro")))
+                .andReturn();
     }
 
     @After
@@ -104,17 +120,5 @@ public class AlunoControllerTest {
 
             }
         }
-    }
-
-    //@Test
-    public void testPostAlunoTokenException() throws Exception {
-        when(mockVerificationTokenService.verificar("token_errado"))
-                .thenThrow(new ApiError(HttpStatus.BAD_REQUEST, "erro", "teste"));
-
-        mvc.perform(post("/api/aluno")
-                .header("VerificationToken", "token_errado")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content("{\"nome\": \"foo\", \"rg\": \"234234\", \"dataNasc\": \"02/02/2000\"}"))
-                .andExpect(status().isBadRequest());
     }
 }
