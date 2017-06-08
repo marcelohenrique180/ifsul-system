@@ -7,7 +7,7 @@ class FloatInput extends React.Component{
         return (
             <div>
                 {
-                    readOnly == "true" ?
+                    readOnly === "true" ?
                         <div>
                             <input id={name} name={name} type={type || "text"} className={value ? 'has-value':''} value={value} readOnly="readOnly"/>
                             <label htmlFor={name}>{textLabel}</label>
