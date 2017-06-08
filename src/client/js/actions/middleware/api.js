@@ -25,7 +25,10 @@ function status(response) {
     if (response.status >= 200 && response.status < 300) {
         return Promise.resolve(response)
     } else {
-        return Promise.reject(new Error(response.statusText))
+        // erro deve ser lançado para entrar em catch
+        throw new (() => {
+            return response // a response é retornada
+        })
     }
 }
 
@@ -42,7 +45,9 @@ function doFetch(endpoint, config) {
         .then(json)
         .then( data => {
             return data;
-        }).catch( error => {});
+        }).catch( error => {
+            return error.json().then(error => Promise.reject(error.message));
+        });
 }
 
 export default store => next => action => {
@@ -66,7 +71,7 @@ export default store => next => action => {
                 type: successType
             }),
         error => next({
-            errorMessage: error.message || 'There was an error.',
+            errorMessage: error || 'Houve um erro.',
             type: errorType
         })
     )
