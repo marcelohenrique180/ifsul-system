@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import FloatInput from '../../components/FloatInput'
+import Alerta from '../../components/Alerta'
 import {handleChange} from '../../util'
 import {sendAlunoMatricula} from '../../actions/aluno'
 import {novaMatricula} from '../../actions/matricula'
@@ -53,14 +54,9 @@ class AlunoCadastro extends React.Component {
                     </div>
                     {
                         empty ?
-                            <div className="alert alert-danger text-center col-xs-8 col-xs-offset-2" role="alert">
-                                Favor, insira a Matrícula.
-                            </div>
+                            <Alerta show={true} alertClass="alert-danger" message="Favor, insira a Matrícula."/>
                             :
-                            error === true &&
-                            <div className="alert alert-danger text-center col-xs-8 col-xs-offset-2" role="alert">
-                                {errorMessage}
-                            </div>
+                            <Alerta show={error} alertClass="alert-danger" message={errorMessage}/>
                     }
                     <div className="input-group text-center">
                         {

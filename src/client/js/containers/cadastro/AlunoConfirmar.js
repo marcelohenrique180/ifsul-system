@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import FloatInput from '../../components/FloatInput'
+import Alerta from '../../components/Alerta'
 import {handleChange} from '../../util'
 import {sendAlunoSenha} from '../../actions/aluno'
 
@@ -34,12 +35,7 @@ class AlunoCadastro extends React.Component {
                     <FloatInput name="senha" value={senha} textLabel="Senha" type="password"
                                 handleChange={this.handleChange}/>
                 </div>
-                {
-                    error === true &&
-                    <div className="alert alert-danger text-center col-xs-8 col-xs-offset-2" role="alert">
-                        {errorMessage}
-                    </div>
-                }
+                <Alerta show={error} alertClass="alert-danger" message={errorMessage} />
                 <div className="input-group text-center">
                     {
                         !usuario.isFetching ?
