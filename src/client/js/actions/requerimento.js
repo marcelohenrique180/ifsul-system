@@ -4,6 +4,9 @@ export const FAILURE_SEND_REQUERIMENTO = "FAILURE_SEND_REQUERIMENTO";
 export const REQUEST_SEND_REQUERIMENTO_PAGE = "REQUEST_SEND_REQUERIMENTO_PAGE";
 export const RECEIVE_SEND_REQUERIMENTO_PAGE = "RECEIVE_SEND_REQUERIMENTO_PAGE";
 export const FAILURE_SEND_REQUERIMENTO_PAGE = "FAILURE_SEND_REQUERIMENTO_PAGE";
+export const REQUEST_REQUERIMENTOS_ABERTOS = "REQUEST_REQUERIMENTOS_ABERTOS";
+export const RECEIVE_REQUERIMENTOS_ABERTOS = "RECEIVE_REQUERIMENTOS_ABERTOS";
+export const FAILURE_REQUERIMENTOS_ABERTOS = "FAILURE_REQUERIMENTOS_ABERTOS";
 import {CALL_API} from './middleware/api'
 
 export function sendRequerimento(requerimento) {
@@ -47,6 +50,23 @@ export function getRequerimentoByPage(page) {
             endpoint: page,
             authenticated: true,
             types: [REQUEST_SEND_REQUERIMENTO_PAGE, RECEIVE_SEND_REQUERIMENTO_PAGE, FAILURE_SEND_REQUERIMENTO_PAGE],
+            config: {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                method: "GET",
+            }
+        }
+    }
+}
+
+export function getRequerimentosEmAberto() {
+    return{
+        [CALL_API]: {
+            endpoint: "requerimentos/search/findRequerimentosByParecerIsNull",
+            authenticated: true,
+            types: [REQUEST_REQUERIMENTOS_ABERTOS, RECEIVE_REQUERIMENTOS_ABERTOS, FAILURE_REQUERIMENTOS_ABERTOS],
             config: {
                 headers: {
                     'Accept': 'application/json',
