@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import autobind from 'autobind-decorator'
 import FloatInput from '../../components/FloatInput'
 import Alerta from '../../components/Alerta'
 import {handleChange} from '../../util'
@@ -7,37 +8,42 @@ import {sendAlunoMatricula} from '../../actions/aluno'
 import {novaMatricula} from '../../actions/matricula'
 
 class AlunoCadastro extends React.Component {
+
     constructor(props){
         super(props);
 
-        this.state = {matricula: "", empty: ""};
+        this.state = {matricula: "", formError: {matricula: false}};
         this.handleChange = handleChange.bind(this);
-        this.novaMatricula = this.novaMatricula.bind(this);
-        this.handleClickMatricula = this.handleClickMatricula.bind(this);
     }
 
+    @autobind
+    handleChangeForm(event){
+        this.setState( {formError: {[event.target.name]: false} });
+        this.handleChange(event);
+    };
+
+    @autobind
     novaMatricula(){
-        this.props.dispatch(novaMatricula());
+        this.props.novaMatricula();
         this.setState({matricula: ""});
     }
-    handleChange(event) {}
 
+    @autobind
     handleClickMatricula(e){
         e.preventDefault();
-        const { dispatch } = this.props;
         const {matricula} = this.state;
 
         if (matricula === "") {
-            this.setState({empty: true})
+            this.setState({formError: {matricula: true}})
         }else{
-            this.setState({empty: false});
-            dispatch(sendAlunoMatricula(matricula));
+            this.setState({formError: {matricula: false}});
+            this.props.sendAlunoMatricula(matricula);
         }
     }
 
     render (){
         const matriculaRequest = this.props.matricula;
-        const {matricula, empty} = this.state;
+        const {matricula, formError} = this.state;
         const {error, errorMessage} = this.props.matricula;
 
         return (
@@ -50,10 +56,10 @@ class AlunoCadastro extends React.Component {
                 <form target="#" className="form-group col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-4">
                     <div className="input-group">
                         <FloatInput name="matricula" value={matricula} textLabel="Insira sua matrícula"
-                                    handleChange={this.handleChange}/>
+                                    handleChange={this.handleChangeForm}/>
                     </div>
                     {
-                        empty ?
+                        formError.matricula ?
                             <Alerta show={true} alertClass="alert-danger" message="Favor, insira a Matrícula."/>
                             :
                             <Alerta show={error} alertClass="alert-danger" message={errorMessage}/>
@@ -79,4 +85,11 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(AlunoCadastro);
+function mapDispatchToProps(dispatch) {
+    return {
+        sendAlunoMatricula: matricula => dispatch(sendAlunoMatricula(matricula)),
+        novaMatricula: () => dispatch(novaMatricula())
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AlunoCadastro);
