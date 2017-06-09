@@ -48,13 +48,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/", "/api/aluno").permitAll()
-                .antMatchers(HttpMethod.POST, "/login", "/api/cadastro/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/cadastro/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/cadastro/aluno/**", "/menu/**").permitAll()
                 .antMatchers("/css/**", "/js/**", "/img/**", "/favicon.ico").permitAll()
                 .anyRequest().authenticated()
                     .and()
+                .formLogin().loginPage("/login").permitAll()
+                .and()
                 // We filter the /login requests
-                .addFilterBefore(new JWTLoginFilter("/login", authenticationManager()), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JWTLoginFilter("/loginfilter", authenticationManager()), UsernamePasswordAuthenticationFilter.class)
                 // And filter other requests to check the presence of JWT in header
                 .addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }

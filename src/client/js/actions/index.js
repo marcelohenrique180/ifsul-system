@@ -68,7 +68,7 @@ export function loginUser(creds){
         dispatch(requestLogin(creds));
 
         return (
-            fetch('http://localhost:8080/login', config)
+            fetch('http://localhost:8080/loginfilter', config)
                 .then(response => {
                     let id_token = response.headers.get("Authorization");
                     let role = response.headers.get("role");
