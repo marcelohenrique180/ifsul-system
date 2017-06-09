@@ -3,6 +3,7 @@
     "es2015",
     "react"
   ],
+  "plugins": ["transform-decorators-legacy"],
   "env": {
     "development": {
       "presets": []
