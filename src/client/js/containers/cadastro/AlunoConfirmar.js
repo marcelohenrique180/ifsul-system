@@ -15,7 +15,8 @@ class AlunoCadastro extends React.Component {
     }
 
     @autobind
-    handleClickSenha(){
+    handleClickSenha(e){
+        e.preventDefault();
         const {senha} = this.state;
         const token = this.props.params["token"];
 
@@ -28,7 +29,7 @@ class AlunoCadastro extends React.Component {
         const usuario = this.props.usuario;
 
         return (
-            <div className="form-group col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-4">
+            <form className="form-group col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-4">
                 <div className="input-group ">
                     <FloatInput name="senha" value={senha} textLabel="Senha" type="password"
                                 handleChange={this.handleChange}/>
@@ -37,14 +38,14 @@ class AlunoCadastro extends React.Component {
                 <div className="input-group text-center">
                     {
                         !usuario.isFetching ?
-                            <button onClick={this.handleClickSenha} className="btn btn-primary">
+                            <button onClick={this.handleClickSenha} type="submit" className="btn btn-primary">
                                 Enviar
                             </button>
                             :
                             <img src="img/loading-big.gif" className="center-block"/>
                     }
                 </div>
-            </div>
+            </form>
         );
     }
 }
