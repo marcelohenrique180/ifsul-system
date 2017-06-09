@@ -1,4 +1,5 @@
 import React from 'react'
+import autobind from 'autobind-decorator'
 import {connect} from 'react-redux'
 import {requestTipos} from '../../actions/tipo'
 import {handleChange} from '../../util'
@@ -28,7 +29,6 @@ class AlunoRequerimento extends React.Component {
         this.handleChange = handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-    handleChange(event){}
 
     renderTipos(){
         const {tipos} = this.props.tipos.tipo;
@@ -59,12 +59,17 @@ class AlunoRequerimento extends React.Component {
         e.preventDefault();
     }
 
+    @autobind
+    onVoltar(){
+        this.setState(defaultState);
+        this.props.router.push("/menu/aluno/requerimento/visualizar");
+    }
+
     render() {
         const tiposState = this.props.tipos;
         const requerimentoProp = this.props.requerimento;
 
         const {tipo, requerimento, justificativa, erro, enviado} = this.state;
-        const {aluno, curso} = this.props;
 
         return (
             <div>
@@ -83,7 +88,7 @@ class AlunoRequerimento extends React.Component {
                                     </div>
                                     <div className="text-center">
                                         <button className="btn btn-custom"
-                                                onClick={() => {this.setState(defaultState)}}>Voltar
+                                                onClick={this.onVoltar}>Voltar
                                         </button>
                                     </div>
                                 </div>
