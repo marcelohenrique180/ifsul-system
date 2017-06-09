@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import {requestTipos} from '../../actions/tipo'
 import {handleChange} from '../../util'
 import {areFieldsEmpty} from '../../util'
-import {sendRequeirmento} from '../../actions/requerimento'
+import {sendRequerimento} from '../../actions/requerimento'
 import {requestAluno} from '../../actions/aluno'
 import {requestCursos} from '../../actions/curso'
 import Alerta from '../../components/Alerta'
@@ -54,7 +54,7 @@ class AlunoRequerimento extends React.Component {
             this.setState({erro: {erro: true, message: "Algum campo obrigatório não foi preenchido."}});
         }else {
             this.setState({erro: {erro: false}});
-            this.props.dispatch(sendRequeirmento({tipo, requerimento, justificativa, aluno}))
+            this.props.dispatch(sendRequerimento({tipo, requerimento, justificativa, aluno}))
                 .then(this.setState({enviado: true}))
         }
         e.preventDefault();

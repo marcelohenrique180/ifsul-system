@@ -6,7 +6,7 @@ export const RECEIVE_SEND_REQUERIMENTO_PAGE = "RECEIVE_SEND_REQUERIMENTO_PAGE";
 export const FAILURE_SEND_REQUERIMENTO_PAGE = "FAILURE_SEND_REQUERIMENTO_PAGE";
 import {CALL_API} from './middleware/api'
 
-export function sendRequeirmento(requerimento) {
+export function sendRequerimento(requerimento) {
     return {
         [CALL_API]: {
             endpoint: 'requerimentos',
