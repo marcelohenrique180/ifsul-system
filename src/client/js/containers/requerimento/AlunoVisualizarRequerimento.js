@@ -5,6 +5,7 @@ import {getRequerimentoByPage} from '../../actions/requerimento'
 import {requestTipos} from '../../actions/tipo'
 import {callApi} from '../../actions/middleware/api'
 import {getId} from '../../util'
+import Carregando from '../../components/Carregando'
 
 const requerimentoApi = "requerimentos?size=5&";
 
@@ -76,9 +77,14 @@ class AlunoVisualizarRequerimento extends React.Component {
                             return (
                                 <tr key={i}>
                                     <td>
-                                        <Link to={"/menu/aluno/requerimento/visualizar/"+requerimentoId}>
-                                            { tipo === null ? "&nbsp;" : tipo.response.tipo }
-                                        </Link>
+                                        {
+                                            tipo !== null ?
+                                            <Link to={"/menu/aluno/requerimento/visualizar/"+requerimentoId}>
+                                                {tipo.response.tipo}
+                                            </Link>
+                                            :
+                                            <p>&nbsp;</p>
+                                        }
                                     </td>
                                     <td>{requerimento.requerimento}</td>
                                     {
@@ -135,7 +141,7 @@ class AlunoVisualizarRequerimento extends React.Component {
                 })();
 
                 for (let i=pageControl.start; i <= pageControl.end; i++){
-                    if (i != currentPage){
+                    if (i !== currentPage){
                         array.push(
                             <li key={i}>
                                 <Link to={self} onClick = {this.getRequerimentoByPage(requerimentoApi+"page="+(i))} >
@@ -223,9 +229,14 @@ class AlunoVisualizarRequerimento extends React.Component {
                     <div className="panel-heading">
                         Meus Requerimentos
                     </div>
-                    <h4>
-                        Nenhum Requerimento Ainda
-                    </h4>
+                    {
+                        this.props.requerimentos.error ?
+                            <h4 className="text-center">
+                                Você ainda não possui Requerimentos
+                            </h4>
+                            :
+                            <Carregando />
+                    }
                 </div>
             </div>
         )
