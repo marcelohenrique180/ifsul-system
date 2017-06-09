@@ -4,6 +4,7 @@ import {connect} from 'react-redux'
 import {loginUser} from '../actions/'
 import {handleChange} from '../util'
 import FloatInput from '../components/FloatInput'
+import Alerta from '../components/Alerta'
 
 class Login extends Component {
     constructor(props) {
@@ -13,8 +14,6 @@ class Login extends Component {
         this.handleChange = handleChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
     }
-
-    handleChange(event) {}
 
     render() {
         const { errorMessage } = this.props.user;
@@ -33,9 +32,7 @@ class Login extends Component {
                     </div>
                     {
                         errorMessage !== "" &&
-                        <div className="alert alert-danger text-center col-xs-8 col-xs-offset-2" role="alert">
-                            {errorMessage}
-                        </div>
+                        <Alerta alertClass="alert-danger" message={errorMessage} />
                     }
                     <div className="input-group text-center">
                         <button onClick={this.handleClick} className="btn btn-primary">

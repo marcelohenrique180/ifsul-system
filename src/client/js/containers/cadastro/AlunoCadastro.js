@@ -60,7 +60,7 @@ class AlunoCadastro extends React.Component {
                     </div>
                     {
                         formError.matricula ?
-                            <Alerta show={true} alertClass="alert-danger" message="Favor, insira a Matrícula."/>
+                            <Alerta alertClass="alert-danger" message="Favor, insira a Matrícula."/>
                             :
                             <Alerta show={error} alertClass="alert-danger" message={errorMessage}/>
                     }
