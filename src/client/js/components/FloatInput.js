@@ -9,12 +9,16 @@ class FloatInput extends React.Component{
                 {
                     readOnly === "true" ?
                         <div>
-                            <input id={name} name={name} type={type || "text"} className={value ? 'has-value':''} value={value} readOnly="readOnly"/>
+                            <input id={name} name={name} type={type || "text"}
+                                   className={value ? 'has-value input__float' : 'input__float'}
+                                   value={value} readOnly="readOnly"/>
                             <label htmlFor={name}>{textLabel}</label>
                         </div>
                         :
                         <div>
-                            <input id={name} name={name} type={type || "text"} className={value ? 'has-value':''} value={value} onChange={handleChange}/>
+                            <input id={name} name={name} type={type || "text"}
+                                   className={value ? 'has-value input__float' : 'input__float'}
+                                   value={value} onChange={handleChange}/>
                             <label htmlFor={name}>{textLabel}</label>
                         </div>
                 }
