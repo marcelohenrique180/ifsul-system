@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import autobind from 'autobind-decorator'
 import FloatInput from '../../components/FloatInput'
 import Alerta from '../../components/Alerta'
 import {handleChange} from '../../util'
@@ -11,17 +12,14 @@ class AlunoCadastro extends React.Component {
 
         this.state = {senha: ""};
         this.handleChange = handleChange.bind(this);
-        this.handleClickSenha = this.handleClickSenha.bind(this);
     }
 
-    handleChange(event) {}
-
+    @autobind
     handleClickSenha(){
-        const { dispatch } = this.props;
         const {senha} = this.state;
         const token = this.props.params["token"];
 
-        dispatch(sendAlunoSenha({senha, token}));
+        this.props.sendAlunoSenha({senha, token});
     }
 
     render (){
@@ -57,4 +55,10 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(AlunoCadastro);
+function mapDispatchToProps(dispatch) {
+    return {
+        sendAlunoSenha: (credentials) => dispatch(sendAlunoSenha(credentials))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AlunoCadastro);
