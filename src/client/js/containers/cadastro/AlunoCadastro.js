@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import autobind from 'autobind-decorator'
 import FloatInput from '../../components/FloatInput'
 import Alerta from '../../components/Alerta'
+import Carregando from '../../components/Carregando'
 import {handleChange} from '../../util'
 import {sendAlunoMatricula} from '../../actions/aluno'
 import {novaMatricula} from '../../actions/matricula'
@@ -71,7 +72,7 @@ class AlunoCadastro extends React.Component {
                                     Enviar
                                 </button>
                                 :
-                                <img src="img/loading-big.gif" className="center-block"/>
+                                <Carregando />
                         }
                     </div>
                 </form>

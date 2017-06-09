@@ -30,6 +30,7 @@ import VisualizarRequerimento from './containers/requerimento/VisualizarRequerim
 require('bootstrap-loader');
 require('../scss/floating-label.scss');
 require('../scss/style.scss');
+require('../scss/loading.scss');
 
 const logger = createLogger();
 const store = createStore(

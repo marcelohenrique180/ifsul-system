@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import FloatInput from '../../components/FloatInput'
+import Carregando from '../../components/Carregando'
 import {getRequerimento} from '../../actions/requerimento'
 import {requestTipos} from '../../actions/tipo'
 import {getAluno} from '../../actions/aluno'
@@ -121,7 +122,7 @@ class CordRequerimento extends React.Component {
                                             </div>
                                         </div>
                                     :
-                                        <img src="img/loading-big.gif" className="center-block"/>
+                                        <Carregando />
                                 }
                             </div>
                         </div>

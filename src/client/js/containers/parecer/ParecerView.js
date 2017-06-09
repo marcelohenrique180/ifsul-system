@@ -1,7 +1,9 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import FloatInput from '../../components/FloatInput'
+import Carregando from '../../components/Carregando'
 import {getParecerByRequerimentoId} from '../../actions/parecer'
+
 
 class ParecerView extends React.Component {
 
@@ -41,7 +43,7 @@ class ParecerView extends React.Component {
                                             </div>
                                         </div>
                                         :
-                                        <img src="img/loading-big.gif" className="center-block"/>
+                                        <Carregando />
                                 }
                             </div>
                             :

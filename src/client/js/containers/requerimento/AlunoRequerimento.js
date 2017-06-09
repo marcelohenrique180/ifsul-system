@@ -8,6 +8,7 @@ import {sendRequeirmento} from '../../actions/requerimento'
 import {requestAluno} from '../../actions/aluno'
 import {requestCursos} from '../../actions/curso'
 import Alerta from '../../components/Alerta'
+import Carregando from '../../components/Carregando'
 import AlunoInfo from '../../containers/aluno/AlunoInfo'
 
 require('../../../scss/panel-ifsul.scss');
@@ -127,7 +128,7 @@ class AlunoRequerimento extends React.Component {
                                                 <div className="input-group text-center">
                                                     {
                                                         requerimentoProp.isFetching ?
-                                                            <img src="img/loading-big.gif" className="center-block"/>
+                                                            <Carregando />
                                                             :
                                                             <button type="submit" className="btn btn-custom"
                                                                     onClick={this.handleSubmit}>Enviar
