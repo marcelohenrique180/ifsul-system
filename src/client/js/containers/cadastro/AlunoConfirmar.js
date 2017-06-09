@@ -10,7 +10,7 @@ class AlunoCadastro extends React.Component {
     constructor(props){
         super(props);
 
-        this.state = {senha: ""};
+        this.state = {senha: "", formError: {senha: false, message: ""}};
         this.handleChange = handleChange.bind(this);
     }
 
@@ -20,11 +20,29 @@ class AlunoCadastro extends React.Component {
         const {senha} = this.state;
         const token = this.props.params["token"];
 
-        this.props.sendAlunoSenha({senha, token});
+        if (senha === "") {
+            this.setState({formError: {senha: true, message: "Senha deve ser informada!"}});
+        }
+        else if(senha.search(/(?=.*\d)/g)){
+            this.setState({formError: {senha: true, message: "Senha deve conter pelo menos 1 número"}});
+        }
+        else if(senha.search(/(?=.*[A-Z])/g)){
+            this.setState({formError: {senha: true, message: "Senha deve conter pelo menos 1 letra maiúscula"}});
+        }
+        else if(senha.search(/(?=.*[a-z])/g)){
+            this.setState({formError: {senha: true, message: "Senha deve conter pelo menos 1 letra minúscula"}});
+        }
+        else if(senha.search(/([a-zA-Z0-9]{8,})/g)){
+            this.setState({formError: {senha: true, message: "Senha deve conter pelo menos 8 caracteres."}});
+        }
+        else {
+            this.setState({formError: {senha: false}});
+            this.props.sendAlunoSenha({senha, token});
+        }
     }
 
     render (){
-        const {senha} = this.state;
+        const {senha, formError} = this.state;
         const {error, errorMessage} = this.props.usuario;
         const usuario = this.props.usuario;
 
@@ -34,7 +52,12 @@ class AlunoCadastro extends React.Component {
                     <FloatInput name="senha" value={senha} textLabel="Senha" type="password"
                                 handleChange={this.handleChange}/>
                 </div>
-                <Alerta show={error} alertClass="alert-danger" message={errorMessage} />
+                {
+                    formError.senha === true ?
+                        <Alerta alertClass="alert-danger" message={formError.message} />
+                        :
+                        <Alerta show={error} alertClass="alert-danger" message={errorMessage} />
+                }
                 <div className="input-group text-center">
                     {
                         !usuario.isFetching ?
