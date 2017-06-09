@@ -17,7 +17,7 @@ class ParecerView extends React.Component {
     render() {
         const {parecer} = this.props;
 
-        if (parecer.parecer) {
+        if (typeof parecer.parecer !== "undefined") {
             parecer.parecer.deferido = (parecer.parecer.deferido) ? "Deferido" : "Indeferido";
         }
 
@@ -26,20 +26,22 @@ class ParecerView extends React.Component {
                 <h3 style={{textAlign: "center"}}>Parecer</h3>
                 <div>
                     {
-                        parecer.parecer != undefined ?
+                        parecer.error === false ?
                             <div>
                                 {
-                                    parecer.parecer.parecer &&
-                                    <div>
-                                        <div className="input-group">
-                                            <FloatInput name="parecer" type="text" value={parecer.parecer.parecer}
-                                                        textLabel="Parecer" readOnly="true"/>
+                                    parecer.fetched === true ?
+                                        <div>
+                                            <div className="input-group">
+                                                <FloatInput name="parecer" type="text" value={parecer.parecer.parecer}
+                                                            textLabel="Parecer" readOnly="true"/>
+                                            </div>
+                                            <div className="input-group">
+                                                <FloatInput name="deferimento" type="text" value={parecer.parecer.deferido}
+                                                            textLabel="Deferimento" readOnly="true"/>
+                                            </div>
                                         </div>
-                                        <div className="input-group">
-                                            <FloatInput name="deferimento" type="text" value={parecer.parecer.deferido}
-                                                        textLabel="Deferimento" readOnly="true"/>
-                                        </div>
-                                    </div>
+                                        :
+                                        <img src="img/loading-big.gif" className="center-block"/>
                                 }
                             </div>
                             :
