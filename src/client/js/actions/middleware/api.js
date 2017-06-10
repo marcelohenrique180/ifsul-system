@@ -22,7 +22,7 @@ export function callApi(endpoint, customConfig, authenticated) {
 }
 
 function status(response) {
-    if (response.status >= 200 && response.status < 300) {
+    if (response.ok) {
         return Promise.resolve(response)
     } else {
         // erro deve ser lançado para entrar em catch
@@ -43,9 +43,7 @@ function doFetch(endpoint, config) {
     return fetch(url, config)
         .then(status)
         .then(json)
-        .then( data => {
-            return data;
-        }).catch( error => {
+        .catch( error => {
             return error.json().then(error => Promise.reject(error.message));
         });
 }
