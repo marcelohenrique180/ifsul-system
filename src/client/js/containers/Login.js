@@ -24,7 +24,8 @@ class Login extends Component {
                 <h2 className="text-center">Login</h2>
                 <form id="login-form" className="form-group col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-4">
                     <div className="input-group">
-                        <FloatInput name="email" value={email} textLabel="E-mail" handleChange={this.handleChange} />
+                        <FloatInput name="email" value={email} textLabel="E-mail" handleChange={this.handleChange}
+                                autofocus="true"/>
                     </div>
                     <div className="input-group">
                         <FloatInput name="senha" value={senha} type="password" textLabel="Senha"
