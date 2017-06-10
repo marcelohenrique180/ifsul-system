@@ -1,18 +1,19 @@
 import {
     FAILURE_SEND_ALUNO,
     RECEIVE_SEND_ALUNO,
-    REQUEST_SEND_ALUNO
+    REQUEST_SEND_ALUNO,
+    RESET_ALUNO
 } from '../actions/aluno'
 
-export function alunoReducer(
-    state = {
-        isFetching: false,
-        error: false,
-        fetched: false,
-        aluno: {},
-        errorMessage: ''
-    },action
-){
+const defaultState = {
+    isFetching: false,
+    error: false,
+    fetched: false,
+    aluno: {},
+    errorMessage: ''
+};
+
+export function alunoReducer(state = defaultState, action){
     switch (action.type){
         case FAILURE_SEND_ALUNO:
             return Object.assign({}, state,{
@@ -38,6 +39,8 @@ export function alunoReducer(
                 aluno: {},
                 errorMessage: ''
             });
+        case RESET_ALUNO:
+            return defaultState;
         default:
             return state
     }

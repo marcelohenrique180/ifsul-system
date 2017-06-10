@@ -7,7 +7,14 @@ export const FAILURE_SEND_REQUERIMENTO_PAGE = "FAILURE_SEND_REQUERIMENTO_PAGE";
 export const REQUEST_REQUERIMENTOS_ABERTOS = "REQUEST_REQUERIMENTOS_ABERTOS";
 export const RECEIVE_REQUERIMENTOS_ABERTOS = "RECEIVE_REQUERIMENTOS_ABERTOS";
 export const FAILURE_REQUERIMENTOS_ABERTOS = "FAILURE_REQUERIMENTOS_ABERTOS";
+export const RESET_REQUERIMENTO = "RESET_REQUERIMENTO";
 import {CALL_API} from './middleware/api'
+
+export function resetRequerimento() {
+    return {
+        type: RESET_REQUERIMENTO
+    }
+}
 
 export function sendRequerimento(requerimento) {
     return {

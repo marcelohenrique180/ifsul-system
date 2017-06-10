@@ -1,18 +1,22 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import FloatInput from '../../components/FloatInput'
 import Carregando from '../../components/Carregando'
 import RequerimentoView from '../../containers/requerimento/RequerimentoView'
 import AlunoInfo from '../../containers/aluno/AlunoInfo'
-import {getRequerimento} from '../../actions/requerimento'
-import {requestTipos} from '../../actions/tipo'
-import {getAluno} from '../../actions/aluno'
-import {requestCursos} from '../../actions/curso'
+import {getRequerimento, resetRequerimento} from '../../actions/requerimento'
+import {requestTipos, resetTipo} from '../../actions/tipo'
+import {getAluno, resetAluno} from '../../actions/aluno'
+import {requestCursos, resetCurso} from '../../actions/curso'
 import {handleChange} from '../../util'
 
 require('../../../scss/panel-ifsul.scss');
 
 export function reload(dispatch, requerimentoId) {
+
+    dispatch(resetRequerimento());
+    dispatch(resetTipo());
+    dispatch(resetAluno());
+    dispatch(resetCurso());
 
     dispatch(getRequerimento(requerimentoId)).then(
         requerimento => {
@@ -45,7 +49,7 @@ class CordRequerimento extends React.Component {
         const requerimentoProp = this.props.requerimento;
         const tipoProp = this.props.tipo;
         const cursoProp = this.props.curso;
-        
+
         return (
             <div>
                 <div className="panel panel-ifsul">
@@ -58,7 +62,7 @@ class CordRequerimento extends React.Component {
                         <div className="container-fluid">
                             <div className="row">
                                 {
-                                    !requerimentoProp.isFetching && !alunoProp.isFetching && !tipoProp.isFetching && !cursoProp.isFetching ?
+                                    requerimentoProp.fetched && alunoProp.fetched && tipoProp.fetched && cursoProp.fetched ?
                                         <div className="form-group col-centered">
                                             <AlunoInfo />
                                             <RequerimentoView />
@@ -67,21 +71,21 @@ class CordRequerimento extends React.Component {
                                                 <div className="radio">
                                                     <label>
                                                         <input type="radio" name="deferido" value="deferido"
-                                                                checked={this.state.deferido === "deferido"}
-                                                                onChange={this.handleChange}/>Deferir
+                                                               checked={this.state.deferido === "deferido"}
+                                                               onChange={this.handleChange}/>Deferir
                                                     </label>
                                                 </div>
                                                 <div className="radio">
                                                     <label>
                                                         <input type="radio" name="deferido" value="naodeferido"
-                                                                checked={this.state.deferido === "naodeferido"}
-                                                                onChange={this.handleChange}/>Não Deferir
+                                                               checked={this.state.deferido === "naodeferido"}
+                                                               onChange={this.handleChange}/>Não Deferir
                                                     </label>
                                                 </div>
                                             </div>
                                         </div>
                                     :
-                                        <Carregando />
+                                        <Carregando/>
                                 }
                             </div>
                         </div>

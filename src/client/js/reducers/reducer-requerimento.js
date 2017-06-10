@@ -1,18 +1,19 @@
 import {
     RECEIVE_SEND_REQUERIMENTO,
     REQUEST_SEND_REQUERIMENTO,
-    FAILURE_SEND_REQUERIMENTO
+    FAILURE_SEND_REQUERIMENTO,
+    RESET_REQUERIMENTO
 } from '../actions/requerimento'
 
-export function requerimentoReducer(
-    state = {
-        isFetching: false,
-        error: false,
-        fetched: false,
-        requerimento: {},
-        errorMessage: ''
-    },action
-) {
+const defaultState = {
+    isFetching: false,
+    error: false,
+    fetched: false,
+    requerimento: {},
+    errorMessage: ''
+}
+
+export function requerimentoReducer(state = defaultState, action){
     switch (action.type){
         case RECEIVE_SEND_REQUERIMENTO:
             return Object.assign({}, state,{
@@ -38,6 +39,8 @@ export function requerimentoReducer(
                 requerimento: {},
                 errorMessage: ''
             });
+        case RESET_REQUERIMENTO:
+            return defaultState;
         default:
             return state
     }

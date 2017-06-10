@@ -1,5 +1,3 @@
-//import {findGetParameter} from '../util'
-
 export const REQUEST_SEND_ALUNO_MATRICULA = "REQUEST_SEND_ALUNO_MATRICULA";
 export const RECEIVE_SEND_ALUNO_MATRICULA = "RECEIVE_SEND_ALUNO_MATRICULA";
 export const FAILURE_SEND_ALUNO_MATRICULA = "FAILURE_SEND_ALUNO_MATRICULA";
@@ -9,7 +7,14 @@ export const FAILURE_SEND_ALUNO_SENHA = "FAILURE_SEND_ALUNO_SENHA";
 export const REQUEST_SEND_ALUNO = "REQUEST_SEND_ALUNO";
 export const RECEIVE_SEND_ALUNO = "RECEIVE_SEND_ALUNO";
 export const FAILURE_SEND_ALUNO = "FAILURE_SEND_ALUNO";
+export const RESET_ALUNO = "RESET_ALUNO";
 import { CALL_API} from './middleware/api'
+
+export function resetAluno() {
+    return {
+        type: RESET_ALUNO
+    }
+}
 
 export function sendAlunoMatricula(matricula) {
     return {
