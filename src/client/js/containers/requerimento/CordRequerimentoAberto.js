@@ -35,7 +35,7 @@ class CordRequerimentoAberto extends React.Component {
 
         return this.state.filteredRequerimentos.map( (reqAberto, i) => {
             return (
-                <li key={i} className="list-group-item"> {reqAberto} </li>
+                <li key={i} className="list-group-item list-group-item--clickable"> {reqAberto} </li>
             )
         })
     }

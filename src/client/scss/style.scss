@@ -26,6 +26,15 @@ body {
   height: 25em;
 }
 
+.list-group-item--clickable {
+  cursor: pointer;
+  &:hover {
+    background-color: #d4f1d0;
+    transition-property: background-color;
+    transition-duration: .7s;
+  }
+}
+
 @mixin myButton{
   color: #fff;
   background-color: #368e2b;
