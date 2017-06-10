@@ -7,6 +7,7 @@ import {handleChange} from '../../util'
 import {getRequerimentosEmAberto} from '../../actions/requerimento'
 import {getAluno} from '../../actions/aluno'
 import Carregando from '../../components/Carregando'
+import {reload} from '../../containers/requerimento/CordRequerimento'
 
 class CordRequerimentoAberto extends React.Component {
 
@@ -19,15 +20,28 @@ class CordRequerimentoAberto extends React.Component {
                 this.props.getAluno(requerimento._links.aluno.href).then( aluno => {
 
                     this.setState({
-                        requerimentos: this.state.requerimentos.concat([
-                            "Req.Nº"+getId(requerimento)+" "+aluno.response.nome+" "+aluno.response.matricula
-                        ])
+                        requerimentos: this.state.requerimentos.concat([{
+                            result: "Req.Nº"+getId(requerimento) + " " + aluno.response.nome + " " + aluno.response.matricula,
+                            requerimento_id: getId(requerimento)
+                        }])
                     });
                     this.setState({filteredRequerimentos: this.state.requerimentos})
                 })
             })
         });
+        this.reload = reload.bind(this);
         this.handleChange = handleChange.bind(this);
+    }
+
+    @autobind
+    onItemClick(id){
+        return () => {
+            this.props.loadRequerimento({
+                push: this.props.router.push,
+                id,
+                reload: this.reload
+            });
+        }
     }
 
     @autobind
@@ -35,7 +49,8 @@ class CordRequerimentoAberto extends React.Component {
 
         return this.state.filteredRequerimentos.map( (reqAberto, i) => {
             return (
-                <li key={i} className="list-group-item list-group-item--clickable"> {reqAberto} </li>
+                <li key={i} className="list-group-item list-group-item--clickable"
+                    onClick={this.onItemClick(reqAberto.requerimento_id)} >{reqAberto.result} </li>
             )
         })
     }
@@ -45,7 +60,7 @@ class CordRequerimentoAberto extends React.Component {
         this.handleChange(event);
 
         this.setState( {filteredRequerimentos:
-            this.state.requerimentos.filter(campo => campo.toLowerCase().includes(event.target.value.toLowerCase()))
+            this.state.requerimentos.filter(req => req.result.toLowerCase().includes(event.target.value.toLowerCase()))
         });
 
     }
@@ -96,7 +111,11 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch){
     return {
         getRequerimentosEmAberto: () => dispatch(getRequerimentosEmAberto()),
-        getAluno: url => dispatch(getAluno(url))
+        getAluno: url => dispatch(getAluno(url)),
+        loadRequerimento: ({push, id, reload}) => {
+            push("/menu/cordcurso/requerimento/"+id);
+            reload(dispatch)
+        }
     }
 }
 

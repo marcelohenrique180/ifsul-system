@@ -10,6 +10,21 @@ import {handleChange} from '../../util'
 
 require('../../../scss/panel-ifsul.scss');
 
+export function reload(dispatch) {
+    const requerimentoId = this.props.params["requerimento"];
+
+    dispatch(getRequerimento(requerimentoId)).then(
+        requerimento => {
+            dispatch(requestTipos(requerimento.response._links.tipo.href));
+            dispatch(getAluno(requerimento.response._links.aluno.href)).then(
+                aluno => {
+                    dispatch(requestCursos(aluno.response._links.curso.href))
+                }
+            );
+        }
+    );
+}
+
 class CordRequerimento extends React.Component {
 
     constructor(props){
@@ -18,22 +33,11 @@ class CordRequerimento extends React.Component {
         this.state = {deferido: "naodeferido", requerimentoId: this.props.params["requerimento"]};
 
         if (this.props.requerimento.fetched === false && this.props.requerimento.isFetching === false){
-            dispatch(getRequerimento(this.state.requerimentoId)).then(
-                requerimento => {
-                    dispatch(requestTipos(requerimento.response._links.tipo.href));
-                    dispatch(getAluno(requerimento.response._links.aluno.href)).then(
-                        aluno => {
-                            dispatch(requestCursos(aluno.response._links.curso.href))
-                        }
-                    );
-                }
-            );
+            reload.bind(this)(dispatch)
         }
 
         this.handleChange = handleChange.bind(this);
     }
-
-    handleChange(event){}
 
     render(){
         const alunoProp = this.props.aluno;
