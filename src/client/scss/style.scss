@@ -16,6 +16,15 @@ body {
   color: #fff;
 }
 
+.panel--requerimentos {
+  max-height: 37em;
+  overflow-y: hidden;
+}
+
+.panel-body--requerimentos {
+  overflow: auto;
+  height: 25em;
+}
 
 @mixin myButton{
   color: #fff;
