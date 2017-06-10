@@ -32,7 +32,7 @@ class CordRequerimento extends React.Component {
     constructor(props){
         super(props);
         const {dispatch} = this.props;
-        this.state = {deferido: "naodeferido", requerimentoId: this.props.params["requerimento"]};
+        this.state = {deferido: "", requerimentoId: this.props.params["requerimento"]};
 
         if (this.props.requerimento.fetched === false && this.props.requerimento.isFetching === false){
             reload.bind(this)(dispatch)
