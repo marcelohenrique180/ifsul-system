@@ -45,7 +45,7 @@ class CordRequerimentoAberto extends React.Component {
         this.handleChange(event);
 
         this.setState( {filteredRequerimentos:
-            this.state.requerimentos.filter(campo => campo.includes(event.target.value))
+            this.state.requerimentos.filter(campo => campo.toLowerCase().includes(event.target.value.toLowerCase()))
         });
 
     }
