@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import FloatInput from '../../components/FloatInput'
 
 class RequerimentoView extends React.Component {
 
@@ -9,14 +10,22 @@ class RequerimentoView extends React.Component {
 
     render(){
         const {requerimento} = this.props.requerimento;
+        const {tipo} = this.props.tipo;
+        const tipoFetched = this.props.tipo.fetched;
+        const requerimentoFetched = this.props.requerimento.fetched;
 
         return (
             <div>
-                <h3 style={{textAlign: "center"}}>Requerimento</h3>
+                <h3 className="text-center">Requerimento</h3>
                 <div>
                     {
-                        requerimento.requerimento &&
+                        tipoFetched && requerimentoFetched &&
                         <div>
+                            <div className="input-group">
+                                <FloatInput name="tipo" type="text" value={tipo.tipo}
+                                            textLabel="Tipo"
+                                            readOnly="true"/>
+                            </div>
                             <div className="form-group">
                                 <label htmlFor="requerimento">Requerimento</label>
                                 <textarea name="requerimento" id="requerimento" rows="5"
@@ -39,7 +48,8 @@ class RequerimentoView extends React.Component {
 
 function mapStateToProps(state){
     return {
-        requerimento: state.requerimento
+        requerimento: state.requerimento,
+        tipo: state.tipos
     };
 }
 
