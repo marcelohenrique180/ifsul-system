@@ -36,6 +36,7 @@ body {
 }
 
 @mixin myButton{
+  margin-top: 2em;
   color: #fff;
   background-color: #368e2b;
   border-color: #5b695b;
@@ -67,4 +68,9 @@ input:-webkit-autofill {
 
 textarea {
   resize: vertical;
+}
+
+.radio-inline-flex {
+  display: flex;
+  justify-content: space-around;
 }
