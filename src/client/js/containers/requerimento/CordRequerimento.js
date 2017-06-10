@@ -3,11 +3,11 @@ import {connect} from 'react-redux'
 import Carregando from '../../components/Carregando'
 import RequerimentoView from '../../containers/requerimento/RequerimentoView'
 import AlunoInfo from '../../containers/aluno/AlunoInfo'
+import ParecerInsert from '../../containers/parecer/ParecerInsert'
 import {getRequerimento, resetRequerimento} from '../../actions/requerimento'
 import {requestTipos, resetTipo} from '../../actions/tipo'
 import {getAluno, resetAluno} from '../../actions/aluno'
 import {requestCursos, resetCurso} from '../../actions/curso'
-import {handleChange} from '../../util'
 
 require('../../../scss/panel-ifsul.scss');
 
@@ -35,13 +35,11 @@ class CordRequerimento extends React.Component {
     constructor(props){
         super(props);
         const {dispatch} = this.props;
-        this.state = {deferido: "", requerimentoId: this.props.params["requerimento"]};
 
         if (this.props.requerimento.fetched === false && this.props.requerimento.isFetching === false){
-            reload.bind(this)(dispatch, this.state.requerimentoId)
+            reload.bind(this)(dispatch, this.props.params["requerimento"])
         }
 
-        this.handleChange = handleChange.bind(this);
     }
 
     render(){
@@ -66,26 +64,10 @@ class CordRequerimento extends React.Component {
                                         <div className="form-group col-centered">
                                             <AlunoInfo />
                                             <RequerimentoView />
-                                            <h3 className="text-center">Parecer</h3>
-                                            <div className="form-group">
-                                                <div className="radio">
-                                                    <label>
-                                                        <input type="radio" name="deferido" value="deferido"
-                                                               checked={this.state.deferido === "deferido"}
-                                                               onChange={this.handleChange}/>Deferir
-                                                    </label>
-                                                </div>
-                                                <div className="radio">
-                                                    <label>
-                                                        <input type="radio" name="deferido" value="naodeferido"
-                                                               checked={this.state.deferido === "naodeferido"}
-                                                               onChange={this.handleChange}/>Não Deferir
-                                                    </label>
-                                                </div>
-                                            </div>
+                                            <ParecerInsert />
                                         </div>
                                     :
-                                        <Carregando/>
+                                        <Carregando />
                                 }
                             </div>
                         </div>
