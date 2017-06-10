@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import FloatInput from '../../components/FloatInput'
 import Carregando from '../../components/Carregando'
 import RequerimentoView from '../../containers/requerimento/RequerimentoView'
+import AlunoInfo from '../../containers/aluno/AlunoInfo'
 import {getRequerimento} from '../../actions/requerimento'
 import {requestTipos} from '../../actions/tipo'
 import {getAluno} from '../../actions/aluno'
@@ -45,12 +46,7 @@ class CordRequerimento extends React.Component {
         const requerimentoProp = this.props.requerimento;
         const tipoProp = this.props.tipo;
         const cursoProp = this.props.curso;
-
-        const aluno = alunoProp.aluno;
-        const curso = cursoProp.cursos;
-        const tipo = tipoProp.tipo;
-        const requerimento = requerimentoProp.requerimento;
-
+        
         return (
             <div>
                 <div className="panel panel-ifsul">
@@ -65,31 +61,9 @@ class CordRequerimento extends React.Component {
                                 {
                                     !requerimentoProp.isFetching && !alunoProp.isFetching && !tipoProp.isFetching && !cursoProp.isFetching ?
                                         <div className="form-group col-centered">
-                                            <h3 style={{textAlign: "center"}}>Aluno</h3>
-                                            <div>
-                                                <div className="input-group">
-                                                    <FloatInput name="nome" type="text" value={aluno.nome}
-                                                                textLabel="Nome"
-                                                                readOnly="true"/>
-                                                </div>
-                                                <div className="input-group">
-                                                    <FloatInput name="matricula" type="text" value={aluno.matricula}
-                                                                textLabel="Matricula"
-                                                                readOnly="true"/>
-                                                </div>
-                                                <div className="input-group">
-                                                    <FloatInput name="telefone" type="text" value={aluno.telefone}
-                                                                textLabel="Telefone"
-                                                                readOnly="true"/>
-                                                </div>
-                                                <div className="input-group">
-                                                    <FloatInput name="curso" type="text" value={curso.nome}
-                                                                textLabel="Curso"
-                                                                readOnly="true"/>
-                                                </div>
-                                            </div>
+                                            <AlunoInfo />
                                             <RequerimentoView />
-                                            <h3 style={{textAlign: "center"}}>Parecer</h3>
+                                            <h3 className="text-center">Parecer</h3>
                                             <div className="form-group">
                                                 <div className="radio">
                                                     <label>
