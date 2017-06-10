@@ -2,6 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import FloatInput from '../../components/FloatInput'
 import Carregando from '../../components/Carregando'
+import RequerimentoView from '../../containers/requerimento/RequerimentoView'
 import {getRequerimento} from '../../actions/requerimento'
 import {requestTipos} from '../../actions/tipo'
 import {getAluno} from '../../actions/aluno'
@@ -87,26 +88,7 @@ class CordRequerimento extends React.Component {
                                                                 readOnly="true"/>
                                                 </div>
                                             </div>
-                                            <h3 style={{textAlign: "center"}}>Requerimento</h3>
-                                            <div className="form-group">
-                                                <div className="input-group">
-                                                    <FloatInput name="tipo" type="text" value={tipo.tipo}
-                                                                textLabel="Tipo"
-                                                                readOnly="true"/>
-                                                </div>
-                                                <div className="form-group">
-                                                    <label htmlFor="requerimento">Requerimento</label>
-                                                    <textarea name="requerimento" id="requerimento" rows="5"
-                                                              className="form-control" value={requerimento.requerimento}
-                                                              readOnly="readOnly"/>
-                                                </div>
-                                                <div className="form-group">
-                                                    <label htmlFor="justificativa">Justificativa</label>
-                                                    <textarea name="justificativa" id="justificativa" rows="5"
-                                                              className="form-control" value={requerimento.justificativa}
-                                                              readOnly="readOnly"/>
-                                                </div>
-                                            </div>
+                                            <RequerimentoView />
                                             <h3 style={{textAlign: "center"}}>Parecer</h3>
                                             <div className="form-group">
                                                 <div className="radio">
