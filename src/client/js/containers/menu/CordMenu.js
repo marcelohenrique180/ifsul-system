@@ -9,7 +9,7 @@ class CordMenu extends AuthorizedContainer {
         return (
             <div>
                 <div className="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 col-lg-3">
-                    <CordRequerimentoAberto />
+                    <CordRequerimentoAberto {...this.props} />
                 </div>
                 <div className="col-xs-12 col-sm-6 col-sm-offset-1 col-md-6 col-md-offset-1 col-lg-6 col-lg-offset-1">
                     <RouterHandler {...this.props} />
