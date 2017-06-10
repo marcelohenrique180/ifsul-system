@@ -13,7 +13,7 @@ class AlunoInfo extends React.Component {
 
         return (
             <div>
-                <h3 style={{textAlign: "center"}}>Aluno</h3>
+                <h3 className="text-center">Aluno</h3>
                 <div>
                     {
                         aluno.fetched && curso.fetched &&
