@@ -12,8 +12,7 @@ import {handleChange} from '../../util'
 
 require('../../../scss/panel-ifsul.scss');
 
-export function reload(dispatch) {
-    const requerimentoId = this.props.params["requerimento"];
+export function reload(dispatch, requerimentoId) {
 
     dispatch(getRequerimento(requerimentoId)).then(
         requerimento => {
@@ -35,7 +34,7 @@ class CordRequerimento extends React.Component {
         this.state = {deferido: "", requerimentoId: this.props.params["requerimento"]};
 
         if (this.props.requerimento.fetched === false && this.props.requerimento.isFetching === false){
-            reload.bind(this)(dispatch)
+            reload.bind(this)(dispatch, this.state.requerimentoId)
         }
 
         this.handleChange = handleChange.bind(this);

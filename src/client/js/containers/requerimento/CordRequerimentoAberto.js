@@ -35,12 +35,16 @@ class CordRequerimentoAberto extends React.Component {
 
     @autobind
     onItemClick(id){
-        return () => {
-            this.props.loadRequerimento({
-                push: this.props.router.push,
-                id,
-                reload: this.reload
-            });
+        if (typeof id !== "undefined"){
+            return () => {
+                this.props.loadRequerimento({
+                    push: this.props.router.push,
+                    id,
+                    reload: this.reload
+                });
+            }
+        } else {
+            alert("gotcha")
         }
     }
 
@@ -114,7 +118,7 @@ function mapDispatchToProps(dispatch){
         getAluno: url => dispatch(getAluno(url)),
         loadRequerimento: ({push, id, reload}) => {
             push("/menu/cordcurso/requerimento/"+id);
-            reload(dispatch)
+            reload(dispatch, id)
         }
     }
 }
