@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import {getRequerimento} from '../../actions/requerimento'
 import {requestAluno} from '../../actions/aluno'
 import {requestCursos} from '../../actions/curso'
+import {requestTipos} from '../../actions/tipo'
 import AlunoInfo from '../../containers/aluno/AlunoInfo'
 import ParecerView from '../../containers/parecer/ParecerView'
 import RequerimentoView from '../../containers/requerimento/RequerimentoView'
@@ -14,7 +15,11 @@ class VisualizarRequerimento extends React.Component {
         const {dispatch} = this.props;
 
         const reqId = this.props.params["requerimento"];
-        dispatch(getRequerimento(reqId));
+        dispatch(getRequerimento(reqId)).then(
+            requerimento => {
+                dispatch(requestTipos(requerimento.response._links.tipo.href))
+            }
+        );
 
         dispatch(requestAluno()).then(
             aluno => dispatch(requestCursos(aluno.response._links.curso.href))
