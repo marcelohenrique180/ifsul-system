@@ -37,3 +37,21 @@ export function getParecerByRequerimentoId(requerimento) {
         }
     }
 }
+
+export function sendParecer(parecer) {
+    return {
+        [CALL_API]: {
+            endpoint: 'pareceres',
+            authenticated: true,
+            types: [REQUEST_SEND_PARECER, RECEIVE_SEND_PARECER, FAILURE_SEND_PARECER],
+            config: {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                method: "POST",
+                body: JSON.stringify(parecer)
+            }
+        }
+    }
+}
