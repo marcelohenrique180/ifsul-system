@@ -11,7 +11,7 @@ import {requestCursos, resetCurso} from '../../actions/curso'
 
 require('../../../scss/panel-ifsul.scss');
 
-export function reload(dispatch, requerimentoId) {
+export function reloadCordRequerimento(dispatch, requerimentoId) {
 
     dispatch(resetRequerimento());
     dispatch(resetTipo());
@@ -37,9 +37,8 @@ class CordRequerimento extends React.Component {
         const {dispatch} = this.props;
 
         if (this.props.requerimento.fetched === false && this.props.requerimento.isFetching === false){
-            reload.bind(this)(dispatch, this.props.params["requerimento"])
+            reloadCordRequerimento.bind(this)(dispatch, this.props.params["requerimento"])
         }
-
     }
 
     render(){
@@ -64,7 +63,7 @@ class CordRequerimento extends React.Component {
                                         <div className="form-group col-centered">
                                             <AlunoInfo />
                                             <RequerimentoView />
-                                            <ParecerInsert />
+                                            <ParecerInsert {...this.props} />
                                         </div>
                                     :
                                         <Carregando />
