@@ -6,8 +6,9 @@ import {requestTipos} from '../../actions/tipo'
 import {callApi} from '../../actions/middleware/api'
 import {getId} from '../../util'
 import Carregando from '../../components/Carregando'
+import Paginator from '../../components/Paginator'
 
-const requerimentoApi = "requerimentos?size=5&";
+const requerimentoApi = "requerimentos/search/findAllAlunoEndpoint?size=5&";
 
 class AlunoVisualizarRequerimento extends React.Component {
 
@@ -21,7 +22,6 @@ class AlunoVisualizarRequerimento extends React.Component {
 
         this.getRequerimentoByPage = this.getRequerimentoByPage.bind(this);
         this.renderLines = this.renderLines.bind(this);
-        this.renderNavigation = this.renderNavigation.bind(this);
     }
 
     requestTableContent(response){
@@ -105,87 +105,6 @@ class AlunoVisualizarRequerimento extends React.Component {
         return data
     }
 
-    renderNavigation(){
-        const {_links, page} = this.props.requerimentos.requerimento;
-        const {currentPage} = this.state;
-        const self = this.props.location.pathname;
-        let pagination = "";
-
-        if (page.totalElements - 1 > 0) {
-            const itens = () => {
-                const array = [];
-
-                const pageControl = (() => {
-                    const {totalPages} = page;
-                    const pages = 6;
-                    const pageControl = {};
-
-                    if (pages >= totalPages) {
-                        pageControl.start = 0;
-                        pageControl.end = totalPages - 1;
-                    } else {
-                        if (totalPages - currentPage <= pages/2){//ending node
-                            pageControl.start = totalPages - pages - 1;
-                            pageControl.end = totalPages - 1;
-                        }
-                        else if (pages/2 > currentPage){//starting node
-                            pageControl.start = 0;
-                            pageControl.end = pages;
-                        } else {
-                            pageControl.start = currentPage - (pages/2);
-                            pageControl.end = currentPage + (pages/2);
-                        }
-                    }
-
-                    return pageControl
-                })();
-
-                for (let i=pageControl.start; i <= pageControl.end; i++){
-                    if (i !== currentPage){
-                        array.push(
-                            <li key={i}>
-                                <Link to={self} onClick = {this.getRequerimentoByPage(requerimentoApi+"page="+(i))} >
-                                    {i+1}
-                                </Link>
-                            </li>
-                        )
-                    } else {
-                        array.push(
-                            <li className="active" key={i}>
-                                <Link to={self}
-                                      onClick = {() => { this.getRequerimentoByPage(requerimentoApi+"page="+(i))}} >
-                                    {i+1}
-                                </Link>
-                            </li>
-                        )
-                    }
-                }
-                return array
-            };
-
-            if (_links.first){
-                pagination =
-                    <div>
-                        <ul className="pagination">
-                            <li>
-                                <Link to={self} onClick = {this.getRequerimentoByPage(_links.first.href)} >
-                                    &laquo;
-                                </Link>
-                            </li>
-                            {itens()}
-                            <li>
-                                <Link to={self} onClick = {this.getRequerimentoByPage(_links.last.href)} >
-                                    &raquo;
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
-            }
-        }
-
-        return pagination
-    }
-
     render() {
         const {page} = this.props.requerimentos.requerimento;
         let {_embedded} = this.props.requerimentos.requerimento;
@@ -214,7 +133,11 @@ class AlunoVisualizarRequerimento extends React.Component {
                                         </thead>
                                         {this.renderLines()}
                                     </table>
-                                    {this.renderNavigation()}
+                                    <Paginator pageableEntity={this.props.requerimentos.requerimento}
+                                               currentPage={this.state.currentPage}
+                                               location={this.props.location}
+                                               api={requerimentoApi}
+                                               onClickHandler={this.getRequerimentoByPage}/>
                                 </div>
                             }
                         </div>
