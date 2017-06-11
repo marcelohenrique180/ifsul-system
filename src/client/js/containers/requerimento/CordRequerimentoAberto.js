@@ -104,7 +104,7 @@ class CordRequerimentoAberto extends React.Component {
                                 }
                             </div>
                         </div>
-                        <Link to="/" className="center-block text-center"><b>Ver Todos</b></Link>
+                        <Link to="/menu/cordcurso/requerimento/visualizar" className="center-block text-center"><b>Ver Todos</b></Link>
                     </div>
                 </div>
             </div>
