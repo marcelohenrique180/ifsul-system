@@ -17,8 +17,4 @@ class NaoAutorizado extends React.Component {
     }
 }
 
-NaoAutorizado.contextTypes = {
-    router: React.PropTypes.object.isRequired
-};
-
 export default NaoAutorizado

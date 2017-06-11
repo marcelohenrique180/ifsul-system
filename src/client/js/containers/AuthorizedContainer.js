@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
 
 class AuthorizedContainer extends React.Component {
 
@@ -17,13 +17,5 @@ class AuthorizedContainer extends React.Component {
         }
     }
 }
-
-AuthorizedContainer.propTypes = {
-    routes: PropTypes.array.isRequired
-};
-
-AuthorizedContainer.contextTypes = {
-    router: PropTypes.object.isRequired
-};
 
 export default AuthorizedContainer
