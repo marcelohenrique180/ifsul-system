@@ -19,6 +19,7 @@ import Cadastro from './components/cadastro/Cadastro'
 import CordRequerimento from './containers/requerimento/CordRequerimento'
 import AlunoRequerimento from './containers/requerimento/AlunoRequerimento'
 import AlunoVisualizarRequerimento from './containers/requerimento/AlunoVisualizarRequerimento'
+import CordVisualizarRequerimento from './containers/requerimento/CordVisualizarRequerimento'
 import AlunoCadastro from './containers/cadastro/AlunoCadastro'
 import AlunoConfirmar from './containers/cadastro/AlunoConfirmar'
 import AlunoMenu from './containers/menu/AlunoMenu'
@@ -56,6 +57,7 @@ ReactDOM.render(
                 <IndexRedirect to={index} />
                 <Route path="menu" component={Menu} onEnter={requireAuth}>
                     <Route path="cordcurso" authorize={['CORDCURSO']} component={CordMenu}>
+                        <Route path="requerimento/visualizar" component={CordVisualizarRequerimento} />
                         <Route path="requerimento/:requerimento" component={CordRequerimento} />
                     </Route>
                     <Route path="aluno" authorize={['ALUNO']} component={AlunoMenu} >
