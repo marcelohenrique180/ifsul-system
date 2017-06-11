@@ -14,6 +14,8 @@ import java.util.Set;
 public interface RequerimentoDAO extends PagingAndSortingRepository<Requerimento, Long> {
 
     @Query(value = "SELECT r FROM Requerimento r INNER JOIN r.aluno a INNER JOIN a.usuario u WHERE u.email = ?#{authentication.name}")
+    Page<Requerimento> findAllAlunoEndpoint(Pageable pageable);
+
     Page<Requerimento> findAll(Pageable pageable);
 
     Set<Requerimento> findRequerimentosByParecerIsNull();
