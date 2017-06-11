@@ -7,7 +7,7 @@ import {handleChange} from '../../util'
 import {getRequerimentosEmAberto} from '../../actions/requerimento'
 import {getAluno} from '../../actions/aluno'
 import Carregando from '../../components/Carregando'
-import {reload} from '../../containers/requerimento/CordRequerimento'
+import {reloadCordRequerimento} from '../../containers/requerimento/CordRequerimento'
 
 class CordRequerimentoAberto extends React.Component {
 
@@ -29,7 +29,7 @@ class CordRequerimentoAberto extends React.Component {
                 })
             })
         });
-        this.reload = reload.bind(this);
+        this.reloadCordRequerimento = reloadCordRequerimento.bind(this);
         this.handleChange = handleChange.bind(this);
     }
 
@@ -40,18 +40,23 @@ class CordRequerimentoAberto extends React.Component {
                 this.props.loadRequerimento({
                     push: this.props.router.push,
                     id,
-                    reload: this.reload
+                    reload: this.reloadCordRequerimento
                 });
             }
-        } else {
-            alert("gotcha")
         }
     }
 
     @autobind
     renderRequerimentos(){
 
-        return this.state.filteredRequerimentos.map( (reqAberto, i) => {
+        const filteredRequerimentos =
+            this.state.filteredRequerimentos
+                .filter(filteredReq =>
+                    this.props.requerimentos_abertos.requerimentos_abertos._embedded.requerimentos
+                        .filter(openReq => filteredReq.requerimento_id === getId(openReq)).length > 0
+                );
+
+        return filteredRequerimentos.map( (reqAberto, i) => {
             return (
                 <li key={i} className="list-group-item list-group-item--clickable" tabIndex={0}
                     onKeyPress={this.onItemClick(reqAberto.requerimento_id)}
