@@ -6,4 +6,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource(collectionResourceRel = "departamentos", path = "departamentos")
 public interface DepartamentoDAO extends CrudRepository<Departamento, Long> {
+
+    public Departamento findDepartamentoByUsuarioEmail(String email);
 }
