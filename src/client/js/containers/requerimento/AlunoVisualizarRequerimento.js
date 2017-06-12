@@ -61,87 +61,79 @@ class AlunoVisualizarRequerimento extends React.Component {
     }
 
     renderLines(){
-        let data;
         const {requerimentos} = this.props.requerimentos.requerimento._embedded;
         const {tipos, pareceres} = this.state;
 
-        if (requerimentos.length > 0){
-            data = (
-                <tbody>
-                    {
-                        requerimentos.map((requerimento, i) => {
-                            const tipo = tipos[i] || null;
-                            const parecer = pareceres[i] || null;
-                            const requerimentoId = getId(requerimento);
+        return (
+            <tbody>
+            {
+                requerimentos.map((requerimento, i) => {
+                    const tipo = tipos[i] || null;
+                    const parecer = pareceres[i] || null;
+                    const requerimentoId = getId(requerimento);
 
-                            return (
-                                <tr key={i}>
-                                    <td>
-                                        {
-                                            tipo !== null ?
-                                            <Link to={"/menu/aluno/requerimento/visualizar/"+requerimentoId}>
-                                                {tipo.response.tipo}
-                                            </Link>
-                                            :
-                                            <p>&nbsp;</p>
-                                        }
-                                    </td>
-                                    <td>{requerimento.requerimento}</td>
-                                    {
-                                        parecer ?
-                                            <td>{ parecer.deferido === true ? "Deferido" : "Não Deferido" }</td>
-                                            :
-                                            <td>Em Andamento</td>
-                                    }
-                                    <td>{ parecer === null ? <span>&nbsp;</span> : parecer.parecer }</td>
-                                </tr>
-                            )
-                        })
-                    }
-                </tbody>
-            )
-        }
-
-        return data
+                    return (
+                        <tr key={i}>
+                            <td>
+                                {
+                                    tipo !== null ?
+                                        <Link to={"/menu/aluno/requerimento/visualizar/"+requerimentoId}>
+                                            {tipo.response.tipo}
+                                        </Link>
+                                        :
+                                        <p>&nbsp;</p>
+                                }
+                            </td>
+                            <td>{requerimento.requerimento}</td>
+                            {
+                                parecer ?
+                                    <td>{ parecer.deferido === true ? "Deferido" : "Não Deferido" }</td>
+                                    :
+                                    <td>Em Andamento</td>
+                            }
+                            <td>{ parecer === null ? <span>&nbsp;</span> : parecer.parecer }</td>
+                        </tr>
+                    )
+                })
+            }
+            </tbody>
+        );
     }
 
     render() {
-        const {page} = this.props.requerimentos.requerimento;
-        let {_embedded} = this.props.requerimentos.requerimento;
+        const requerimentosProp = this.props.requerimentos;
+        let data = (<Carregando/>);
 
-        if (_embedded){
-            const {requerimentos} = _embedded;
+        if (requerimentosProp.fetched){
+            const {requerimentos} = requerimentosProp.requerimento._embedded;
+
             if (requerimentos.length > 0){
-                return (
-                    <div>
-                        <div className="panel panel-default">
-                            <div className="panel-heading">
-
-                                Meus Requerimentos
-                            </div>
-                            {
-                                page !== undefined &&
-                                <div className="panel-body table-responsive">
-                                    <table className="table table-hover">
-                                        <thead>
-                                        <tr>
-                                            <th>Tipo</th>
-                                            <th>Requerimento</th>
-                                            <th>Status</th>
-                                            <th>Parecer</th>
-                                        </tr>
-                                        </thead>
-                                        {this.renderLines()}
-                                    </table>
-                                    <Paginator pageableEntity={this.props.requerimentos.requerimento}
-                                               currentPage={this.state.currentPage}
-                                               location={this.props.location}
-                                               api={requerimentoApi}
-                                               onClickHandler={this.getRequerimentoByPage}/>
-                                </div>
-                            }
-                        </div>
+                data = (
+                    <div className="panel-body table-responsive">
+                        <table className="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Requerimento</th>
+                                <th>Status</th>
+                                <th>Parecer</th>
+                            </tr>
+                            </thead>
+                            {this.renderLines()}
+                        </table>
+                        <Paginator pageableEntity={this.props.requerimentos.requerimento}
+                                   currentPage={this.state.currentPage}
+                                   location={this.props.location}
+                                   api={requerimentoApi}
+                                   onClickHandler={this.getRequerimentoByPage}/>
                     </div>
+                )
+            }
+            else if (requerimentos.length === 0){
+                data = (
+                    <h4 className="text-center">
+                        Você ainda não possui qualquer requerimento.
+                    </h4>
                 )
             }
         }
@@ -153,12 +145,7 @@ class AlunoVisualizarRequerimento extends React.Component {
                         Meus Requerimentos
                     </div>
                     {
-                        this.props.requerimentos.error ?
-                            <h4 className="text-center">
-                                Você ainda não possui Requerimentos
-                            </h4>
-                            :
-                            <Carregando />
+                        data
                     }
                 </div>
             </div>
