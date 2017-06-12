@@ -24,7 +24,7 @@ export function getParecer(id) {
 export function getParecerByRequerimentoId(requerimento) {
     return {
         [CALL_API]: {
-            endpoint: 'pareceres/search/findByRequerimentoId/?id='+getId(requerimento.requerimento),
+            endpoint: 'pareceres/search/findByRequerimentoId/?id='+getId(requerimento),
             authenticated: true,
             types: [REQUEST_SEND_PARECER, RECEIVE_SEND_PARECER, FAILURE_SEND_PARECER],
             config: {

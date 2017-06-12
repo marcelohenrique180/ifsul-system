@@ -12,7 +12,7 @@ class ParecerView extends React.Component {
         const {dispatch, requerimento} = this.props;
 
         if (requerimento.fetched) {
-            dispatch(getParecerByRequerimentoId(requerimento))
+            dispatch(getParecerByRequerimentoId(requerimento.requerimento))
         }
     }
 
