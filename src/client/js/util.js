@@ -2,7 +2,7 @@ export function findField(error) {
     const exp = /\[([A-Za-z]+)]/g;
 
     const match = exp.exec(error);
-    if (match != null){
+    if (match !== null){
         return match[1];
     }
     return error
@@ -23,7 +23,7 @@ export function indexRoute() {
 }
 
 export function areFieldsEmpty(notNullFields) {
-    return (notNullFields.filter((field) => {return (field.length == 0)}).length > 0)
+    return (notNullFields.filter((field) => {return (field.length === 0)}).length > 0)
 }
 
 export function getId(entity) {
@@ -31,5 +31,10 @@ export function getId(entity) {
 }
 
 export function extractEmbedded(data) {
-    return data._embedded == undefined ? data : data._embedded
+    return data._embedded === undefined ? data : data._embedded
+}
+
+export function formattedDate(date) {
+    let data = new Date(date);
+    return (data.getDate()+1)+"/"+(data.getMonth()+1)+"/"+data.getFullYear();
 }
