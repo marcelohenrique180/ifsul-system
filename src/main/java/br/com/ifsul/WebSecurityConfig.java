@@ -18,7 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.Assert;
 
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @Configuration
 @EnableJpaRepositories
 @EnableGlobalMethodSecurity(prePostEnabled = true)

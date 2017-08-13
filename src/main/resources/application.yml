@@ -22,3 +22,10 @@ spring:
       driver-class-name: com.mysql.jdbc.Driver
     thymeleaf:
       cache: false
+    jpa:
+      hibernate:
+        ddl-auto: update
+      
+logging:
+  level:
+    org.springframework.security: DEBUG
