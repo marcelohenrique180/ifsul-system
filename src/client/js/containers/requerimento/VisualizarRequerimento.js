@@ -9,55 +9,53 @@ import ParecerView from '../../containers/parecer/ParecerView'
 import RequerimentoView from '../../containers/requerimento/RequerimentoView'
 
 class VisualizarRequerimento extends React.Component {
+  constructor (props) {
+    super(props)
+    const {dispatch} = this.props
 
-    constructor(props) {
-        super(props);
-        const {dispatch} = this.props;
+    const reqId = this.props.params['requerimento']
+    dispatch(getRequerimento(reqId)).then(
+      requerimento => {
+        dispatch(requestTipos(requerimento.response._links.tipo.href))
+      }
+    )
 
-        const reqId = this.props.params["requerimento"];
-        dispatch(getRequerimento(reqId)).then(
-            requerimento => {
-                dispatch(requestTipos(requerimento.response._links.tipo.href))
-            }
-        );
+    dispatch(requestAluno()).then(
+      aluno => dispatch(requestCursos(aluno.response._links.curso.href))
+    )
+  }
 
-        dispatch(requestAluno()).then(
-            aluno => dispatch(requestCursos(aluno.response._links.curso.href))
-        );
+  render () {
+    const {requerimento} = this.props
 
-    }
-
-    render() {
-        const {requerimento} = this.props;
-
-        return (
-            <div>
-                <div className="panel panel-ifsul">
-                    <div className="panel-heading text-center">
-                        <h3 className="panel-title">
+    return (
+      <div>
+        <div className="panel panel-ifsul">
+          <div className="panel-heading text-center">
+            <h3 className="panel-title">
                             Ver Requerimento
-                        </h3>
-                    </div>
-                    <div className="panel-body">
-                        {
-                            requerimento.fetched &&
+            </h3>
+          </div>
+          <div className="panel-body">
+            {
+              requerimento.fetched &&
                             <div>
-                                <AlunoInfo />
-                                <RequerimentoView />
-                                <ParecerView />
+                              <AlunoInfo />
+                              <RequerimentoView />
+                              <ParecerView />
                             </div>
-                        }
-                    </div>
-                </div>
-            </div>
-        )
-    }
+            }
+          </div>
+        </div>
+      </div>
+    )
+  }
 }
 
-function mapStateToProps(state) {
-    return {
-        requerimento: state.requerimento
-    };
+function mapStateToProps (state) {
+  return {
+    requerimento: state.requerimento
+  }
 }
 
-export default connect(mapStateToProps)(VisualizarRequerimento);
+export default connect(mapStateToProps)(VisualizarRequerimento)

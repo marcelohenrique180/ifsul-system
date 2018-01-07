@@ -9,81 +9,78 @@ import {requestTipos, resetTipo} from '../../actions/tipo'
 import {getAluno, resetAluno} from '../../actions/aluno'
 import {requestCursos, resetCurso} from '../../actions/curso'
 
-require('../../../scss/panel-ifsul.scss');
+require('../../../scss/panel-ifsul.scss')
 
-export function reloadCordRequerimento(dispatch, requerimentoId) {
+export function reloadCordRequerimento (dispatch, requerimentoId) {
+  dispatch(resetRequerimento())
+  dispatch(resetTipo())
+  dispatch(resetAluno())
+  dispatch(resetCurso())
 
-    dispatch(resetRequerimento());
-    dispatch(resetTipo());
-    dispatch(resetAluno());
-    dispatch(resetCurso());
-
-    dispatch(getRequerimento(requerimentoId)).then(
-        requerimento => {
-            dispatch(requestTipos(requerimento.response._links.tipo.href));
-            dispatch(getAluno(requerimento.response._links.aluno.href)).then(
-                aluno => {
-                    dispatch(requestCursos(aluno.response._links.curso.href))
-                }
-            );
+  dispatch(getRequerimento(requerimentoId)).then(
+    requerimento => {
+      dispatch(requestTipos(requerimento.response._links.tipo.href))
+      dispatch(getAluno(requerimento.response._links.aluno.href)).then(
+        aluno => {
+          dispatch(requestCursos(aluno.response._links.curso.href))
         }
-    );
+      )
+    }
+  )
 }
 
 class CordRequerimento extends React.Component {
+  constructor (props) {
+    super(props)
+    const {dispatch} = this.props
 
-    constructor(props){
-        super(props);
-        const {dispatch} = this.props;
-
-        if (this.props.requerimento.fetched === false && this.props.requerimento.isFetching === false){
-            reloadCordRequerimento.bind(this)(dispatch, this.props.params["requerimento"])
-        }
+    if (this.props.requerimento.fetched === false && this.props.requerimento.isFetching === false) {
+      reloadCordRequerimento.bind(this)(dispatch, this.props.params['requerimento'])
     }
+  }
 
-    render(){
-        const alunoProp = this.props.aluno;
-        const requerimentoProp = this.props.requerimento;
-        const tipoProp = this.props.tipo;
-        const cursoProp = this.props.curso;
+  render () {
+    const alunoProp = this.props.aluno
+    const requerimentoProp = this.props.requerimento
+    const tipoProp = this.props.tipo
+    const cursoProp = this.props.curso
 
-        return (
-            <div>
-                <div className="panel panel-ifsul">
-                    <div className="panel-heading text-center">
-                        <h3 className="panel-title">
+    return (
+      <div>
+        <div className="panel panel-ifsul">
+          <div className="panel-heading text-center">
+            <h3 className="panel-title">
                             Requerimento
-                        </h3>
+            </h3>
+          </div>
+          <div className="panel-body">
+            <div className="container-fluid">
+              <div className="row">
+                {
+                  requerimentoProp.fetched && alunoProp.fetched && tipoProp.fetched && cursoProp.fetched
+                    ? <div className="form-group col-centered">
+                      <AlunoInfo />
+                      <RequerimentoView />
+                      <ParecerInsert {...this.props} />
                     </div>
-                    <div className="panel-body">
-                        <div className="container-fluid">
-                            <div className="row">
-                                {
-                                    requerimentoProp.fetched && alunoProp.fetched && tipoProp.fetched && cursoProp.fetched ?
-                                        <div className="form-group col-centered">
-                                            <AlunoInfo />
-                                            <RequerimentoView />
-                                            <ParecerInsert {...this.props} />
-                                        </div>
-                                    :
-                                        <Carregando />
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    : <Carregando />
+                }
+              </div>
             </div>
-        )
-    }
+          </div>
+        </div>
+      </div>
+    )
+  }
 }
 
-function mapStateToProps(state) {
-    return {
-        requerimento: state.requerimento,
-        aluno: state.aluno,
-        tipo: state.tipos,
-        curso: state.curso
-    }
+function mapStateToProps (state) {
+  return {
+    requerimento: state.requerimento,
+    aluno: state.aluno,
+    tipo: state.tipos,
+    curso: state.curso
+  }
 }
 
-export default connect(mapStateToProps)(CordRequerimento);
+export default connect(mapStateToProps)(CordRequerimento)

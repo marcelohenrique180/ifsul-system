@@ -4,9 +4,4 @@
     "react"
   ],
   "plugins": ["transform-decorators-legacy"],
-  "env": {
-    "development": {
-      "presets": []
-    }
-  }
 }
