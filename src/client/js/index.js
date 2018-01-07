@@ -5,7 +5,7 @@ import {Provider} from 'react-redux'
 import thunk from 'redux-thunk'
 import {Router, Route, IndexRedirect, browserHistory} from 'react-router'
 import {createStore, applyMiddleware} from 'redux'
-import createLogger from 'redux-logger'
+import {createLogger} from 'redux-logger'
 import allReducers from './reducers'
 import {indexRoute} from './util'
 
