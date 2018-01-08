@@ -1,6 +1,6 @@
 // @flow
 
-import { StateType } from './generic-reducer'
+import { StateType, ActionType } from './generic-reducer'
 
 import {
   RECEIVE_LOGOUT,
@@ -16,7 +16,7 @@ const defaultState = {
   isAuthenticated: !!localStorage.getItem('id_token')
 }
 
-export function userReducer (state: StateType = defaultState, action: string): StateType {
+export function userReducer (state: StateType = defaultState, action: ActionType): StateType {
   switch (action.type) {
     case REQUEST_LOGIN:
       return Object.assign({}, state, {

@@ -6,6 +6,11 @@ type CaseType = {
   failure: string
 }
 
+export type ActionType = {
+  type: string,
+  payload: object
+}
+
 export type StateType = {
   isFetching: boolean,
   error: boolean,
@@ -22,7 +27,7 @@ export const defaultState: StateType = {
   errorMessage: ''
 }
 
-export default function genericReducer (state: StateType = defaultState, action: string, cases: CaseType): StateType {
+export default function genericReducer (state: StateType = defaultState, action: ActionType, cases: CaseType): StateType {
   switch (action.type) {
     case cases.failure:
       return Object.assign({}, state, {

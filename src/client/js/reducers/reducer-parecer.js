@@ -1,6 +1,6 @@
 // @flow
 
-import genericReducer, { defaultState, StateType} from './generic-reducer'
+import genericReducer, { defaultState, StateType, ActionType } from './generic-reducer'
 
 import {
   RECEIVE_SEND_PARECER,
@@ -8,7 +8,7 @@ import {
   FAILURE_SEND_PARECER
 } from '../actions/parecer'
 
-export function parecerReducer (state: StateType = defaultState, action: string): StateType {
+export function parecerReducer (state: StateType = defaultState, action: ActionType): StateType {
   return genericReducer(state, action, {
     receive: RECEIVE_SEND_PARECER,
     request: REQUEST_SEND_PARECER,

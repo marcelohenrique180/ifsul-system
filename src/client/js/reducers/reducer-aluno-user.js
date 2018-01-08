@@ -1,6 +1,6 @@
 // @flow
 
-import genericReducer, { defaultState, StateType} from './generic-reducer'
+import genericReducer, { defaultState, StateType, ActionType } from './generic-reducer'
 
 import {
   FAILURE_SEND_ALUNO_SENHA,
@@ -8,7 +8,7 @@ import {
   REQUEST_SEND_ALUNO_SENHA
 } from '../actions/aluno'
 
-export function alunoUserReducer (state: StateType = defaultState, action: string): StateType {
+export function alunoUserReducer (state: StateType = defaultState, action: ActionType): StateType {
   return genericReducer(
     state, action, {
       request: REQUEST_SEND_ALUNO_SENHA,
