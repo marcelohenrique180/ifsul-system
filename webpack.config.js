@@ -1,10 +1,10 @@
-const webpack = require('webpack');
-const { join } = require('path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const webpack = require('webpack')
+const { join } = require('path')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 module.exports = {
   entry: {
-    bundle: './src/client/js/index.js',
+    bundle: './src/client/js/index.js'
   },
   output: {
     path: join(__dirname, 'src/main/resources/static/'),
@@ -12,9 +12,9 @@ module.exports = {
     publicPath: 'src/main/resources/static/'
   },
   devServer: {
-    contentBase: [join(__dirname, "/src/main/resources/templates"), join(__dirname, "src/main/resources/static")],
+    contentBase: [join(__dirname, '/src/main/resources/templates'), join(__dirname, 'src/main/resources/static')],
     compress: true,
-    port: 9000,
+    port: 9000
   },
   resolve: {
     extensions: ['.js', '.jsx']
@@ -24,7 +24,7 @@ module.exports = {
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        loaders: ["eslint-loader", "babel-loader"]
+        loaders: ['babel-loader', 'eslint-loader']
       },
       {
         test: /\.scss$/,
@@ -38,13 +38,13 @@ module.exports = {
   },
   plugins: [
     new webpack.ProvidePlugin({
-      $: "jquery",
-      jQuery: "jquery"
+      $: 'jquery',
+      jQuery: 'jquery'
     }),
     new ExtractTextPlugin({
       filename: 'css/[name].css',
       allChunks: true,
       disable: false
-    }),
+    })
   ]
-};
+}

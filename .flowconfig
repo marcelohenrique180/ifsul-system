@@ -1,0 +1,14 @@
+[ignore]
+./node_modules/
+./src/client/index.js
+
+[include]
+./src/client
+
+[libs]
+
+[lints]
+
+[options]
+
+[strict]
