@@ -1,3 +1,7 @@
+// @flow
+
+import genericReducer, { defaultState, StateType} from './generic-reducer'
+
 import {
   RECEIVE_SEND_REQUERIMENTO,
   REQUEST_SEND_REQUERIMENTO,
@@ -5,43 +9,15 @@ import {
   RESET_REQUERIMENTO
 } from '../actions/requerimento'
 
-const defaultState = {
-  isFetching: false,
-  error: false,
-  fetched: false,
-  requerimento: {},
-  errorMessage: ''
-}
-
-export function requerimentoReducer (state = defaultState, action) {
+export function requerimentoReducer (state: StateType = defaultState, action: string): StateType {
   switch (action.type) {
-    case RECEIVE_SEND_REQUERIMENTO:
-      return Object.assign({}, state, {
-        isFetching: false,
-        error: false,
-        fetched: true,
-        requerimento: action.response,
-        errorMessage: ''
-      })
-    case FAILURE_SEND_REQUERIMENTO:
-      return Object.assign({}, state, {
-        isFetching: false,
-        error: true,
-        fetched: false,
-        requerimento: {},
-        errorMessage: action.errorMessage
-      })
-    case REQUEST_SEND_REQUERIMENTO:
-      return Object.assign({}, state, {
-        isFetching: true,
-        error: false,
-        fetched: false,
-        requerimento: {},
-        errorMessage: ''
-      })
     case RESET_REQUERIMENTO:
       return defaultState
     default:
-      return state
+      return genericReducer(state, action, {
+        request: REQUEST_SEND_REQUERIMENTO,
+        receive: RECEIVE_SEND_REQUERIMENTO,
+        failure: FAILURE_SEND_REQUERIMENTO
+      })
   }
 }

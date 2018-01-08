@@ -1,3 +1,7 @@
+// @flow
+
+import { StateType } from './generic-reducer'
+
 import {
   RECEIVE_LOGOUT,
   RECEIVE_LOGIN,
@@ -5,12 +9,14 @@ import {
   FAILURE_LOGIN
 } from '../actions'
 
-export function userReducer (state = {
+const defaultState = {
   isFetching: false,
   errorMessage: '',
   role: localStorage.getItem('role'),
   isAuthenticated: !!localStorage.getItem('id_token')
-}, action) {
+}
+
+export function userReducer (state: StateType = defaultState, action: string): StateType {
   switch (action.type) {
     case REQUEST_LOGIN:
       return Object.assign({}, state, {

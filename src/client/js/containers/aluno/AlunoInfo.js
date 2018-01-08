@@ -1,14 +1,10 @@
+import { connect } from 'react-redux'
 import React from 'react'
-import {connect} from 'react-redux'
 import FloatInput from '../../components/FloatInput'
 
 class AlunoInfo extends React.Component {
-  constructor (props) {
-    super(props)
-  }
-
   render () {
-    const {aluno, curso} = this.props
+    const { aluno, curso } = this.props
 
     return (
       <div>
@@ -16,26 +12,26 @@ class AlunoInfo extends React.Component {
         <div>
           {
             aluno.fetched && curso.fetched &&
-                            <div>
-                              <div className="input-group">
-                                <FloatInput name="nome" type="text" value={aluno.aluno.nome}
-                                  textLabel="Nome"
-                                  readOnly="true"/>
-                              </div>
-                              <div className="input-group">
-                                <FloatInput name="nome" type="text" value={aluno.aluno.matricula}
-                                  textLabel="Matricula" readOnly="true"/>
-                              </div>
-                              <div className="input-group">
-                                <FloatInput name="nome" type="text" value={aluno.aluno.telefone}
-                                  textLabel="Telefone" readOnly="true"/>
-                              </div>
-                              <div className="input-group">
-                                <FloatInput name="nome" type="text" value={curso.cursos.nome}
-                                  textLabel="Curso"
-                                  readOnly="true"/>
-                              </div>
-                            </div>
+            <div>
+              <div className="input-group">
+                <FloatInput name="nome" type="text" value={aluno.aluno.nome}
+                  textLabel="Nome"
+                  readOnly="true" />
+              </div>
+              <div className="input-group">
+                <FloatInput name="nome" type="text" value={aluno.aluno.matricula}
+                  textLabel="Matricula" readOnly="true" />
+              </div>
+              <div className="input-group">
+                <FloatInput name="nome" type="text" value={aluno.aluno.telefone}
+                  textLabel="Telefone" readOnly="true" />
+              </div>
+              <div className="input-group">
+                <FloatInput name="nome" type="text" value={curso.cursos.nome}
+                  textLabel="Curso"
+                  readOnly="true" />
+              </div>
+            </div>
           }
         </div>
       </div>
