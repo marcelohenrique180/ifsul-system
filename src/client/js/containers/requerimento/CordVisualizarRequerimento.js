@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import { connect } from 'react-redux'
 import { getRequerimentoByPage } from '../../actions/requerimento'
@@ -11,24 +13,39 @@ import Carregando from '../../components/Carregando'
 
 const requerimentosAbertosApi = 'requerimentos?size=5&'
 
-class CordVisualizarRequerimento extends React.Component {
-  constructor (props) {
+type Props = {
+  getRequerimentoByPage: Function,
+  requestTipos: Function,
+  getAluno: Function,
+  getParecerByRequerimentoId: Function,
+  requerimentos: Object,
+  location: Object
+}
+
+type State = {}
+
+class CordVisualizarRequerimento extends React.Component<Props, State> {
+  constructor(props) {
     super(props)
 
     this.state = { currentPage: 0, tipos: [], pareceres: [], alunos: [] }
-    this.props.getRequerimentoByPage(requerimentosAbertosApi + 'page=0')
+    this.props
+      .getRequerimentoByPage(requerimentosAbertosApi + 'page=0')
       .then(this.requestTableContent)
   }
 
   @autobind
-  requestTableContent () {
+  requestTableContent() {
     const { requerimentos } = this.props.requerimentos.requerimento._embedded
-    const alunos = [], pareceres = [], tipos = []
+    const alunos = []
+    const pareceres = []
+    const tipos = []
 
     // para cada requerimento
     requerimentos.forEach(requerimento => {
       // carregue o tipo
-      this.props.requestTipos(requerimento._links.tipo.href)
+      this.props
+        .requestTipos(requerimento._links.tipo.href)
         .then(tipo => {
           tipos.push(tipo.response.tipo)
           this.setState({ tipos: tipos })
@@ -39,9 +56,13 @@ class CordVisualizarRequerimento extends React.Component {
         })
 
       // carregue o aluno
-      this.props.getAluno(requerimento._links.aluno.href)
+      this.props
+        .getAluno(requerimento._links.aluno.href)
         .then(aluno => {
-          alunos.push({ nome: aluno.response.nome, matricula: aluno.response.matricula })
+          alunos.push({
+            nome: aluno.response.nome,
+            matricula: aluno.response.matricula
+          })
           this.setState({ alunos: alunos })
         })
         .catch(() => {
@@ -50,7 +71,8 @@ class CordVisualizarRequerimento extends React.Component {
         })
 
       // carregue o parecer
-      this.props.getParecerByRequerimentoId(requerimento)
+      this.props
+        .getParecerByRequerimentoId(requerimento)
         .then(parecer => {
           pareceres.push(parecer.response.deferido)
           this.setState({ pareceres: pareceres })
@@ -63,17 +85,22 @@ class CordVisualizarRequerimento extends React.Component {
   }
 
   @autobind
-  getRequerimentoByPage (page) {
+  getRequerimentoByPage(page) {
     return () => {
       const pageNum = page.match(/page=([0-9])+/)[1]
-      this.setState({ currentPage: parseInt(pageNum), tipos: [], pareceres: [], alunos: [] })
+      this.setState({
+        currentPage: parseInt(pageNum),
+        tipos: [],
+        pareceres: [],
+        alunos: []
+      })
 
       this.props.getRequerimentoByPage(page).then(this.requestTableContent)
     }
   }
 
   @autobind
-  renderLines () {
+  renderLines() {
     const { requerimentos } = this.props.requerimentos.requerimento._embedded
     const { tipos, pareceres, alunos } = this.state
 
@@ -82,7 +109,8 @@ class CordVisualizarRequerimento extends React.Component {
       let parecer = pareceres[i]
       const aluno = alunos[i]
       const data = formattedDate(requerimento.data)
-      let nome, matricula = ''
+      let nome
+      let matricula = ''
 
       if (aluno) {
         nome = aluno.nome
@@ -107,14 +135,17 @@ class CordVisualizarRequerimento extends React.Component {
     })
   }
 
-  render () {
+  render() {
     const { requerimentos } = this.props
     const { tipos, pareceres, alunos } = this.state
     let renderTable = false
 
     if (requerimentos.fetched) {
       const length = requerimentos.requerimento._embedded.requerimentos.length
-      renderTable = tipos.length === length && pareceres.length === length && alunos.length === length
+      renderTable =
+        tipos.length === length &&
+        pareceres.length === length &&
+        alunos.length === length
     }
 
     return (
@@ -122,47 +153,52 @@ class CordVisualizarRequerimento extends React.Component {
         <div className="panel-heading">
           <h4>Todos os Requerimentos</h4>
         </div>
-        {
-          renderTable
-            ? <div className="panel-body table-responsive">
-              <table className="table table-hover">
-                <thead>
-                  <tr>
-                    <th>Tipo</th>
-                    <th>Nome Aluno</th>
-                    <th>Matrícula Aluno</th>
-                    <th>Data</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>{this.renderLines()}</tbody>
-              </table>
-              <Paginator pageableEntity={requerimentos.requerimento}
-                currentPage={this.state.currentPage}
-                location={this.props.location}
-                api={requerimentosAbertosApi}
-                onClickHandler={this.getRequerimentoByPage} />
-            </div>
-            : <Carregando />
-        }
+        {renderTable ? (
+          <div className="panel-body table-responsive">
+            <table className="table table-hover">
+              <thead>
+                <tr>
+                  <th>Tipo</th>
+                  <th>Nome Aluno</th>
+                  <th>Matrícula Aluno</th>
+                  <th>Data</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>{this.renderLines()}</tbody>
+            </table>
+            <Paginator
+              pageableEntity={requerimentos.requerimento}
+              currentPage={this.state.currentPage}
+              location={this.props.location}
+              api={requerimentosAbertosApi}
+              onClickHandler={this.getRequerimentoByPage}
+            />
+          </div>
+        ) : (
+          <Carregando />
+        )}
       </div>
     )
   }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return {
     requerimentos: state.requerimentoPage
   }
 }
 
-function mapDispatchToProps (dispatch) {
+function mapDispatchToProps(dispatch) {
   return {
     getRequerimentoByPage: page => dispatch(getRequerimentoByPage(page)),
     requestTipos: url => dispatch(requestTipos(url)),
-    getParecerByRequerimentoId: req => dispatch(getParecerByRequerimentoId(req)),
+    getParecerByRequerimentoId: req =>
+      dispatch(getParecerByRequerimentoId(req)),
     getAluno: url => dispatch(getAluno(url))
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CordVisualizarRequerimento)
+export default connect(mapStateToProps, mapDispatchToProps)(
+  CordVisualizarRequerimento
+)

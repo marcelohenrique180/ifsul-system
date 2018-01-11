@@ -5,7 +5,7 @@ export const REQUEST_LOGOUT = 'REQUEST_LOGOUT'
 export const RECEIVE_LOGOUT = 'RECEIVE_LOGOUT'
 export const FAILURE_LOGOUT = 'FAILURE_LOGOUT'
 
-function requestLogin (creds) {
+function requestLogin(creds) {
   return {
     type: REQUEST_LOGIN,
     isFetching: true,
@@ -14,26 +14,30 @@ function requestLogin (creds) {
   }
 }
 
-function recieveLogin (user) {
+function recieveLogin(user) {
   return {
     type: RECEIVE_LOGIN,
     isFetching: false,
     isAuthenticated: true,
-    id_token: user.id_token,
-    role: user.role
+    payload: {
+      id_token: user.id_token,
+      role: user.role
+    }
   }
 }
 
-function failureLogin (error) {
+function failureLogin(error) {
   return {
     type: FAILURE_LOGIN,
     isFetching: false,
     isAuthenticated: false,
-    error
+    error: {
+      message: error
+    }
   }
 }
 
-function requestLogout () {
+function requestLogout() {
   return {
     type: REQUEST_LOGOUT,
     isFetching: true,
@@ -41,7 +45,7 @@ function requestLogout () {
   }
 }
 
-function recieveLogout () {
+function recieveLogout() {
   return {
     type: RECEIVE_LOGOUT,
     isFetching: false,
@@ -49,7 +53,7 @@ function recieveLogout () {
   }
 }
 
-export function loginUser (creds) {
+export function loginUser(creds) {
   const config = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -59,30 +63,28 @@ export function loginUser (creds) {
   return dispatch => {
     dispatch(requestLogin(creds))
 
-    return (
-      fetch('http://localhost:8080/loginfilter', config)
-        .then(response => {
-          let idToken = response.headers.get('Authorization')
-          let role = response.headers.get('role')
-          const user = {
-            username: creds.username,
-            role,
-            idToken
-          }
-          if (!response.ok) {
-            return Promise.reject(user)
-          } else {
-            localStorage.setItem('id_token', user.id_token)
-            localStorage.setItem('role', user.role)
-            dispatch(recieveLogin(user))
-          }
-        }).catch(() => dispatch(failureLogin('E-mail ou Senha incorretos.'))
-        )
-    )
+    return fetch('http://localhost:8080/loginfilter', config)
+      .then(response => {
+        let idToken = response.headers.get('Authorization')
+        let role = response.headers.get('role')
+        const user = {
+          username: creds.username,
+          role,
+          idToken
+        }
+        if (!response.ok) {
+          return Promise.reject(user)
+        } else {
+          localStorage.setItem('id_token', user.id_token)
+          localStorage.setItem('role', user.role)
+          dispatch(recieveLogin(user))
+        }
+      })
+      .catch(() => dispatch(failureLogin('E-mail ou Senha incorretos.')))
   }
 }
 
-export function logoutUser () {
+export function logoutUser() {
   return dispatch => {
     dispatch(requestLogout())
     localStorage.removeItem('id_token')

@@ -6,50 +6,63 @@ type CaseType = {
   failure: string
 }
 
-export type ActionType = {
-  type: string,
-  payload: object
+export type Error = {
+  +message: string,
+  +status: number
 }
 
-export type StateType = {
-  isFetching: boolean,
-  error: boolean,
-  fetched: boolean,
-  payload: object,
-  errorMessage: string
+export type Action = {
+  +type: string,
+  payload: Object,
+  error: ?Error
 }
 
-export const defaultState: StateType = {
+export type State = {
+  +isFetching: boolean,
+  +error: boolean,
+  +fetched: boolean,
+  +payload: Object,
+  +error: ?Error
+}
+
+export const defaultState: State = {
   isFetching: false,
-  error: false,
+  hasError: false,
   fetched: false,
   payload: {},
-  errorMessage: ''
+  error: { message: '', status: -1 }
 }
 
-export default function genericReducer (state: StateType = defaultState, action: ActionType, cases: CaseType): StateType {
+export default function genericReducer(
+  state: State = defaultState,
+  action: Action,
+  cases: CaseType
+): State {
   switch (action.type) {
     case cases.failure:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: false,
-        error: true,
+        hasError: true,
         fetched: false,
         payload: {},
-        errorMessage: action.errorMessage
-      })
+        error: action.error
+      }
     case cases.receive:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: false,
-        error: false,
+        hasError: false,
         fetched: true,
-        payload: action.response
-      })
+        payload: action.payload
+      }
     case cases.request:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: true,
-        error: false,
+        hasError: false,
         fetched: false
-      })
+      }
     default:
       return state
   }

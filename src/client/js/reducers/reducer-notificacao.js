@@ -1,6 +1,8 @@
 // @flow
 
-import genericReducer, { defaultState, StateType, ActionType } from './generic-reducer'
+import type { State, Action } from './generic-reducer'
+
+import genericReducer, { defaultState } from './generic-reducer'
 
 import {
   FAILURE_SEND_NOTIFICACAO,
@@ -8,7 +10,10 @@ import {
   REQUEST_SEND_NOTIFICACAO
 } from '../actions/notificacao'
 
-export function notificacaoReducer (state: StateType = defaultState, action: ActionType): StateType {
+export function notificacaoReducer(
+  state: State = defaultState,
+  action: Action
+): State {
   return genericReducer(state, action, {
     request: REQUEST_SEND_NOTIFICACAO,
     receive: RECEIVE_SEND_NOTIFICACAO,

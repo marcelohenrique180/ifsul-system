@@ -1,6 +1,8 @@
 // @flow
 
-import genericReducer, { defaultState, StateType, ActionType } from './generic-reducer'
+import type { Action, State } from './generic-reducer'
+
+import genericReducer, { defaultState } from './generic-reducer'
 
 import {
   FAILURE_SEND_ALUNO_MATRICULA,
@@ -10,7 +12,10 @@ import {
 
 import { NOVA_MATRICULA } from '../actions/matricula'
 
-export function matriculaReducer (state: StateType = defaultState, action: ActionType): StateType {
+export function matriculaReducer(
+  state: State = defaultState,
+  action: Action
+): State {
   switch (action.type) {
     case NOVA_MATRICULA:
       return Object.assign({}, state, {

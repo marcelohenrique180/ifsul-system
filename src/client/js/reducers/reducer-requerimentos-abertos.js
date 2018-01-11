@@ -1,6 +1,8 @@
 // @flow
 
-import genericReducer, { defaultState, StateType, ActionType } from './generic-reducer'
+import type { Action, State } from './generic-reducer'
+
+import genericReducer, { defaultState } from './generic-reducer'
 
 import {
   RECEIVE_REQUERIMENTOS_ABERTOS,
@@ -8,7 +10,10 @@ import {
   FAILURE_REQUERIMENTOS_ABERTOS
 } from '../actions/requerimento'
 
-export function requerimentosAbertosReducer (state: StateType = defaultState, action: ActionType): StateType {
+export function requerimentosAbertosReducer(
+  state: State = defaultState,
+  action: Action
+): StateType {
   return genericReducer(state, action, {
     request: REQUEST_REQUERIMENTOS_ABERTOS,
     receive: RECEIVE_REQUERIMENTOS_ABERTOS,

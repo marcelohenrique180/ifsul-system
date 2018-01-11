@@ -1,6 +1,8 @@
 // @flow
 
-import genericReducer, { defaultState, StateType, ActionType } from './generic-reducer'
+import type { State, Action } from './generic-reducer'
+
+import genericReducer, { defaultState } from './generic-reducer'
 
 import {
   REQUEST_SEND_CURSO,
@@ -9,7 +11,10 @@ import {
   RESET_CURSO
 } from '../actions/curso'
 
-export function cursosReducer (state: StateType = defaultState, action: ActionType): StateType {
+export function cursosReducer(
+  state: State = defaultState,
+  action: Action
+): State {
   switch (action.type) {
     case RESET_CURSO:
       return defaultState

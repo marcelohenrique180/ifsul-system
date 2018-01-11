@@ -1,15 +1,32 @@
+// @flow
+
+import type { Action } from '../../reducers/generic-reducer'
+
 const BASE_URL = 'http://localhost:8080/api/'
 
 export const CALL_API = Symbol('Call API')
 
-export function callApi (endpoint, customConfig, authenticated) {
+export type ApiCall = {
+  endpoint: string,
+  types: [string, string, string],
+  authenticated: boolean,
+  config: Object
+}
+
+type NextFunction = any => Action | Promise<*>
+
+export function callApi(
+  endpoint: string,
+  customConfig: Object,
+  authenticated: ?boolean
+) {
   let token = localStorage.getItem('id_token') || null
   let config = customConfig || {}
 
   if (authenticated) {
     if (token) {
       config.headers = Object.assign({}, config.headers, {
-        'Authorization': token
+        Authorization: token
       })
     } else {
       throw new Error('No token saved!')
@@ -19,7 +36,7 @@ export function callApi (endpoint, customConfig, authenticated) {
   return doFetch(endpoint, config)
 }
 
-function status (response) {
+function status(response) {
   if (response.ok) {
     return Promise.resolve(response)
   } else {
@@ -30,12 +47,12 @@ function status (response) {
   }
 }
 
-function json (response) {
+function json(response) {
   return response.json()
 }
 
 // Realiza Fetch
-function doFetch (endpoint, config) {
+function doFetch(endpoint, config) {
   const url = BASE_URL + endpoint.replace(BASE_URL, '')
 
   return fetch(url, config)
@@ -46,10 +63,12 @@ function doFetch (endpoint, config) {
     })
 }
 
-export default store => next => action => {
-  const callAPI = action[CALL_API]
+export default (store: Object): Function => (
+  next: NextFunction
+): Function => (action: { [Symbol]: ?ApiCall }): Action | Promise<*> => {
+  const callAPI: ?ApiCall = action[CALL_API]
 
-  if (typeof callAPI === 'undefined') {
+  if (typeof callAPI === 'undefined' || callAPI === null) {
     return next(action)
   }
 
@@ -59,15 +78,19 @@ export default store => next => action => {
 
   next({ type: requestType })
   return callApi(endpoint, config, authenticated).then(
-    response =>
+    (response: Object) =>
       next({
-        response,
+        payload: response,
         authenticated,
         type: successType
       }),
-    error => next({
-      errorMessage: error || 'Houve um erro.',
-      type: errorType
-    })
+    (error: Object) =>
+      next({
+        error: {
+          message: error || 'Houve um erro.',
+          status: 400
+        },
+        type: errorType
+      })
   )
 }
