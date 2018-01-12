@@ -75,7 +75,7 @@ export function loginUser(creds) {
         if (!response.ok) {
           return Promise.reject(user)
         } else {
-          localStorage.setItem('id_token', user.id_token)
+          localStorage.setItem('id_token', user.idToken)
           localStorage.setItem('role', user.role)
           dispatch(recieveLogin(user))
         }

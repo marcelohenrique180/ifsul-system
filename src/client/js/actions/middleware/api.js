@@ -40,10 +40,7 @@ function status(response) {
   if (response.ok) {
     return Promise.resolve(response)
   } else {
-    // erro deve ser lançado para entrar em catch
-    throw new (() => {
-      return response // a response é retornada
-    })() // TODO Review
+    return Promise.reject(response)
   }
 }
 
