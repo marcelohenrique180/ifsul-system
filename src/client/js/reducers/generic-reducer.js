@@ -1,6 +1,6 @@
 // @flow
 
-type CaseType = {
+type Case = {
   request: string,
   receive: string,
   failure: string
@@ -36,7 +36,7 @@ export const defaultState: State = {
 export default function genericReducer(
   state: State = defaultState,
   action: Action,
-  cases: CaseType
+  cases: Case
 ): State {
   switch (action.type) {
     case cases.failure:
