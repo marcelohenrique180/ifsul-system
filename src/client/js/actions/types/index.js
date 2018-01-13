@@ -3,7 +3,7 @@
 import type { Error } from '../../reducers/types'
 import { CALL_API } from '../middleware/api'
 
-export type Dispatch = (Action | ActionApi) => Action | Promise<Action>
+export type Dispatch = (Action | ActionApi) => Promise<Action>
 
 export type Action = {
   +type: string,

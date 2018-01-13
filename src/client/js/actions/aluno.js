@@ -20,7 +20,7 @@ export function resetAluno() {
   }
 }
 
-export function sendAlunoMatricula(matricula: string): ActionApi {
+export function sendAlunoMatricula(matricula: string) {
   return {
     [CALL_API]: {
       endpoint: 'cadastro/aluno',
@@ -42,7 +42,7 @@ export function sendAlunoMatricula(matricula: string): ActionApi {
   }
 }
 
-export function sendAlunoSenha({ senha, token }) {
+export function sendAlunoSenha([senha, token]: [string, string]) {
   return {
     [CALL_API]: {
       endpoint: 'cadastro/aluno/usuario',
@@ -77,7 +77,7 @@ export function requestAluno() {
   }
 }
 
-export function getAluno(url) {
+export function getAluno(url: string) {
   return {
     [CALL_API]: {
       endpoint: url || 'alunos',
