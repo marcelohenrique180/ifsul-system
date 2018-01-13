@@ -23,6 +23,7 @@ export function resetAluno() {
 export function sendAlunoMatricula(matricula: string): ActionApi {
   return {
     [CALL_API]: {
+      endpoint: 'cadastro/aluno',
       authenticated: false,
       types: [
         REQUEST_ALUNO_MATRICULA,
