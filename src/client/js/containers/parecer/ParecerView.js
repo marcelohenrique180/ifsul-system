@@ -1,20 +1,34 @@
 // @flow
 
+import type { Store, State as DefaultState } from '../../reducers/types'
+import type { Dispatch, Action } from '../../actions/types'
+import type { ParecerType } from '../../reducers/reducer-parecer'
+import type { RequerimentoType } from '../../reducers/reducer-requerimento'
+
 import React from 'react'
 import { connect } from 'react-redux'
 import FloatInput from '../../components/FloatInput'
 import Carregando from '../../components/Carregando'
 import { getParecerByRequerimentoId } from '../../actions/parecer'
 
-type Props = Object
+type DispatchProps = {
+  getParecerByRequerimentoId: RequerimentoType => Promise<Action>
+}
+
+type StateProps = {
+  parecer: DefaultState<ParecerType>,
+  requerimento: DefaultState<RequerimentoType>
+}
+
+type Props = StateProps & DispatchProps
 
 class ParecerView extends React.Component<Props> {
-  constructor(props) {
+  constructor(props: Props) {
     super(props)
-    const { dispatch, requerimento } = this.props
+    const { requerimento } = this.props
 
     if (requerimento.fetched) {
-      dispatch(getParecerByRequerimentoId(requerimento.payload))
+      this.props.getParecerByRequerimentoId(requerimento.payload)
     }
   }
 
@@ -31,7 +45,7 @@ class ParecerView extends React.Component<Props> {
       <div>
         <h3 style={{ textAlign: 'center' }}>Parecer</h3>
         <div>
-          {parecer.error === false ? (
+          {parecer.hasError === false ? (
             <div>
               {parecer.fetched === true ? (
                 <div>
@@ -71,11 +85,18 @@ class ParecerView extends React.Component<Props> {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(store: Store): StateProps {
   return {
-    parecer: state.parecer,
-    requerimento: state.requerimento
+    parecer: store.parecer,
+    requerimento: store.requerimento
   }
 }
 
-export default connect(mapStateToProps)(ParecerView)
+function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
+  return {
+    getParecerByRequerimentoId: requerimento =>
+      dispatch(getParecerByRequerimentoId(requerimento))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ParecerView)
