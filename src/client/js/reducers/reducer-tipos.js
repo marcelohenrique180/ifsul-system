@@ -11,10 +11,14 @@ import {
   RESET_TIPO
 } from '../actions/tipo'
 
+export type TipoType = {
+  tipo: string
+}
+
 export function tiposReducer(
-  state: State = defaultState,
+  state: State<?TipoType> = defaultState,
   action: Action
-): State {
+): State<?TipoType> {
   switch (action.type) {
     case RESET_TIPO:
       return defaultState

@@ -10,10 +10,16 @@ import {
   FAILURE_PARECER
 } from '../actions/parecer'
 
+export type ParecerType = {
+  deferido: string,
+  memorando: string,
+  parecer: string
+}
+
 export function parecerReducer(
-  state: State = defaultState,
+  state: State<?ParecerType> = defaultState,
   action: Action
-): State {
+): State<?ParecerType> {
   return genericReducer(state, action, {
     receive: RECEIVE_PARECER,
     request: REQUEST_PARECER,

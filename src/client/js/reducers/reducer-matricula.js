@@ -12,10 +12,12 @@ import {
 
 import { NOVA_MATRICULA } from '../actions/matricula'
 
+export type MatriculaType = {}
+
 export function matriculaReducer(
-  state: State = defaultState,
+  state: State<?MatriculaType> = defaultState,
   action: Action
-): State {
+): State<?MatriculaType> {
   switch (action.type) {
     case NOVA_MATRICULA:
       return Object.assign({}, state, {

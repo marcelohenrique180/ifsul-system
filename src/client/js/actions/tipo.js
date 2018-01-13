@@ -1,3 +1,5 @@
+// @flow
+
 import { CALL_API } from './middleware/api'
 export const REQUEST_TIPO: string = 'REQUEST_TIPO'
 export const RECEIVE_TIPO: string = 'RECEIVE_TIPO'

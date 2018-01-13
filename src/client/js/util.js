@@ -1,5 +1,14 @@
 // @flow
 
+export type PageType = {
+  page: {
+    number: number,
+    size: number,
+    totalElements: number,
+    totalPages: number
+  }
+}
+
 type EventType = {
   target: {
     name: string,

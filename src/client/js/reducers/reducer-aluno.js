@@ -11,10 +11,18 @@ import {
   RESET_ALUNO
 } from '../actions/aluno'
 
+export type AlunoType = {
+  dataNasc: string,
+  matricula: string,
+  nome: string,
+  rg: string,
+  telefone: string
+}
+
 export function alunoReducer(
-  state: State = defaultState,
+  state: State<?AlunoType> = defaultState,
   action: Action
-): State {
+): State<?AlunoType> {
   switch (action.type) {
     case RESET_ALUNO:
       return defaultState

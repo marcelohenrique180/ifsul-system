@@ -1,9 +1,9 @@
 // @flow
 
 import { combineReducers } from 'redux'
-import { userReducer } from './reducer-user'
+import { usuarioReducer } from './reducer-user'
 import { matriculaReducer } from './reducer-matricula'
-import { alunoUserReducer } from './reducer-aluno-user'
+import { alunoUsuarioReducer } from './reducer-aluno-user'
 import { alunoReducer } from './reducer-aluno'
 import { tiposReducer } from './reducer-tipos'
 import { cursosReducer } from './reducer-curso'
@@ -14,9 +14,9 @@ import { parecerReducer } from './reducer-parecer'
 import { requerimentosAbertosReducer } from './reducer-requerimentos-abertos'
 
 const allReducers = combineReducers({
-  usuario: userReducer,
+  usuario: usuarioReducer,
   matricula: matriculaReducer,
-  aluno_usuario: alunoUserReducer,
+  aluno_usuario: alunoUsuarioReducer,
   aluno: alunoReducer,
   tipos: tiposReducer,
   curso: cursosReducer,

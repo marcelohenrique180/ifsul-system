@@ -3,7 +3,7 @@
 import type { Action } from '../actions/types'
 import type { Case, Error, State } from './types'
 
-export const defaultState: State = {
+export const defaultState: State<*> = {
   isFetching: false,
   hasError: false,
   fetched: false,
@@ -12,10 +12,10 @@ export const defaultState: State = {
 }
 
 export default function genericReducer(
-  state: State = defaultState,
+  state: State<?Object> = defaultState,
   action: Action,
   cases: Case
-): State {
+): State<?Object> {
   switch (action.type) {
     case cases.failure:
       return {

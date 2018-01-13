@@ -1,3 +1,5 @@
+// @flow
+
 export const REQUEST_LOGIN: string = 'REQUEST_LOGIN'
 export const RECEIVE_LOGIN: string = 'RECEIVE_LOGIN'
 export const FAILURE_LOGIN: string = 'FAILURE_LOGIN'
@@ -17,7 +19,7 @@ function recieveLogin(user) {
     type: RECEIVE_LOGIN,
     payload: {
       isAuthenticated: true,
-      id_token: user.id_token,
+      idToken: user.idToken,
       role: user.role
     }
   }

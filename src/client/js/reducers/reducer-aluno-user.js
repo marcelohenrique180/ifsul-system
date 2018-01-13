@@ -10,10 +10,12 @@ import {
   REQUEST_ALUNO_SENHA
 } from '../actions/aluno'
 
-export function alunoUserReducer(
-  state: State = defaultState,
+export type AlunoUsuarioType = {}
+
+export function alunoUsuarioReducer(
+  state: State<?AlunoUsuarioType> = defaultState,
   action: Action
-): State {
+): State<?AlunoUsuarioType> {
   const cases: Case = {
     request: REQUEST_ALUNO_SENHA,
     receive: RECEIVE_ALUNO_SENHA,

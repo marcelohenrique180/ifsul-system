@@ -11,17 +11,28 @@ import {
   FAILURE_LOGIN
 } from '../actions'
 
-export function userReducer(
-  state: State = defaultState,
+export type UsuarioType = {
+  idToken: ?string,
+  isAuthenticated: boolean,
+  role: ?string
+}
+
+export function usuarioReducer(
+  state: State<?UsuarioType> = defaultState,
   action: Action
-): State {
+): State<?UsuarioType> {
   switch (action.type) {
     case RECEIVE_LOGOUT:
       return {
         ...state,
         isFetching: false,
-        isAuthenticated: false,
-        payload: {}
+        fetched: true,
+        hasError: false,
+        payload: {
+          idToken: '',
+          role: '',
+          isAuthenticated: false
+        }
       }
     default:
       return genericReducer(state, action, {

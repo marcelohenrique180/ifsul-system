@@ -11,10 +11,14 @@ import {
   RESET_CURSO
 } from '../actions/curso'
 
+export type CursoType = {
+  nome: string
+}
+
 export function cursosReducer(
-  state: State = defaultState,
+  state: State<?CursoType> = defaultState,
   action: Action
-): State {
+): State<?CursoType> {
   switch (action.type) {
     case RESET_CURSO:
       return defaultState

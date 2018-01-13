@@ -11,10 +11,16 @@ import {
   RESET_REQUERIMENTO
 } from '../actions/requerimento'
 
+export type RequerimentoType = {
+  data: string,
+  justificativa: string,
+  requerimento: string
+}
+
 export function requerimentoReducer(
-  state: State = defaultState,
+  state: State<?RequerimentoType> = defaultState,
   action: Action
-): State {
+): State<?RequerimentoType> {
   switch (action.type) {
     case RESET_REQUERIMENTO:
       return defaultState

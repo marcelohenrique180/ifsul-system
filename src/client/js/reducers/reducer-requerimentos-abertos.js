@@ -2,6 +2,8 @@
 
 import type { Action } from '../actions/types'
 import type { State, Case } from './types'
+import type { RequerimentoType } from './reducer-requerimento'
+import type { PageType } from '../util'
 import genericReducer, { defaultState } from './generic-reducer'
 
 import {
@@ -10,10 +12,14 @@ import {
   FAILURE_REQUERIMENTOS_ABERTOS
 } from '../actions/requerimento'
 
+export type RequerimentoAbertoType = {
+  _embedded: Array<RequerimentoType>
+}
+
 export function requerimentosAbertosReducer(
-  state: State = defaultState,
+  state: State<?RequerimentoAbertoType> = defaultState,
   action: Action
-): State {
+): State<?RequerimentoAbertoType> {
   return genericReducer(state, action, {
     request: REQUEST_REQUERIMENTOS_ABERTOS,
     receive: RECEIVE_REQUERIMENTOS_ABERTOS,

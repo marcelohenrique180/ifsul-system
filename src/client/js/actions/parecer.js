@@ -1,3 +1,5 @@
+// @flow
+
 import { CALL_API } from './middleware/api'
 import { getId } from '../util'
 export const REQUEST_PARECER: string = 'REQUEST_PARECER'

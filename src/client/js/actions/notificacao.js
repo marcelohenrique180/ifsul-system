@@ -1,3 +1,5 @@
+// @flow
+
 import { CALL_API } from './middleware/api'
 export const REQUEST_NOTIFICACAO: string = 'REQUEST_NOTIFICACAO'
 export const RECEIVE_NOTIFICACAO: string = 'RECEIVE_NOTIFICACAO'

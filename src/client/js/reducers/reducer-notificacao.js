@@ -10,10 +10,12 @@ import {
   REQUEST_NOTIFICACAO
 } from '../actions/notificacao'
 
+export type NotificacaType = {}
+
 export function notificacaoReducer(
-  state: State = defaultState,
+  state: State<?NotificacaType> = defaultState,
   action: Action
-): State {
+): State<?NotificacaType> {
   return genericReducer(state, action, {
     request: REQUEST_NOTIFICACAO,
     receive: RECEIVE_NOTIFICACAO,
