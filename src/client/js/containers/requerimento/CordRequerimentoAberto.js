@@ -14,11 +14,12 @@ type Props = {
   getRequerimentosEmAberto: Function,
   getAluno: Function,
   loadRequerimento: Function,
+  reloadCordRequerimento: Function,
   router: Object,
   requerimentosAbertos: Object
 }
 
-type State = {}
+type State = Object
 
 class CordRequerimentoAberto extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -26,7 +27,7 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
 
     this.state = { search: '', requerimentos: [], filteredRequerimentos: [] }
     this.props.getRequerimentosEmAberto().then(reqsAbertos => {
-      reqsAbertos.response._embedded.requerimentos.forEach(requerimento => {
+      reqsAbertos.payload._embedded.requerimentos.forEach(requerimento => {
         this.props.getAluno(requerimento._links.aluno.href).then(aluno => {
           this.setState({
             requerimentos: this.state.requerimentos.concat([
@@ -35,9 +36,9 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
                   'Req.Nº' +
                   getId(requerimento) +
                   ' ' +
-                  aluno.response.nome +
+                  aluno.payload.nome +
                   ' ' +
-                  aluno.response.matricula,
+                  aluno.payload.matricula,
                 requerimento_id: getId(requerimento)
               }
             ])
@@ -67,7 +68,7 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
   renderRequerimentos() {
     const filteredRequerimentos = this.state.filteredRequerimentos.filter(
       filteredReq =>
-        this.props.requerimentosAbertos.requerimentos_abertos._embedded.requerimentos.filter(
+        this.props.requerimentosAbertos.payload._embedded.requerimentos.filter(
           openReq => filteredReq.requerimento_id === getId(openReq)
         ).length > 0
     )

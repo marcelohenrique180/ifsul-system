@@ -36,7 +36,7 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
 
   @autobind
   requestTableContent() {
-    const { requerimentos } = this.props.requerimentos.requerimento._embedded
+    const { requerimentos } = this.props.requerimentos.payload._embedded
     const alunos = []
     const pareceres = []
     const tipos = []
@@ -47,7 +47,7 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
       this.props
         .requestTipos(requerimento._links.tipo.href)
         .then(tipo => {
-          tipos.push(tipo.response.tipo)
+          tipos.push(tipo.payload.tipo)
           this.setState({ tipos: tipos })
         })
         .catch(() => {
@@ -60,8 +60,8 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
         .getAluno(requerimento._links.aluno.href)
         .then(aluno => {
           alunos.push({
-            nome: aluno.response.nome,
-            matricula: aluno.response.matricula
+            nome: aluno.payload.nome,
+            matricula: aluno.payload.matricula
           })
           this.setState({ alunos: alunos })
         })
@@ -101,7 +101,7 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
 
   @autobind
   renderLines() {
-    const { requerimentos } = this.props.requerimentos.requerimento._embedded
+    const { requerimentos } = this.props.requerimentos.payload._embedded
     const { tipos, pareceres, alunos } = this.state
 
     return requerimentos.map((requerimento, i) => {
@@ -141,7 +141,7 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
     let renderTable = false
 
     if (requerimentos.fetched) {
-      const length = requerimentos.requerimento._embedded.requerimentos.length
+      const length = requerimentos.payload._embedded.requerimentos.length
       renderTable =
         tipos.length === length &&
         pareceres.length === length &&
@@ -168,7 +168,7 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
               <tbody>{this.renderLines()}</tbody>
             </table>
             <Paginator
-              pageableEntity={requerimentos.requerimento}
+              pageableEntity={requerimentos.payload}
               currentPage={this.state.currentPage}
               location={this.props.location}
               api={requerimentosAbertosApi}

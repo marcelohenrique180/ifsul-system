@@ -1,46 +1,60 @@
-import React, {Component} from 'react'
-import {Link} from 'react-router'
-import {connect} from 'react-redux'
-import {logoutUser} from '../actions/index'
-import {indexRoute} from '../util'
+import React, { Component } from 'react'
+import { Link } from 'react-router'
+import { connect } from 'react-redux'
+import { logoutUser } from '../actions/index'
+import { indexRoute } from '../util'
 
 class Navbar extends Component {
-  render () {
-    const {isAuthenticated} = this.props
+  render() {
+    const { isAuthenticated } = this.props
 
     return (
       <nav className="navbar navbar-inverse">
         <div className="container-fluid">
           <div className="navbar-header">
-            <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <button
+              type="button"
+              className="navbar-toggle collapsed"
+              data-toggle="collapse"
+              data-target="#bs-example-navbar-collapse-1"
+              aria-expanded="false"
+            >
               <span className="sr-only">Toggle navigation</span>
               <span className="icon-bar" />
               <span className="icon-bar" />
               <span className="icon-bar" />
             </button>
-            <Link to={indexRoute()} className="navbar-brand">LOGO</Link>
+            <Link to={indexRoute()} className="navbar-brand">
+              LOGO
+            </Link>
           </div>
 
-          <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <div
+            className="collapse navbar-collapse"
+            id="bs-example-navbar-collapse-1"
+          >
             <ul className="nav navbar-nav navbar-right">
               <li>
                 <a className="nav-link" href="#">
-                  <img src="img/config.png" width="21" height="18"/> Perfil
+                  <img src="img/config.png" width="21" height="18" /> Perfil
                 </a>
               </li>
               <li>
-                {
-                  isAuthenticated
-                    ? <Link className="nav-link" to="/login"
-                      onClick={ () => {
-                        this.props.dispatch(logoutUser())
-                      }}>
-                      <img src="img/glyphicons-388-log-out.png" alt=""/> Logout
-                    </Link>
-                    : <Link className="nav-link" to="/login">
-                      <img src="img/glyphicons-388-log-out.png" alt=""/> Login
-                    </Link>
-                }
+                {isAuthenticated ? (
+                  <Link
+                    className="nav-link"
+                    to="/login"
+                    onClick={() => {
+                      this.props.dispatch(logoutUser())
+                    }}
+                  >
+                    <img src="img/glyphicons-388-log-out.png" alt="" /> Logout
+                  </Link>
+                ) : (
+                  <Link className="nav-link" to="/login">
+                    <img src="img/glyphicons-388-log-out.png" alt="" /> Login
+                  </Link>
+                )}
               </li>
             </ul>
           </div>
@@ -50,9 +64,9 @@ class Navbar extends Component {
   }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return {
-    isAuthenticated: state.usuario.isAuthenticated,
+    isAuthenticated: state.usuario.payload.isAuthenticated,
     dispatch: state.usuario.dispatch
   }
 }

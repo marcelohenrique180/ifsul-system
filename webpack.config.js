@@ -3,16 +3,22 @@ const { join } = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 module.exports = {
+  devtool: 'source-map',
   entry: {
     bundle: './src/client/js/index.js'
   },
   output: {
     path: join(__dirname, 'src/main/resources/static/'),
     filename: 'js/bundle.min.js',
-    publicPath: 'src/main/resources/static/'
+    publicPath: 'src/main/resources/static/',
+    sourceMapFilename: 'js/bundle.min.js.map',
+    pathinfo: true
   },
   devServer: {
-    contentBase: [join(__dirname, '/src/main/resources/templates'), join(__dirname, 'src/main/resources/static')],
+    contentBase: [
+      join(__dirname, '/src/main/resources/templates'),
+      join(__dirname, 'src/main/resources/static')
+    ],
     compress: true,
     port: 9000
   },
@@ -33,7 +39,10 @@ module.exports = {
           use: ['css-loader', 'sass-loader']
         })
       },
-      { test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000&name=css/fonts/[hash].[ext]' }
+      {
+        test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+        loader: 'url-loader?limit=100000&name=css/fonts/[hash].[ext]'
+      }
     ]
   },
   plugins: [

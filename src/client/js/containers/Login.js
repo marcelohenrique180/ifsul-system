@@ -1,12 +1,14 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router'
 import { connect } from 'react-redux'
-import { loginUser } from '../actions/'
 import { handleChange } from '../util'
-import FloatInput from '../components/FloatInput'
-import Alerta from '../components/Alerta'
+import { loginUser } from '../actions/'
+import { Link } from 'react-router'
 
-class Login extends Component {
+import React from 'react'
+
+import Alerta from '../components/Alerta'
+import FloatInput from '../components/FloatInput'
+
+class Login extends React.Component {
   constructor(props) {
     super(props)
     this.state = { email: '', senha: '' }
@@ -16,7 +18,7 @@ class Login extends Component {
   }
 
   render() {
-    const { errorMessage } = this.props.user
+    const { hasError, error } = this.props.user
     const { email, senha } = this.state
 
     return (
@@ -44,8 +46,8 @@ class Login extends Component {
               handleChange={this.handleChange}
             />
           </div>
-          {errorMessage !== '' && (
-            <Alerta alertClass="alert-danger" message={errorMessage} />
+          {hasError && (
+            <Alerta alertClass="alert-danger" message={error.message} />
           )}
           <div className="input-group text-center">
             <button onClick={this.handleClick} className="btn btn-primary">

@@ -31,20 +31,19 @@ class AlunoRequerimento extends React.Component<Props, State> {
     this.state = defaultState
     const { dispatch } = this.props
 
-    dispatch(requestAluno()).then(aluno =>
-      dispatch(requestCursos(aluno.response._links.curso.href))
-    )
     dispatch(requestTipos())
+    dispatch(requestAluno()).then(aluno =>
+      dispatch(requestCursos(aluno.payload._links.curso.href))
+    )
 
     this.handleChange = handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   renderTipos() {
-    const { tipos } = this.props.tipos.tipo
-
-    if (tipos) {
-      return tipos.map(tipo => {
+    const { _embedded } = this.props.tipos.payload
+    if (_embedded) {
+      return _embedded.tipos.map(tipo => {
         return (
           <option key={tipo._links.self.href} value={tipo._links.self.href}>
             {tipo.tipo}
@@ -58,7 +57,7 @@ class AlunoRequerimento extends React.Component<Props, State> {
   handleSubmit(e) {
     const { tipo, requerimento, justificativa } = this.state
     const notNullFields = [tipo, requerimento, justificativa]
-    const aluno = this.props.aluno.aluno._links.aluno.href
+    const aluno = this.props.aluno.payload._links.aluno.href
 
     const error = areFieldsEmpty(notNullFields)
     if (error) {

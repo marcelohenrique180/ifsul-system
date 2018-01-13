@@ -11,8 +11,8 @@ type Props = {
 
 class RequerimentoView extends React.Component<Props> {
   render() {
-    const { requerimento } = this.props.requerimento
-    const { tipo } = this.props.tipo
+    const requerimento = this.props.requerimento.payload
+    const tipo = this.props.tipo.payload
     const tipoFetched = this.props.tipo.fetched
     const requerimentoFetched = this.props.requerimento.fetched
 

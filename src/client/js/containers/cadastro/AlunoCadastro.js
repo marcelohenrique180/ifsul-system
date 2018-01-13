@@ -10,7 +10,7 @@ import Alerta from '../../components/Alerta'
 import Carregando from '../../components/Carregando'
 
 class AlunoCadastro extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = { matricula: '', formError: { matricula: false } }
@@ -18,19 +18,19 @@ class AlunoCadastro extends React.Component {
   }
 
   @autobind
-  handleChangeForm (event) {
+  handleChangeForm(event) {
     this.setState({ formError: { [event.target.name]: false } })
     this.handleChange(event)
   }
 
   @autobind
-  novaMatricula () {
+  novaMatricula() {
     this.props.novaMatricula()
     this.setState({ matricula: '' })
   }
 
   @autobind
-  handleClickMatricula (e) {
+  handleClickMatricula(e) {
     e.preventDefault()
     const { matricula } = this.state
     if (matricula === '') {
@@ -41,48 +41,70 @@ class AlunoCadastro extends React.Component {
     }
   }
 
-  render () {
+  render() {
     const matriculaRequest = this.props.matricula
     const { matricula, formError } = this.state
-    const { error, errorMessage } = this.props.matricula
+    const { hasError, error } = this.props.matricula
 
-    return (
-      matriculaRequest.fetched
-        ? <div className='text-center'>
-          <h5 className='text-success'>Brevemente será enviado um e-mail à você com o link de cadastro!</h5>
-          <button onClick={this.novaMatricula} className='btn btn-success'>Novo Cadastro</button>
+    return matriculaRequest.fetched ? (
+      <div className="text-center">
+        <h5 className="text-success">
+          Brevemente será enviado um e-mail à você com o link de cadastro!
+        </h5>
+        <button onClick={this.novaMatricula} className="btn btn-success">
+          Novo Cadastro
+        </button>
+      </div>
+    ) : (
+      <form
+        target="#"
+        className="form-group col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-4"
+      >
+        <div className="input-group">
+          <FloatInput
+            name="matricula"
+            value={matricula}
+            textLabel="Insira sua matrícula"
+            handleChange={this.handleChangeForm}
+          />
         </div>
-        : <form target='#' className="form-group col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-4">
-          <div className='input-group'>
-            <FloatInput name='matricula' value={matricula} textLabel="Insira sua matrícula"
-              handleChange={this.handleChangeForm} />
-          </div>
-          {
-            formError.matricula
-              ? <Alerta alertClass='alert-danger' message="Favor, insira a Matrícula." />
-              : <Alerta show={error} alertClass='alert-danger' message={errorMessage} />
-          }
-          <div className='input-group text-center'>
-            {
-              !matriculaRequest.isFetching
-                ? <button onClick={this.handleClickMatricula} type='submit' className="btn btn-primary">
-                  Enviar
-                </button>
-                : <Carregando />
-            }
-          </div>
-        </form>
+        {formError.matricula ? (
+          <Alerta
+            alertClass="alert-danger"
+            message="Favor, insira a Matrícula."
+          />
+        ) : (
+          <Alerta
+            show={hasError}
+            alertClass="alert-danger"
+            message={error.message}
+          />
+        )}
+        <div className="input-group text-center">
+          {!matriculaRequest.isFetching ? (
+            <button
+              onClick={this.handleClickMatricula}
+              type="submit"
+              className="btn btn-primary"
+            >
+              Enviar
+            </button>
+          ) : (
+            <Carregando />
+          )}
+        </div>
+      </form>
     )
   }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return {
     matricula: state.matricula
   }
 }
 
-function mapDispatchToProps (dispatch) {
+function mapDispatchToProps(dispatch) {
   return {
     sendAlunoMatricula: matricula => dispatch(sendAlunoMatricula(matricula)),
     novaMatricula: () => dispatch(novaMatricula())

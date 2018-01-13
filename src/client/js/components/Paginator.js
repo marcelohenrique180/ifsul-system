@@ -1,14 +1,19 @@
-import React, {Component} from 'react'
-import {Link} from 'react-router'
+// @flow
+
+import { Link } from 'react-router'
+
+import React from 'react'
 import Carregando from '../components/Carregando'
 
-export default class Paginator extends Component {
-  render () {
-    const {pageableEntity, currentPage, onClickHandler, api} = this.props
-    const {pathname} = this.props.location
+type Props = Object
+
+export default class Paginator extends React.Component<Props> {
+  render() {
+    const { pageableEntity, currentPage, onClickHandler, api } = this.props
+    const { pathname } = this.props.location
 
     if (typeof pageableEntity.page !== 'undefined') {
-      const {_links, page} = pageableEntity
+      const { _links, page } = pageableEntity
       let pagination = null
 
       if (page.totalElements - 1 > 0) {
@@ -16,7 +21,7 @@ export default class Paginator extends Component {
           const array = []
 
           const pageControl = (() => {
-            const {totalPages} = page
+            const { totalPages } = page
             const pages = 6
             const pageControl = {}
 
@@ -24,15 +29,17 @@ export default class Paginator extends Component {
               pageControl.start = 0
               pageControl.end = totalPages - 1
             } else {
-              if (totalPages - currentPage <= pages / 2) { // ending node
+              if (totalPages - currentPage <= pages / 2) {
+                // ending node
                 pageControl.start = totalPages - pages - 1
                 pageControl.end = totalPages - 1
-              } else if (pages / 2 > currentPage) { // starting node
+              } else if (pages / 2 > currentPage) {
+                // starting node
                 pageControl.start = 0
                 pageControl.end = pages
               } else {
-                pageControl.start = currentPage - (pages / 2)
-                pageControl.end = currentPage + (pages / 2)
+                pageControl.start = currentPage - pages / 2
+                pageControl.end = currentPage + pages / 2
               }
             }
 
@@ -43,7 +50,10 @@ export default class Paginator extends Component {
             if (i !== currentPage) {
               array.push(
                 <li key={i}>
-                  <Link to={pathname} onClick = {onClickHandler(api + 'page=' + (i))} >
+                  <Link
+                    to={pathname}
+                    onClick={onClickHandler(api + 'page=' + i)}
+                  >
                     {i + 1}
                   </Link>
                 </li>
@@ -51,8 +61,12 @@ export default class Paginator extends Component {
             } else {
               array.push(
                 <li className="active" key={i}>
-                  <Link to={pathname}
-                    onClick = {() => { onClickHandler(api + 'page=' + (i)) }} >
+                  <Link
+                    to={pathname}
+                    onClick={() => {
+                      onClickHandler(api + 'page=' + i)
+                    }}
+                  >
                     {i + 1}
                   </Link>
                 </li>
@@ -63,22 +77,29 @@ export default class Paginator extends Component {
         }
 
         if (_links.first) {
-          pagination =
-                        <div>
-                          <ul className="pagination">
-                            <li>
-                              <Link to={pathname} onClick = {onClickHandler(_links.first.href)} >
-                                        &laquo;
-                              </Link>
-                            </li>
-                            {itens()}
-                            <li>
-                              <Link to={pathname} onClick = {onClickHandler(_links.last.href)} >
-                                        &raquo;
-                              </Link>
-                            </li>
-                          </ul>
-                        </div>
+          pagination = (
+            <div>
+              <ul className="pagination">
+                <li>
+                  <Link
+                    to={pathname}
+                    onClick={onClickHandler(_links.first.href)}
+                  >
+                    &laquo;
+                  </Link>
+                </li>
+                {itens()}
+                <li>
+                  <Link
+                    to={pathname}
+                    onClick={onClickHandler(_links.last.href)}
+                  >
+                    &raquo;
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          )
         }
       }
 

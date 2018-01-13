@@ -1,12 +1,13 @@
 // @flow
 
-import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { getRequerimentoByPage } from '../../actions/requerimento'
 import { requestTipos } from '../../actions/tipo'
 import { callApi } from '../../actions/middleware/api'
 import { getId } from '../../util'
+
+import React from 'react'
 import Carregando from '../../components/Carregando'
 import Paginator from '../../components/Paginator'
 
@@ -37,7 +38,7 @@ class AlunoVisualizarRequerimento extends React.Component<Props, State> {
 
   requestTableContent(response) {
     const { dispatch } = this.props
-    const { requerimentos } = response.response._embedded
+    const { requerimentos } = response.payload._embedded
     const tipos = []
     const pareceres = []
 
@@ -81,7 +82,7 @@ class AlunoVisualizarRequerimento extends React.Component<Props, State> {
   }
 
   renderLines() {
-    const { requerimentos } = this.props.requerimentos.requerimento._embedded
+    const { requerimentos } = this.props.requerimentos.payload._embedded
     const { tipos, pareceres } = this.state
 
     return (
@@ -98,7 +99,7 @@ class AlunoVisualizarRequerimento extends React.Component<Props, State> {
                   <Link
                     to={'/menu/aluno/requerimento/visualizar/' + requerimentoId}
                   >
-                    {tipo.response.tipo}
+                    {tipo.payload.tipo}
                   </Link>
                 ) : (
                   <p>&nbsp;</p>
@@ -127,7 +128,7 @@ class AlunoVisualizarRequerimento extends React.Component<Props, State> {
     let data = <Carregando />
 
     if (requerimentosProp.fetched) {
-      const { requerimentos } = requerimentosProp.requerimento._embedded
+      const { requerimentos } = requerimentosProp.payload._embedded
 
       if (requerimentos.length > 0) {
         data = (
@@ -144,7 +145,7 @@ class AlunoVisualizarRequerimento extends React.Component<Props, State> {
               {this.renderLines()}
             </table>
             <Paginator
-              pageableEntity={this.props.requerimentos.requerimento}
+              pageableEntity={this.props.requerimentos.payload}
               currentPage={this.state.currentPage}
               location={this.props.location}
               api={requerimentoApi}

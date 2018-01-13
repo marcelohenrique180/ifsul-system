@@ -23,11 +23,11 @@ class VisualizarRequerimento extends React.Component<Props> {
 
     const reqId = this.props.params['requerimento']
     dispatch(getRequerimento(reqId)).then(requerimento => {
-      dispatch(requestTipos(requerimento.response._links.tipo.href))
+      dispatch(requestTipos(requerimento.payload._links.tipo.href))
     })
 
     dispatch(requestAluno()).then(aluno =>
-      dispatch(requestCursos(aluno.response._links.curso.href))
+      dispatch(requestCursos(aluno.payload._links.curso.href))
     )
   }
 

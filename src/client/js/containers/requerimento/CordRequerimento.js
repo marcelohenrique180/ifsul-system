@@ -1,15 +1,17 @@
 // @flow
 
-import React from 'react'
 import { connect } from 'react-redux'
+import { getAluno, resetAluno } from '../../actions/aluno'
+import { getRequerimento, resetRequerimento } from '../../actions/requerimento'
+import { requestCursos, resetCurso } from '../../actions/curso'
+import { requestTipos, resetTipo } from '../../actions/tipo'
+
+import React from 'react'
+
+import AlunoInfo from '../../containers/aluno/AlunoInfo'
 import Carregando from '../../components/Carregando'
 import RequerimentoView from '../../containers/requerimento/RequerimentoView'
-import AlunoInfo from '../../containers/aluno/AlunoInfo'
 import ParecerInsert from '../../containers/parecer/ParecerInsert'
-import { getRequerimento, resetRequerimento } from '../../actions/requerimento'
-import { requestTipos, resetTipo } from '../../actions/tipo'
-import { getAluno, resetAluno } from '../../actions/aluno'
-import { requestCursos, resetCurso } from '../../actions/curso'
 
 export function reloadCordRequerimento(dispatch, requerimentoId) {
   dispatch(resetRequerimento())
@@ -18,9 +20,9 @@ export function reloadCordRequerimento(dispatch, requerimentoId) {
   dispatch(resetCurso())
 
   dispatch(getRequerimento(requerimentoId)).then(requerimento => {
-    dispatch(requestTipos(requerimento.response._links.tipo.href))
-    dispatch(getAluno(requerimento.response._links.aluno.href)).then(aluno => {
-      dispatch(requestCursos(aluno.response._links.curso.href))
+    dispatch(requestTipos(requerimento.payload._links.tipo.href))
+    dispatch(getAluno(requerimento.payload._links.aluno.href)).then(aluno => {
+      dispatch(requestCursos(aluno.payload._links.curso.href))
     })
   })
 }
@@ -89,12 +91,12 @@ class CordRequerimento extends React.Component<Props> {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(store) {
   return {
-    requerimento: state.requerimento,
-    aluno: state.aluno,
-    tipo: state.tipos,
-    curso: state.curso
+    requerimento: store.requerimento,
+    aluno: store.aluno,
+    tipo: store.tipos,
+    curso: store.curso
   }
 }
 

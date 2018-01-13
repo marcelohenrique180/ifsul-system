@@ -33,8 +33,7 @@ class ParecerInsert extends Component<Props, State> {
 
     const { deferido, parecer, memorando } = this.state
     const notNullFields = [deferido, parecer, memorando]
-    const requerimento_link = this.props.requerimento.requerimento._links.self
-      .href
+    const requerimento_link = this.props.requerimento.payload._links.self.href
 
     const error = areFieldsEmpty(notNullFields)
     if (error) {

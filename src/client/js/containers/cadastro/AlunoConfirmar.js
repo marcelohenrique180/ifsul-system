@@ -1,89 +1,136 @@
+import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
+import { handleChange } from '../../util'
+import { sendAlunoSenha } from '../../actions/aluno'
+
 import React from 'react'
-import {connect} from 'react-redux'
 import autobind from 'autobind-decorator'
-import {browserHistory} from 'react-router'
 import FloatInput from '../../components/FloatInput'
 import Alerta from '../../components/Alerta'
 import Carregando from '../../components/Carregando'
-import {handleChange} from '../../util'
-import {sendAlunoSenha} from '../../actions/aluno'
 
 class AlunoCadastro extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
-    this.state = {senha: '', confirmaSenha: '', formError: { senha: false, message: '' }}
+    this.state = {
+      senha: '',
+      confirmaSenha: '',
+      formError: { senha: false, message: '' }
+    }
     this.handleChange = handleChange.bind(this)
   }
 
-    @autobind
-  handleClickSenha (e) {
+  @autobind
+  handleClickSenha(e) {
     e.preventDefault()
     const { senha, confirmaSenha } = this.state
     const token = this.props.params['token']
 
     if (senha !== confirmaSenha) {
-      this.setState({formError: {senha: true, message: 'Senha diferentes!'}})
+      this.setState({
+        formError: { senha: true, message: 'Senha diferentes!' }
+      })
     } else if (senha === '') {
-      this.setState({formError: {senha: true, message: 'Senha deve ser informada!'}})
+      this.setState({
+        formError: { senha: true, message: 'Senha deve ser informada!' }
+      })
     } else if (senha.search(/(?=.*\d)/g)) {
-      this.setState({formError: {senha: true, message: 'Senha deve conter pelo menos 1 número'}})
+      this.setState({
+        formError: {
+          senha: true,
+          message: 'Senha deve conter pelo menos 1 número'
+        }
+      })
     } else if (senha.search(/(?=.*[A-Z])/g)) {
-      this.setState({formError: {senha: true, message: 'Senha deve conter pelo menos 1 letra maiúscula'}})
+      this.setState({
+        formError: {
+          senha: true,
+          message: 'Senha deve conter pelo menos 1 letra maiúscula'
+        }
+      })
     } else if (senha.search(/(?=.*[a-z])/g)) {
-      this.setState({formError: {senha: true, message: 'Senha deve conter pelo menos 1 letra minúscula'}})
+      this.setState({
+        formError: {
+          senha: true,
+          message: 'Senha deve conter pelo menos 1 letra minúscula'
+        }
+      })
     } else if (senha.length <= 8) {
-      this.setState({formError: {senha: true, message: 'Senha deve conter pelo menos 8 caracteres.'}})
+      this.setState({
+        formError: {
+          senha: true,
+          message: 'Senha deve conter pelo menos 8 caracteres.'
+        }
+      })
     } else {
-      this.setState({formError: {senha: false}})
-      this.props.sendAlunoSenha({senha, token})
+      this.setState({ formError: { senha: false } })
+      this.props.sendAlunoSenha({ senha, token })
       browserHistory.push('/login')
     }
   }
 
-    render () {
-      const {senha, confirmaSenha, formError} = this.state
-      const {error, errorMessage} = this.props.usuario
-      const usuario = this.props.usuario
+  render() {
+    const { senha, confirmaSenha, formError } = this.state
+    const { error, hasError } = this.props.usuario
+    const usuario = this.props.usuario
 
-      return (
-        <form className="form-group col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-4">
-          <div className="input-group ">
-            <FloatInput name="senha" value={senha} textLabel="Nova Senha" type="password"
-              handleChange={this.handleChange}/>
-          </div>
-          <div className="input-group ">
-            <FloatInput name="confirmaSenha" value={confirmaSenha} textLabel="Confirmar Nova Senha" type="password"
-              handleChange={this.handleChange}/>
-          </div>
-          {
-            formError.senha === true
-              ? <Alerta alertClass="alert-danger" message={formError.message} />
-              : <Alerta show={error} alertClass="alert-danger" message={errorMessage} />
-          }
-          <div className="input-group text-center">
-            {
-              !usuario.isFetching
-                ? <button onClick={this.handleClickSenha} type="submit" className="btn btn-primary">
-                                Enviar
-                </button>
-                : <Carregando />
-            }
-          </div>
-        </form>
-      )
-    }
+    return (
+      <form className="form-group col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-4">
+        <div className="input-group ">
+          <FloatInput
+            name="senha"
+            value={senha}
+            textLabel="Nova Senha"
+            type="password"
+            handleChange={this.handleChange}
+          />
+        </div>
+        <div className="input-group ">
+          <FloatInput
+            name="confirmaSenha"
+            value={confirmaSenha}
+            textLabel="Confirmar Nova Senha"
+            type="password"
+            handleChange={this.handleChange}
+          />
+        </div>
+        {formError.senha === true ? (
+          <Alerta alertClass="alert-danger" message={formError.message} />
+        ) : (
+          <Alerta
+            show={hasError}
+            alertClass="alert-danger"
+            message={error.message}
+          />
+        )}
+        <div className="input-group text-center">
+          {!usuario.isFetching ? (
+            <button
+              onClick={this.handleClickSenha}
+              type="submit"
+              className="btn btn-primary"
+            >
+              Enviar
+            </button>
+          ) : (
+            <Carregando />
+          )}
+        </div>
+      </form>
+    )
+  }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return {
     usuario: state.aluno_usuario
   }
 }
 
-function mapDispatchToProps (dispatch) {
+function mapDispatchToProps(dispatch) {
   return {
-    sendAlunoSenha: (credentials) => dispatch(sendAlunoSenha(credentials))
+    sendAlunoSenha: credentials => dispatch(sendAlunoSenha(credentials))
   }
 }
 

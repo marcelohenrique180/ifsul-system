@@ -14,15 +14,15 @@ class ParecerView extends React.Component<Props> {
     const { dispatch, requerimento } = this.props
 
     if (requerimento.fetched) {
-      dispatch(getParecerByRequerimentoId(requerimento.requerimento))
+      dispatch(getParecerByRequerimentoId(requerimento.payload))
     }
   }
 
   render() {
     const { parecer } = this.props
 
-    if (typeof parecer.parecer !== 'undefined') {
-      parecer.parecer.deferido = parecer.parecer.deferido
+    if (typeof parecer.payload !== 'undefined') {
+      parecer.payload.deferido = parecer.payload.deferido
         ? 'Deferido'
         : 'Indeferido'
     }
@@ -39,7 +39,7 @@ class ParecerView extends React.Component<Props> {
                     <FloatInput
                       name="parecer"
                       type="text"
-                      value={parecer.parecer.parecer}
+                      value={parecer.payload.parecer}
                       textLabel="Parecer"
                       readOnly="true"
                     />
@@ -48,7 +48,7 @@ class ParecerView extends React.Component<Props> {
                     <FloatInput
                       name="deferimento"
                       type="text"
-                      value={parecer.parecer.deferido}
+                      value={parecer.payload.deferido}
                       textLabel="Deferimento"
                       readOnly="true"
                     />

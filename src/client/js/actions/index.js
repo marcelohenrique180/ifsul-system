@@ -8,8 +8,6 @@ export const FAILURE_LOGOUT = 'FAILURE_LOGOUT'
 function requestLogin(creds) {
   return {
     type: REQUEST_LOGIN,
-    isFetching: true,
-    isAuthenticated: false,
     creds
   }
 }
@@ -17,9 +15,8 @@ function requestLogin(creds) {
 function recieveLogin(user) {
   return {
     type: RECEIVE_LOGIN,
-    isFetching: false,
-    isAuthenticated: true,
     payload: {
+      isAuthenticated: true,
       id_token: user.id_token,
       role: user.role
     }
@@ -29,9 +26,8 @@ function recieveLogin(user) {
 function failureLogin(error) {
   return {
     type: FAILURE_LOGIN,
-    isFetching: false,
-    isAuthenticated: false,
     error: {
+      isAuthenticated: false,
       message: error
     }
   }
@@ -40,16 +36,18 @@ function failureLogin(error) {
 function requestLogout() {
   return {
     type: REQUEST_LOGOUT,
-    isFetching: true,
-    isAuthenticated: true
+    payload: {
+      isAuthenticated: true
+    }
   }
 }
 
 function recieveLogout() {
   return {
     type: RECEIVE_LOGOUT,
-    isFetching: false,
-    isAuthenticated: false
+    payload: {
+      isAuthenticated: false
+    }
   }
 }
 
@@ -77,7 +75,7 @@ export function loginUser(creds) {
         } else {
           localStorage.setItem('id_token', user.idToken)
           localStorage.setItem('role', user.role)
-          dispatch(recieveLogin(user))
+          return dispatch(recieveLogin(user))
         }
       })
       .catch(() => dispatch(failureLogin('E-mail ou Senha incorretos.')))
