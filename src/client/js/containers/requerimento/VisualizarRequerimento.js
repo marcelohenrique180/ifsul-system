@@ -1,28 +1,33 @@
 // @flow
 
-import type { Store, State as DefaultState } from '../../reducers/types'
 import type { Action, Dispatch } from '../../actions/types'
-import type { RequerimentoType } from '../../reducers/reducer-requerimento'
+import type {
+  Aluno,
+  Curso,
+  Requerimento,
+  Tipo
+} from '../../reducers/types/index'
+import type { State as DefaultState, Store } from '../../reducers/types'
 
+import AlunoInfo from '../../containers/aluno/AlunoInfo'
+import ParecerView from '../../containers/parecer/ParecerView'
 import React from 'react'
+import RequerimentoView from '../../containers/requerimento/RequerimentoView'
 import { connect } from 'react-redux'
 import { getRequerimento } from '../../actions/requerimento'
 import { requestAluno } from '../../actions/aluno'
 import { requestCursos } from '../../actions/curso'
 import { requestTipos } from '../../actions/tipo'
-import AlunoInfo from '../../containers/aluno/AlunoInfo'
-import ParecerView from '../../containers/parecer/ParecerView'
-import RequerimentoView from '../../containers/requerimento/RequerimentoView'
 
 type StateProps = {
-  requerimento: DefaultState<RequerimentoType>
+  requerimento: DefaultState<Requerimento>
 }
 
 type DispatchProps = {
-  getRequerimento: string => Promise<Action>,
-  requestAluno: void => Promise<Action>,
-  requestCursos: string => Promise<Action>,
-  requestTipos: string => Promise<Action>
+  getRequerimento: string => Promise<Action<Requerimento>>,
+  requestAluno: void => Promise<Action<Aluno>>,
+  requestCursos: string => Promise<Action<Curso>>,
+  requestTipos: string => Promise<Action<Tipo>>
 }
 
 type Props = StateProps &
@@ -36,18 +41,20 @@ class VisualizarRequerimento extends React.Component<Props> {
 
     const reqId = this.props.params['requerimento']
 
-    this.props.getRequerimento(reqId).then(requerimento => {
-      this.props.requestTipos(requerimento.payload._links.tipo.href)
-    })
-
     this.props
-      .requestAluno()
-      .then(aluno => this.props.requestCursos(aluno.payload._links.curso.href))
+      .getRequerimento(reqId)
+      .then((requerimento: Action<Requerimento>) => {
+        if (typeof requerimento.payload._links !== 'undefined')
+          this.props.requestTipos(requerimento.payload._links.tipo.href)
+      })
+
+    this.props.requestAluno().then((aluno: Action<Aluno>) => {
+      if (typeof aluno.payload._links !== 'undefined')
+        this.props.requestCursos(aluno.payload._links.curso.href)
+    })
   }
 
   render() {
-    const { requerimento } = this.props
-
     return (
       <div>
         <div className="panel panel-ifsul">
@@ -55,13 +62,11 @@ class VisualizarRequerimento extends React.Component<Props> {
             <h3 className="panel-title">Ver Requerimento</h3>
           </div>
           <div className="panel-body">
-            {requerimento.fetched && (
-              <div>
-                <AlunoInfo />
-                <RequerimentoView />
-                <ParecerView />
-              </div>
-            )}
+            <div>
+              <AlunoInfo />
+              <RequerimentoView />
+              <ParecerView />
+            </div>
           </div>
         </div>
       </div>

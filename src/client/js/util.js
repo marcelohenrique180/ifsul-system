@@ -1,6 +1,6 @@
 // @flow
 
-export type PageType = {
+export type Page = {
   page: {
     number: number,
     size: number,

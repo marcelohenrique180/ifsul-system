@@ -10,8 +10,6 @@ import {
   REQUEST_NOTIFICACAO
 } from '../actions/notificacao'
 
-export type NotificacaType = {}
-
 export function notificacaoReducer(
   state: State<?NotificacaType> = defaultState,
   action: Action

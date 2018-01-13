@@ -1,28 +1,20 @@
 // @flow
 
-import type { Action } from '../actions/types'
-import type { State, Case } from './types'
-import genericReducer, { defaultState } from './generic-reducer'
-
 import {
   FAILURE_ALUNO,
   RECEIVE_ALUNO,
   REQUEST_ALUNO,
   RESET_ALUNO
 } from '../actions/aluno'
+import genericReducer, { defaultState } from './generic-reducer'
 
-export type AlunoType = {
-  dataNasc: string,
-  matricula: string,
-  nome: string,
-  rg: string,
-  telefone: string
-}
+import type { Action } from '../actions/types'
+import type { State } from './types'
 
 export function alunoReducer(
-  state: State<?AlunoType> = defaultState,
-  action: Action
-): State<?AlunoType> {
+  state: State<any> = defaultState,
+  action: Action<any>
+): State<any> {
   switch (action.type) {
     case RESET_ALUNO:
       return defaultState

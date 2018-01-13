@@ -1,17 +1,18 @@
 // @flow
 
+import * as React from 'react'
+
+import { areFieldsEmpty, handleChange } from '../../util'
+
+import Alerta from '../../components/Alerta'
+import AlunoInfo from '../../containers/aluno/AlunoInfo'
+import Carregando from '../../components/Carregando'
+import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
-import { requestTipos } from '../../actions/tipo'
-import { handleChange, areFieldsEmpty } from '../../util'
-import { sendRequerimento } from '../../actions/requerimento'
 import { requestAluno } from '../../actions/aluno'
 import { requestCursos } from '../../actions/curso'
-
-import React from 'react'
-import autobind from 'autobind-decorator'
-import Alerta from '../../components/Alerta'
-import Carregando from '../../components/Carregando'
-import AlunoInfo from '../../containers/aluno/AlunoInfo'
+import { requestTipos } from '../../actions/tipo'
+import { sendRequerimento } from '../../actions/requerimento'
 
 const defaultState = {
   tipo: '',

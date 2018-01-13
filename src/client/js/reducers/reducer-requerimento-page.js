@@ -12,11 +12,6 @@ import {
   FAILURE_REQUERIMENTO_PAGE
 } from '../actions/requerimento'
 
-export type RequerimentoPageType = {
-  page: PageType,
-  _embedded: Array<RequerimentoType>
-}
-
 export function requerimentoPageReducer(
   state: State<?RequerimentoPageType> = defaultState,
   action: Action

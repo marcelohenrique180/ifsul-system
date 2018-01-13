@@ -1,27 +1,30 @@
 // @flow
 
-import type { Store, State as DefaultState } from '../../reducers/types'
-import type { Dispatch, Action } from '../../actions/types'
-import type { AlunoUsuarioType } from '../../reducers/reducer-aluno-user'
-
-import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
-import { handleChange } from '../../util'
-import { sendAlunoSenha } from '../../actions/aluno'
-import { FAILURE_ALUNO_SENHA } from '../../actions/aluno'
-
 import * as React from 'react'
-import autobind from 'autobind-decorator'
-import FloatInput from '../../components/FloatInput'
+
+import type { Action, Dispatch } from '../../actions/types'
+import type {
+  AlunoUsuario,
+  State as DefaultState,
+  Store
+} from '../../reducers/types'
+
 import Alerta from '../../components/Alerta'
 import Carregando from '../../components/Carregando'
+import { FAILURE_ALUNO_SENHA } from '../../actions/aluno'
+import FloatInput from '../../components/FloatInput'
+import autobind from 'autobind-decorator'
+import { browserHistory } from 'react-router'
+import { connect } from 'react-redux'
+import { handleChange } from '../../util'
+import { sendAlunoSenha } from '../../actions/aluno'
 
 type StateProps = {
-  usuario: DefaultState<AlunoUsuarioType>
+  usuario: DefaultState<AlunoUsuario>
 }
 
 type DispatchProps = {
-  sendAlunoSenha: ([string, string]) => Promise<Action>
+  sendAlunoSenha: ([string, string]) => Promise<Action<AlunoUsuario>>
 }
 
 type Props = StateProps &

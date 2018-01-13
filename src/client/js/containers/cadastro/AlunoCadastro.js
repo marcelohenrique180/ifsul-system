@@ -1,27 +1,30 @@
 // @flow
 
-import type { Store, State as DefaultState } from '../../reducers/types'
-import type { Dispatch, Action } from '../../actions/types'
-import type { MatriculaType } from '../../reducers/reducer-matricula'
-
-import { connect } from 'react-redux'
-import { handleChange } from '../../util'
-import { sendAlunoMatricula } from '../../actions/aluno'
-import { novaMatricula } from '../../actions/matricula'
-
 import * as React from 'react'
-import autobind from 'autobind-decorator'
-import FloatInput from '../../components/FloatInput'
+
+import type { Action, Dispatch } from '../../actions/types'
+import type {
+  State as DefaultState,
+  Matricula,
+  Store
+} from '../../reducers/types'
+
 import Alerta from '../../components/Alerta'
 import Carregando from '../../components/Carregando'
+import FloatInput from '../../components/FloatInput'
+import autobind from 'autobind-decorator'
+import { connect } from 'react-redux'
+import { handleChange } from '../../util'
+import { novaMatricula } from '../../actions/matricula'
+import { sendAlunoMatricula } from '../../actions/aluno'
 
 type StateProps = {
-  matricula: DefaultState<MatriculaType>
+  matricula: DefaultState<Matricula>
 }
 
 type DispatchProps = {
-  sendAlunoMatricula: (matricula: string) => Promise<Action>,
-  novaMatricula: () => Action | Promise<Action>
+  sendAlunoMatricula: (matricula: string) => Promise<Action<Matricula>>,
+  novaMatricula: () => Action<Matricula> | Promise<Action<Matricula>>
 }
 
 type Props = StateProps & DispatchProps

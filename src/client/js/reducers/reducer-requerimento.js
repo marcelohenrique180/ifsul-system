@@ -11,12 +11,6 @@ import {
   RESET_REQUERIMENTO
 } from '../actions/requerimento'
 
-export type RequerimentoType = {
-  data: string,
-  justificativa: string,
-  requerimento: string
-}
-
 export function requerimentoReducer(
   state: State<?RequerimentoType> = defaultState,
   action: Action

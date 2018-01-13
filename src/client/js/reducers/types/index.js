@@ -1,29 +1,19 @@
 // @flow
 
-import type { AlunoType } from '../reducer-aluno'
-import type { UsuarioType } from '../reducer-user'
-import type { MatriculaType } from '../reducer-matricula'
-import type { AlunoUsuarioType } from '../reducer-aluno-user'
-import type { TipoType } from '../reducer-tipos'
-import type { CursoType } from '../reducer-curso'
-import type { RequerimentoType } from '../reducer-requerimento'
-import type { RequerimentoPageType } from '../reducer-requerimento-page'
-import type { NotificacaType } from '../reducer-notificacao'
-import type { ParecerType } from '../reducer-parecer'
-import type { RequerimentoAbertoType } from '../reducer-requerimentos-abertos'
+import type { Page } from '../../util'
 
 export type Store = {
-  +usuario: State<UsuarioType>,
-  +matricula: State<MatriculaType>,
-  +aluno_usuario: State<AlunoUsuarioType>,
-  +aluno: State<AlunoType>,
-  +tipos: State<TipoType>,
-  +curso: State<CursoType>,
-  +requerimento: State<RequerimentoType>,
-  +requerimentoPage: State<RequerimentoPageType>,
-  +notificacao: State<NotificacaType>,
-  +parecer: State<ParecerType>,
-  +requerimentos_abertos: State<RequerimentoAbertoType>
+  +usuario: State<Usuario>,
+  +matricula: State<Matricula>,
+  +aluno_usuario: State<AlunoUsuario>,
+  +aluno: State<Aluno>,
+  +tipos: State<Tipo>,
+  +curso: State<Curso>,
+  +requerimento: State<Requerimento>,
+  +requerimentoPage: State<RequerimentoPage>,
+  +notificacao: State<Notificacao>,
+  +parecer: State<Parecer>,
+  +requerimentos_abertos: State<RequerimentoAberto>
 }
 
 export type Case = {
@@ -43,4 +33,55 @@ export type State<T> = {
   +fetched: boolean,
   +payload: T,
   +error: Error
+}
+
+export type Aluno = {
+  dataNasc: string,
+  matricula: string,
+  nome: string,
+  rg: string,
+  telefone: string,
+  _links?: { curso: { href: string } }
+}
+
+export type Matricula = {}
+
+export type Usuario = {
+  idToken: ?string,
+  isAuthenticated: boolean,
+  role: ?string
+}
+
+export type AlunoUsuario = {}
+
+export type Tipo = {
+  tipo: string
+}
+
+export type Curso = {
+  nome: string
+}
+
+export type Requerimento = {
+  data: string,
+  justificativa: string,
+  requerimento: string,
+  _links?: { tipo: { href: string } }
+}
+
+export type Notificacao = {}
+
+export type Parecer = {
+  deferido: string,
+  memorando: string,
+  parecer: string
+}
+
+export type RequerimentoPage = {
+  page: Page,
+  _embedded: Array<Requerimento>
+}
+
+export type RequerimentoAberto = {
+  _embedded: Array<Requerimento>
 }

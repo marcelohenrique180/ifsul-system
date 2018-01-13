@@ -11,12 +11,6 @@ import {
   FAILURE_LOGIN
 } from '../actions'
 
-export type UsuarioType = {
-  idToken: ?string,
-  isAuthenticated: boolean,
-  role: ?string
-}
-
 export function usuarioReducer(
   state: State<?UsuarioType> = defaultState,
   action: Action

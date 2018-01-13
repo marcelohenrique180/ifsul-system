@@ -1,13 +1,13 @@
 // @flow
 
-import type { Error } from '../../reducers/types'
 import { CALL_API } from '../middleware/api'
+import type { Error } from '../../reducers/types'
 
-export type Dispatch = (Action | ActionApi) => Promise<Action>
+export type Dispatch = (Action<*> | ActionApi) => Promise<Action<*>>
 
-export type Action = {
+export type Action<T> = {
   +type: string,
-  +payload?: Object,
+  +payload: T,
   +error?: Error
 }
 

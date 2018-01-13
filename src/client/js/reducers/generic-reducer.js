@@ -1,7 +1,8 @@
 // @flow
 
-import type { Action } from '../actions/types'
 import type { Case, Error, State } from './types'
+
+import type { Action } from '../actions/types'
 
 export const defaultState: State<any> = {
   isFetching: false,
@@ -12,10 +13,10 @@ export const defaultState: State<any> = {
 }
 
 export default function genericReducer(
-  state: State<?Object> = defaultState,
-  action: Action,
+  state: State<*> = defaultState,
+  action: Action<any>,
   cases: Case
-): State<?Object> {
+): State<*> {
   switch (action.type) {
     case cases.failure:
       return {

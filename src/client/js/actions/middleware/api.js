@@ -2,10 +2,10 @@
 
 import type {
   Action,
-  Dispatch,
   ActionApi,
   ActionApiData,
-  ConfigApi
+  ConfigApi,
+  Dispatch
 } from '../types'
 
 import type { Store } from '../../reducers/types'
@@ -65,7 +65,7 @@ function doFetch(endpoint: string, config: ConfigApi) {
 
 export default (store: Store) => (next: Dispatch) => (
   action: ActionApi
-): Action | Promise<Action> => {
+): Action<*> | Promise<Action<*>> => {
   const callAPI: ?ActionApiData = action[CALL_API]
 
   if (typeof callAPI === 'undefined' || callAPI === null) return next(action)
@@ -74,14 +74,14 @@ export default (store: Store) => (next: Dispatch) => (
 
   const [requestType, successType, errorType] = types
 
-  next(({ type: requestType }: Action))
+  next(({ type: requestType }: Action<*>))
   return callApi(endpoint, config, authenticated).then(
     (response: Object) =>
       next(
         ({
           payload: response,
           type: successType
-        }: Action)
+        }: Action<*>)
       ),
     (error: ?string) =>
       next({

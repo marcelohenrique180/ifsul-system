@@ -1,17 +1,15 @@
 // @flow
 
+import type { Aluno, Curso } from '../../reducers/types/index'
+import type { State as DefaultState, Store } from '../../reducers/types/'
+
+import FloatInput from '../../components/FloatInput'
+import React from 'react'
 import { connect } from 'react-redux'
 
-import type { Store, State as DefaultState } from '../../reducers/types/'
-import type { AlunoType } from '../../reducers/reducer-aluno'
-import type { CursoType } from '../../reducers/reducer-curso'
-
-import React from 'react'
-import FloatInput from '../../components/FloatInput'
-
 type Props = {
-  aluno: DefaultState<AlunoType>,
-  curso: DefaultState<CursoType>
+  aluno: DefaultState<Aluno>,
+  curso: DefaultState<Curso>
 }
 
 class AlunoInfo extends React.Component<Props> {

@@ -10,12 +10,6 @@ import {
   FAILURE_PARECER
 } from '../actions/parecer'
 
-export type ParecerType = {
-  deferido: string,
-  memorando: string,
-  parecer: string
-}
-
 export function parecerReducer(
   state: State<?ParecerType> = defaultState,
   action: Action

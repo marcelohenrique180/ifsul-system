@@ -12,8 +12,6 @@ import {
 
 import { NOVA_MATRICULA } from '../actions/matricula'
 
-export type MatriculaType = {}
-
 export function matriculaReducer(
   state: State<?MatriculaType> = defaultState,
   action: Action

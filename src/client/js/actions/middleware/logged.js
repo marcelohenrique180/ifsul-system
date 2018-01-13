@@ -1,11 +1,12 @@
 // @flow
 
-import type { Store, State } from '../../reducers/types'
-import type { Dispatch, Action } from '../types'
+import type { Action, Dispatch } from '../types'
+import type { State, Store } from '../../reducers/types'
+
 import { RECEIVE_LOGIN } from '../index'
 import { browserHistory } from 'react-router'
 
-export default (store: Store) => (next: Dispatch) => (action: Action) => {
+export default (store: Store) => (next: Dispatch) => (action: Action<*>) => {
   if (action.type === RECEIVE_LOGIN) {
     if (!action.payload) return next(action)
 

@@ -1,15 +1,15 @@
 // @flow
 
-import { connect } from 'react-redux'
+import * as React from 'react'
+
+import Carregando from '../../components/Carregando'
 import { Link } from 'react-router'
+import Paginator from '../../components/Paginator'
+import { callApi } from '../../actions/middleware/api'
+import { connect } from 'react-redux'
+import { getId } from '../../util'
 import { getRequerimentoByPage } from '../../actions/requerimento'
 import { requestTipos } from '../../actions/tipo'
-import { callApi } from '../../actions/middleware/api'
-import { getId } from '../../util'
-
-import React from 'react'
-import Carregando from '../../components/Carregando'
-import Paginator from '../../components/Paginator'
 
 const requerimentoApi = 'requerimentos/search/findAllAlunoEndpoint?size=5&'
 

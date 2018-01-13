@@ -12,10 +12,6 @@ import {
   FAILURE_REQUERIMENTOS_ABERTOS
 } from '../actions/requerimento'
 
-export type RequerimentoAbertoType = {
-  _embedded: Array<RequerimentoType>
-}
-
 export function requerimentosAbertosReducer(
   state: State<?RequerimentoAbertoType> = defaultState,
   action: Action

@@ -11,10 +11,6 @@ import {
   RESET_CURSO
 } from '../actions/curso'
 
-export type CursoType = {
-  nome: string
-}
-
 export function cursosReducer(
   state: State<?CursoType> = defaultState,
   action: Action
