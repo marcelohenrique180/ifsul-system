@@ -1,9 +1,9 @@
 // @flow
 
-type Case = {
-  request: string,
-  receive: string,
-  failure: string
+export type Case = {
+  +request: string,
+  +receive: string,
+  +failure: string
 }
 
 export type Error = {
