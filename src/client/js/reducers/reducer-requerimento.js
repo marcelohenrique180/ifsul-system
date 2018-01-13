@@ -5,9 +5,9 @@ import type { State, Case } from './types'
 import genericReducer, { defaultState } from './generic-reducer'
 
 import {
-  RECEIVE_SEND_REQUERIMENTO,
-  REQUEST_SEND_REQUERIMENTO,
-  FAILURE_SEND_REQUERIMENTO,
+  RECEIVE_REQUERIMENTO,
+  REQUEST_REQUERIMENTO,
+  FAILURE_REQUERIMENTO,
   RESET_REQUERIMENTO
 } from '../actions/requerimento'
 
@@ -20,9 +20,9 @@ export function requerimentoReducer(
       return defaultState
     default:
       return genericReducer(state, action, {
-        request: REQUEST_SEND_REQUERIMENTO,
-        receive: RECEIVE_SEND_REQUERIMENTO,
-        failure: FAILURE_SEND_REQUERIMENTO
+        request: REQUEST_REQUERIMENTO,
+        receive: RECEIVE_REQUERIMENTO,
+        failure: FAILURE_REQUERIMENTO
       })
   }
 }

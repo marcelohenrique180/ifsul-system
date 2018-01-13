@@ -5,9 +5,9 @@ import type { State, Case } from './types'
 import genericReducer, { defaultState } from './generic-reducer'
 
 import {
-  RECEIVE_SEND_PARECER,
-  REQUEST_SEND_PARECER,
-  FAILURE_SEND_PARECER
+  RECEIVE_PARECER,
+  REQUEST_PARECER,
+  FAILURE_PARECER
 } from '../actions/parecer'
 
 export function parecerReducer(
@@ -15,8 +15,8 @@ export function parecerReducer(
   action: Action
 ): State {
   return genericReducer(state, action, {
-    receive: RECEIVE_SEND_PARECER,
-    request: REQUEST_SEND_PARECER,
-    failure: FAILURE_SEND_PARECER
+    receive: RECEIVE_PARECER,
+    request: REQUEST_PARECER,
+    failure: FAILURE_PARECER
   })
 }

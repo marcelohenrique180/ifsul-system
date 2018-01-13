@@ -5,9 +5,9 @@ import type { State, Case } from './types'
 import genericReducer, { defaultState } from './generic-reducer'
 
 import {
-  REQUEST_SEND_TIPO,
-  RECEIVE_SEND_TIPO,
-  FAILURE_SEND_TIPO,
+  REQUEST_TIPO,
+  RECEIVE_TIPO,
+  FAILURE_TIPO,
   RESET_TIPO
 } from '../actions/tipo'
 
@@ -20,9 +20,9 @@ export function tiposReducer(
       return defaultState
     default:
       return genericReducer(state, action, {
-        request: REQUEST_SEND_TIPO,
-        receive: RECEIVE_SEND_TIPO,
-        failure: FAILURE_SEND_TIPO
+        request: REQUEST_TIPO,
+        receive: RECEIVE_TIPO,
+        failure: FAILURE_TIPO
       })
   }
 }

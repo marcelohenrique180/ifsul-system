@@ -5,9 +5,9 @@ import type { State, Case } from './types'
 import genericReducer, { defaultState } from './generic-reducer'
 
 import {
-  REQUEST_SEND_CURSO,
-  RECEIVE_SEND_CURSO,
-  FAILURE_SEND_CURSO,
+  REQUEST_CURSO,
+  RECEIVE_CURSO,
+  FAILURE_CURSO,
   RESET_CURSO
 } from '../actions/curso'
 
@@ -20,9 +20,9 @@ export function cursosReducer(
       return defaultState
     default:
       return genericReducer(state, action, {
-        request: REQUEST_SEND_CURSO,
-        receive: RECEIVE_SEND_CURSO,
-        failure: FAILURE_SEND_CURSO
+        request: REQUEST_CURSO,
+        receive: RECEIVE_CURSO,
+        failure: FAILURE_CURSO
       })
   }
 }
