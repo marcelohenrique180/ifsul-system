@@ -1,5 +1,5 @@
-export const NOVA_MATRICULA = 'NOVA_MATRICULA'
+export const NOVA_MATRICULA: string = 'NOVA_MATRICULA'
 
-export function novaMatricula () {
+export function novaMatricula() {
   return { type: NOVA_MATRICULA }
 }

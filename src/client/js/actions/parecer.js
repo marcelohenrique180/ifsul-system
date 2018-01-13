@@ -1,18 +1,18 @@
 import { CALL_API } from './middleware/api'
 import { getId } from '../util'
-export const REQUEST_SEND_PARECER = 'REQUEST_SEND_PARECER'
-export const RECEIVE_SEND_PARECER = 'RECEIVE_SEND_PARECER'
-export const FAILURE_SEND_PARECER = 'FAILURE_SEND_PARECER'
+export const REQUEST_PARECER: string = 'REQUEST_PARECER'
+export const RECEIVE_PARECER: string = 'RECEIVE_PARECER'
+export const FAILURE_PARECER: string = 'FAILURE_PARECER'
 
-export function getParecer (id) {
+export function getParecer(id) {
   return {
     [CALL_API]: {
       endpoint: 'pareceres/' + id,
       authenticated: true,
-      types: [REQUEST_SEND_PARECER, RECEIVE_SEND_PARECER, FAILURE_SEND_PARECER],
+      types: [REQUEST_PARECER, RECEIVE_PARECER, FAILURE_PARECER],
       config: {
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
           'Content-Type': 'application/json'
         },
         method: 'GET'
@@ -21,15 +21,16 @@ export function getParecer (id) {
   }
 }
 
-export function getParecerByRequerimentoId (requerimento) {
+export function getParecerByRequerimentoId(requerimento) {
   return {
     [CALL_API]: {
-      endpoint: 'pareceres/search/findByRequerimentoId/?id=' + getId(requerimento),
+      endpoint:
+        'pareceres/search/findByRequerimentoId/?id=' + getId(requerimento),
       authenticated: true,
-      types: [REQUEST_SEND_PARECER, RECEIVE_SEND_PARECER, FAILURE_SEND_PARECER],
+      types: [REQUEST_PARECER, RECEIVE_PARECER, FAILURE_PARECER],
       config: {
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
           'Content-Type': 'application/json'
         },
         method: 'GET'
@@ -38,15 +39,15 @@ export function getParecerByRequerimentoId (requerimento) {
   }
 }
 
-export function sendParecer (parecer) {
+export function sendParecer(parecer) {
   return {
     [CALL_API]: {
       endpoint: 'pareceres',
       authenticated: true,
-      types: [REQUEST_SEND_PARECER, RECEIVE_SEND_PARECER, FAILURE_SEND_PARECER],
+      types: [REQUEST_PARECER, RECEIVE_PARECER, FAILURE_PARECER],
       config: {
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
           'Content-Type': 'application/json'
         },
         method: 'POST',
