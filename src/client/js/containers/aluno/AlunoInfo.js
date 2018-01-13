@@ -1,18 +1,37 @@
 // @flow
 
+import type { Action, Dispatch } from '../../actions/types/index'
 import type { Aluno, Curso } from '../../reducers/types/index'
 import type { State as DefaultState, Store } from '../../reducers/types/'
 
+import { requestCursos } from '../../actions/curso'
 import FloatInput from '../../components/FloatInput'
 import React from 'react'
 import { connect } from 'react-redux'
+import { requestAluno } from '../../actions/aluno'
 
-type Props = {
+type StateProps = {
   aluno: DefaultState<Aluno>,
   curso: DefaultState<Curso>
 }
 
+type DispatchProps = {
+  requestAluno: void => Promise<Action<Aluno>>,
+  requestCursos: string => Promise<Action<Curso>>
+}
+
+type Props = StateProps & DispatchProps
+
 class AlunoInfo extends React.Component<Props> {
+  constructor(props: Props) {
+    super(props)
+
+    this.props.requestAluno().then((aluno: Action<Aluno>) => {
+      if (typeof aluno.payload._links !== 'undefined')
+        this.props.requestCursos(aluno.payload._links.curso.href)
+    })
+  }
+
   render() {
     const { aluno, curso } = this.props
 
@@ -68,11 +87,18 @@ class AlunoInfo extends React.Component<Props> {
   }
 }
 
-function mapStateToProps(store: Store): Props {
+function mapStateToProps(store: Store): StateProps {
   return {
     aluno: store.aluno,
     curso: store.curso
   }
 }
 
-export default connect(mapStateToProps)(AlunoInfo)
+function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
+  return {
+    requestAluno: () => dispatch(requestAluno()),
+    requestCursos: endpoint => dispatch(requestCursos(endpoint))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AlunoInfo)

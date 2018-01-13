@@ -25,8 +25,6 @@ type StateProps = {
 
 type DispatchProps = {
   getRequerimento: string => Promise<Action<Requerimento>>,
-  requestAluno: void => Promise<Action<Aluno>>,
-  requestCursos: string => Promise<Action<Curso>>,
   requestTipos: string => Promise<Action<Tipo>>
 }
 
@@ -47,11 +45,6 @@ class VisualizarRequerimento extends React.Component<Props> {
         if (typeof requerimento.payload._links !== 'undefined')
           this.props.requestTipos(requerimento.payload._links.tipo.href)
       })
-
-    this.props.requestAluno().then((aluno: Action<Aluno>) => {
-      if (typeof aluno.payload._links !== 'undefined')
-        this.props.requestCursos(aluno.payload._links.curso.href)
-    })
   }
 
   render() {
@@ -83,8 +76,6 @@ function mapStateToProps(state: Store): StateProps {
 function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
   return {
     getRequerimento: reqId => dispatch(getRequerimento(reqId)),
-    requestAluno: () => dispatch(requestAluno()),
-    requestCursos: endpoint => dispatch(requestCursos(endpoint)),
     requestTipos: endpoint => dispatch(requestTipos(endpoint))
   }
 }
