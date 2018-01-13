@@ -1,31 +1,64 @@
+// @flow
+
+import type { Store, State as DefaultState } from '../../reducers/types'
+import type { Dispatch, Action } from '../../actions/types'
+import type { AlunoUsuarioType } from '../../reducers/reducer-aluno-user'
+
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { handleChange } from '../../util'
 import { sendAlunoSenha } from '../../actions/aluno'
+import { FAILURE_ALUNO_SENHA } from '../../actions/aluno'
 
-import React from 'react'
+import * as React from 'react'
 import autobind from 'autobind-decorator'
 import FloatInput from '../../components/FloatInput'
 import Alerta from '../../components/Alerta'
 import Carregando from '../../components/Carregando'
 
-class AlunoCadastro extends React.Component {
-  constructor(props) {
-    super(props)
+type StateProps = {
+  usuario: DefaultState<AlunoUsuarioType>
+}
 
-    this.state = {
-      senha: '',
-      confirmaSenha: '',
-      formError: { senha: false, message: '' }
+type DispatchProps = {
+  sendAlunoSenha: ([string, string]) => Promise<Action>
+}
+
+type Props = StateProps &
+  DispatchProps & {
+    params: {
+      ['token']: string
     }
-    this.handleChange = handleChange.bind(this)
+  }
+
+type State = {
+  senha: string,
+  confirmaSenha: string,
+  formError: {
+    senha: boolean,
+    message?: string
+  }
+}
+
+class AlunoCadastro extends React.Component<Props, State> {
+  state = {
+    senha: '',
+    confirmaSenha: '',
+    formError: { senha: false, message: '' }
   }
 
   @autobind
-  handleClickSenha(e) {
+  handleChange(event: SyntheticInputEvent<HTMLButtonElement>) {
+    const { name, value } = event.target
+
+    this.setState({ [name]: value })
+  }
+
+  @autobind
+  handleClickSenha(e: SyntheticEvent<HTMLButtonElement>) {
     e.preventDefault()
     const { senha, confirmaSenha } = this.state
-    const token = this.props.params['token']
+    const token: string = this.props.params['token']
 
     if (senha !== confirmaSenha) {
       this.setState({
@@ -64,9 +97,12 @@ class AlunoCadastro extends React.Component {
         }
       })
     } else {
-      this.setState({ formError: { senha: false } })
-      this.props.sendAlunoSenha({ senha, token })
-      browserHistory.push('/login')
+      this.setState({
+        formError: { senha: false }
+      })
+      this.props.sendAlunoSenha([senha, token]).then(response => {
+        if (response.type !== FAILURE_ALUNO_SENHA) browserHistory.push('/login')
+      })
     }
   }
 
@@ -122,15 +158,16 @@ class AlunoCadastro extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: Store): StateProps {
   return {
     usuario: state.aluno_usuario
   }
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
   return {
-    sendAlunoSenha: credentials => dispatch(sendAlunoSenha(credentials))
+    sendAlunoSenha: (credentials: [string, string]) =>
+      dispatch(sendAlunoSenha(credentials))
   }
 }
 

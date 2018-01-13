@@ -1,7 +1,7 @@
 // @flow
 
 import type { Store, State as DefaultState } from '../../reducers/types'
-import type { Dispatch } from '../../actions/types'
+import type { Dispatch, Action } from '../../actions/types'
 import type { MatriculaType } from '../../reducers/reducer-matricula'
 
 import { connect } from 'react-redux'
@@ -20,8 +20,8 @@ type StateProps = {
 }
 
 type DispatchProps = {
-  sendAlunoMatricula: Function,
-  novaMatricula: Function
+  sendAlunoMatricula: (matricula: string) => Action | Promise<Action>,
+  novaMatricula: () => Action | Promise<Action>
 }
 
 type Props = StateProps & DispatchProps
