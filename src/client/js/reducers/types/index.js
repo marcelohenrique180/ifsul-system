@@ -15,6 +15,6 @@ export type State = {
   +isFetching: boolean,
   +error: boolean,
   +fetched: boolean,
-  +payload: Object,
+  +payload: ?Object,
   +error: ?Error
 }

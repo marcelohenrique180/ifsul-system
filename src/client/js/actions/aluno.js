@@ -1,6 +1,6 @@
 // @flow
 
-import type { ApiCallWrapped } from './middleware/api'
+import type { ActionApi } from './types'
 import { CALL_API } from './middleware/api'
 
 export const REQUEST_ALUNO_MATRICULA: string = 'REQUEST_ALUNO_MATRICULA'
@@ -20,7 +20,7 @@ export function resetAluno() {
   }
 }
 
-export function sendAlunoMatricula(matricula: string): ApiCallWrapped {
+export function sendAlunoMatricula(matricula: string): ActionApi {
   return {
     [CALL_API]: {
       authenticated: false,
