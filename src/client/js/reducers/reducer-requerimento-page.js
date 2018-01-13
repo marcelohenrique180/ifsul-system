@@ -1,7 +1,7 @@
 // @flow
 
-import type { State, Action } from './generic-reducer'
-
+import type { Action } from '../actions/types'
+import type { State, Case } from './types'
 import genericReducer, { defaultState } from './generic-reducer'
 
 import {

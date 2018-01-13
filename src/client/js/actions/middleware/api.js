@@ -1,16 +1,20 @@
 // @flow
 
-import type { Action } from '../../reducers/generic-reducer'
+import type { Action } from '../types'
+
+export const CALL_API: string = 'Call API'
 
 const BASE_URL = 'http://localhost:8080/api/'
-
-export const CALL_API = Symbol('Call API')
 
 export type ApiCall = {
   endpoint: string,
   types: [string, string, string],
   authenticated: boolean,
   config: Object
+}
+
+export type ApiCallWrapped = {
+  [string]: ApiCall
 }
 
 type NextFunction = any => Action | Promise<*>
@@ -60,9 +64,9 @@ function doFetch(endpoint, config) {
     })
 }
 
-export default (store: Object): Function => (
-  next: NextFunction
-): Function => (action: { [Symbol]: ?ApiCall }): Action | Promise<*> => {
+export default (store: Object): Function => (next: NextFunction): Function => (
+  action: ApiCallWrapped
+): Action | Promise<*> => {
   const callAPI: ?ApiCall = action[CALL_API]
 
   if (typeof callAPI === 'undefined' || callAPI === null) {

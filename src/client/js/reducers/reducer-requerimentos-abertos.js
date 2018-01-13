@@ -1,7 +1,7 @@
 // @flow
 
-import type { Action, State } from './generic-reducer'
-
+import type { Action } from '../actions/types'
+import type { State, Case } from './types'
 import genericReducer, { defaultState } from './generic-reducer'
 
 import {
@@ -13,7 +13,7 @@ import {
 export function requerimentosAbertosReducer(
   state: State = defaultState,
   action: Action
-): StateType {
+): State {
   return genericReducer(state, action, {
     request: REQUEST_REQUERIMENTOS_ABERTOS,
     receive: RECEIVE_REQUERIMENTOS_ABERTOS,

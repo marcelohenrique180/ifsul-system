@@ -1,29 +1,7 @@
 // @flow
 
-export type Case = {
-  +request: string,
-  +receive: string,
-  +failure: string
-}
-
-export type Error = {
-  +message: string,
-  +status: number
-}
-
-export type Action = {
-  +type: string,
-  payload: Object,
-  error: ?Error
-}
-
-export type State = {
-  +isFetching: boolean,
-  +error: boolean,
-  +fetched: boolean,
-  +payload: Object,
-  +error: ?Error
-}
+import type { Action } from '../actions/types'
+import type { Case, Error, State } from './types'
 
 export const defaultState: State = {
   isFetching: false,

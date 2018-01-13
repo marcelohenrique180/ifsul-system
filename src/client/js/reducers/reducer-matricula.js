@@ -1,13 +1,13 @@
 // @flow
 
-import type { Action, State } from './generic-reducer'
-
+import type { Action } from '../actions/types'
+import type { State, Case } from './types'
 import genericReducer, { defaultState } from './generic-reducer'
 
 import {
-  FAILURE_SEND_ALUNO_MATRICULA,
-  RECEIVE_SEND_ALUNO_MATRICULA,
-  REQUEST_SEND_ALUNO_MATRICULA
+  FAILURE_ALUNO_MATRICULA,
+  RECEIVE_ALUNO_MATRICULA,
+  REQUEST_ALUNO_MATRICULA
 } from '../actions/aluno'
 
 import { NOVA_MATRICULA } from '../actions/matricula'
@@ -23,9 +23,9 @@ export function matriculaReducer(
       })
     default:
       return genericReducer(state, action, {
-        request: REQUEST_SEND_ALUNO_MATRICULA,
-        receive: RECEIVE_SEND_ALUNO_MATRICULA,
-        failure: FAILURE_SEND_ALUNO_MATRICULA
+        request: REQUEST_ALUNO_MATRICULA,
+        receive: RECEIVE_ALUNO_MATRICULA,
+        failure: FAILURE_ALUNO_MATRICULA
       })
   }
 }

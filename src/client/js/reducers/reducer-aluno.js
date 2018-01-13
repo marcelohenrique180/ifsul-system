@@ -1,11 +1,13 @@
 // @flow
 
-import genericReducer, { defaultState, State, Action } from './generic-reducer'
+import type { Action } from '../actions/types'
+import type { State, Case } from './types'
+import genericReducer, { defaultState } from './generic-reducer'
 
 import {
-  FAILURE_SEND_ALUNO,
-  RECEIVE_SEND_ALUNO,
-  REQUEST_SEND_ALUNO,
+  FAILURE_ALUNO,
+  RECEIVE_ALUNO,
+  REQUEST_ALUNO,
   RESET_ALUNO
 } from '../actions/aluno'
 
@@ -18,9 +20,9 @@ export function alunoReducer(
       return defaultState
     default:
       return genericReducer(state, action, {
-        request: REQUEST_SEND_ALUNO,
-        receive: RECEIVE_SEND_ALUNO,
-        failure: FAILURE_SEND_ALUNO
+        request: REQUEST_ALUNO,
+        receive: RECEIVE_ALUNO,
+        failure: FAILURE_ALUNO
       })
   }
 }
