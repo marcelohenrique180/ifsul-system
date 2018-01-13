@@ -20,7 +20,7 @@ type StateProps = {
 }
 
 type DispatchProps = {
-  sendAlunoMatricula: (matricula: string) => Action | Promise<Action>,
+  sendAlunoMatricula: (matricula: string) => Promise<Action>,
   novaMatricula: () => Action | Promise<Action>
 }
 
