@@ -2,12 +2,19 @@
 
 import { connect } from 'react-redux'
 
-import type { Store, State } from '../../reducers/types/'
+import type { Store, State as DefaultState } from '../../reducers/types/'
+import type { AlunoType } from '../../reducers/reducer-aluno'
+import type { CursoType } from '../../reducers/reducer-curso'
 
 import React from 'react'
 import FloatInput from '../../components/FloatInput'
 
-class AlunoInfo extends React.Component<Store> {
+type Props = {
+  aluno: DefaultState<AlunoType>,
+  curso: DefaultState<CursoType>
+}
+
+class AlunoInfo extends React.Component<Props> {
   render() {
     const { aluno, curso } = this.props
 
@@ -63,7 +70,7 @@ class AlunoInfo extends React.Component<Store> {
   }
 }
 
-function mapStateToProps(store: Store): Store {
+function mapStateToProps(store: Store): Props {
   return {
     aluno: store.aluno,
     curso: store.curso

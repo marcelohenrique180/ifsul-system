@@ -3,7 +3,7 @@
 import type { Action } from '../actions/types'
 import type { Case, Error, State } from './types'
 
-export const defaultState: State<*> = {
+export const defaultState: State<any> = {
   isFetching: false,
   hasError: false,
   fetched: false,

@@ -34,6 +34,12 @@ export function findField(error: string): string {
   return error
 }
 
+/**
+ * @deprecated
+ *
+ * Altera estado do componente
+ *
+ */
 export function handleChange(event: EventType) {
   const { name, value } = event.target
 

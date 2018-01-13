@@ -1,12 +1,18 @@
 // @flow
 
-import type { Action, ActionApi, ActionApiData, ConfigApi } from '../types'
+import type {
+  Action,
+  Dispatch,
+  ActionApi,
+  ActionApiData,
+  ConfigApi
+} from '../types'
+
+import type { Store } from '../../reducers/types'
 
 export const CALL_API: string = 'Call API'
 
 const BASE_URL = 'http://localhost:8080/api/'
-
-type NextFunction = any => Action | Promise<*>
 
 export function callApi(
   endpoint: string,
@@ -57,7 +63,7 @@ function doFetch(endpoint: string, config: ConfigApi) {
     })
 }
 
-export default (store: Object): Function => (next: NextFunction): Function => (
+export default (store: Store) => (next: Dispatch) => (
   action: ActionApi
 ): Action | Promise<Action> => {
   const callAPI: ?ActionApiData = action[CALL_API]
@@ -68,16 +74,18 @@ export default (store: Object): Function => (next: NextFunction): Function => (
 
   const [requestType, successType, errorType] = types
 
-  next({ type: requestType })
+  next(({ type: requestType }: Action))
   return callApi(endpoint, config, authenticated).then(
     (response: Object) =>
+      next(
+        ({
+          payload: response,
+          type: successType
+        }: Action)
+      ),
+    (error: ?string) =>
       next({
-        payload: response,
-        authenticated,
-        type: successType
-      }),
-    (error: Object) =>
-      next({
+        payload: {},
         error: {
           message: error || 'Houve um erro.',
           status: 400

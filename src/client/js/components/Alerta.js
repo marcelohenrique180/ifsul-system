@@ -3,7 +3,7 @@
 import React from 'react'
 
 type Props = {
-  show: ?boolean,
+  show?: ?boolean,
   message: ?string,
   alertClass: string
 }

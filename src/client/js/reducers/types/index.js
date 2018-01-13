@@ -13,17 +13,17 @@ import type { ParecerType } from '../reducer-parecer'
 import type { RequerimentoAbertoType } from '../reducer-requerimentos-abertos'
 
 export type Store = {
-  +usuario: State<?UsuarioType>,
-  +matricula: State<?MatriculaType>,
-  +aluno_usuario: State<?AlunoUsuarioType>,
-  +aluno: State<?AlunoType>,
-  +tipos: State<?TipoType>,
-  +curso: State<?CursoType>,
-  +requerimento: State<?RequerimentoType>,
-  +requerimentoPage: State<?RequerimentoPageType>,
-  +notificacao: State<?NotificacaType>,
-  +parecer: State<?ParecerType>,
-  +requerimentos_abertos: State<?RequerimentoAbertoType>
+  +usuario: State<UsuarioType>,
+  +matricula: State<MatriculaType>,
+  +aluno_usuario: State<AlunoUsuarioType>,
+  +aluno: State<AlunoType>,
+  +tipos: State<TipoType>,
+  +curso: State<CursoType>,
+  +requerimento: State<RequerimentoType>,
+  +requerimentoPage: State<RequerimentoPageType>,
+  +notificacao: State<NotificacaType>,
+  +parecer: State<ParecerType>,
+  +requerimentos_abertos: State<RequerimentoAbertoType>
 }
 
 export type Case = {
@@ -41,6 +41,6 @@ export type State<T> = {
   +isFetching: boolean,
   +hasError: boolean,
   +fetched: boolean,
-  +payload: ?T,
-  +error: ?Error
+  +payload: T,
+  +error: Error
 }

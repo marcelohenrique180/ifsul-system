@@ -1,12 +1,15 @@
 // @flow
 
 import type { Error } from '../../reducers/types'
+import { CALL_API } from '../middleware/api'
 
-export type Action = {|
+export type Dispatch = (Action | ActionApi) => Action | Promise<Action>
+
+export type Action = {
   +type: string,
-  +payload: ?Object,
-  +error: ?Error
-|}
+  +payload?: Object,
+  +error?: Error
+}
 
 export type ConfigApi = {
   headers: { Authentication: string },
@@ -22,5 +25,5 @@ export type ActionApiData = {|
 |}
 
 export type ActionApi = {
-  [string]: ActionApiData
+  [CALL_API: string]: ActionApiData
 }

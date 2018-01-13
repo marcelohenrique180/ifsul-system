@@ -1,26 +1,52 @@
+// @flow
+
+import type { Store, State as DefaultState } from '../../reducers/types'
+import type { Dispatch } from '../../actions/types'
+import type { MatriculaType } from '../../reducers/reducer-matricula'
+
 import { connect } from 'react-redux'
 import { handleChange } from '../../util'
 import { sendAlunoMatricula } from '../../actions/aluno'
 import { novaMatricula } from '../../actions/matricula'
 
-import React from 'react'
+import * as React from 'react'
 import autobind from 'autobind-decorator'
 import FloatInput from '../../components/FloatInput'
 import Alerta from '../../components/Alerta'
 import Carregando from '../../components/Carregando'
 
-class AlunoCadastro extends React.Component {
-  constructor(props) {
-    super(props)
+type StateProps = {
+  matricula: DefaultState<MatriculaType>
+}
 
-    this.state = { matricula: '', formError: { matricula: false } }
-    this.handleChange = handleChange.bind(this)
+type DispatchProps = {
+  sendAlunoMatricula: Function,
+  novaMatricula: Function
+}
+
+type Props = StateProps & DispatchProps
+
+type State = {
+  matricula: string,
+  formError: {
+    [string]: boolean
+  }
+}
+
+class AlunoCadastro extends React.Component<Props, State> {
+  state = {
+    matricula: '',
+    formError: { matricula: false }
   }
 
   @autobind
-  handleChangeForm(event) {
-    this.setState({ formError: { [event.target.name]: false } })
-    this.handleChange(event)
+  handleChangeForm(event: SyntheticInputEvent<HTMLInputElement>) {
+    const { name, value } = event.target
+
+    this.setState({
+      formError: { [name]: false },
+      [name]: value
+    })
   }
 
   @autobind
@@ -30,7 +56,7 @@ class AlunoCadastro extends React.Component {
   }
 
   @autobind
-  handleClickMatricula(e) {
+  handleClickMatricula(e: SyntheticEvent<HTMLButtonElement>) {
     e.preventDefault()
     const { matricula } = this.state
     if (matricula === '') {
@@ -98,15 +124,16 @@ class AlunoCadastro extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: Store): StateProps {
   return {
     matricula: state.matricula
   }
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
   return {
-    sendAlunoMatricula: matricula => dispatch(sendAlunoMatricula(matricula)),
+    sendAlunoMatricula: (matricula: string) =>
+      dispatch(sendAlunoMatricula(matricula)),
     novaMatricula: () => dispatch(novaMatricula())
   }
 }
