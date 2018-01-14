@@ -1,21 +1,20 @@
 // @flow
 
-import type { Action } from '../actions/types'
-import type { State, Case } from './types'
-import type { RequerimentoType } from './reducer-requerimento'
-import type { PageType } from '../util'
+import type { Case, State } from './types'
+import {
+  FAILURE_REQUERIMENTO_PAGE,
+  RECEIVE_REQUERIMENTO_PAGE,
+  REQUEST_REQUERIMENTO_PAGE
+} from '../actions/requerimento'
 import genericReducer, { defaultState } from './generic-reducer'
 
-import {
-  RECEIVE_REQUERIMENTO_PAGE,
-  REQUEST_REQUERIMENTO_PAGE,
-  FAILURE_REQUERIMENTO_PAGE
-} from '../actions/requerimento'
+import type { Action } from '../actions/types'
+import type { RequerimentoPage } from './types/index'
 
 export function requerimentoPageReducer(
-  state: State<?RequerimentoPageType> = defaultState,
-  action: Action
-): State<?RequerimentoPageType> {
+  state: State<RequerimentoPage> = defaultState,
+  action: Action<RequerimentoPage>
+): State<RequerimentoPage> {
   return genericReducer(state, action, {
     request: REQUEST_REQUERIMENTO_PAGE,
     receive: RECEIVE_REQUERIMENTO_PAGE,

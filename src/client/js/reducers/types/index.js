@@ -66,20 +66,27 @@ export type Requerimento = {
   data: string,
   justificativa: string,
   requerimento: string,
-  _links?: { tipo: { href: string } }
+  +_links?: {
+    tipo: { href: string },
+    aluno: { href: string },
+    self: { href: string }
+  }
 }
 
 export type Notificacao = {}
 
 export type Parecer = {
-  deferido: string,
+  deferido: boolean,
   memorando: string,
-  parecer: string
+  parecer: string,
+  requerimento: string
 }
 
 export type RequerimentoPage = {
   page: Page,
-  _embedded: Array<Requerimento>
+  _embedded: {
+    requerimentos: Array<Requerimento>
+  }
 }
 
 export type RequerimentoAberto = {
