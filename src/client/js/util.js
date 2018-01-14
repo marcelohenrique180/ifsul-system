@@ -61,8 +61,15 @@ export function areFieldsEmpty(notNullFields: Array<string>): boolean {
   )
 }
 
-export function getId(entity: EntityType): string {
-  return entity._links.self.href.match(/\/(\d+)/)[1]
+/**
+ * @deprecated
+ */
+export function getId(str: string): string {
+  const matches = str.match(/\/(\d+)/)
+
+  if (matches) return matches[1]
+
+  return ''
 }
 
 export function extractEmbedded(data: { _embedded: mixed }): mixed {
