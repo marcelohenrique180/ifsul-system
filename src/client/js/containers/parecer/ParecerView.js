@@ -1,35 +1,32 @@
 // @flow
 
-import type { Store, State as DefaultState } from '../../reducers/types'
-import type { Dispatch, Action } from '../../actions/types'
-import type { ParecerType } from '../../reducers/reducer-parecer'
-import type { RequerimentoType } from '../../reducers/reducer-requerimento'
+import type { Action, Dispatch } from '../../actions/types'
+import type { State as DefaultState, Store } from '../../reducers/types'
+import type { Parecer, Requerimento } from '../../reducers/types/index'
 
+import Carregando from '../../components/Carregando'
+import FloatInput from '../../components/FloatInput'
 import React from 'react'
 import { connect } from 'react-redux'
-import FloatInput from '../../components/FloatInput'
-import Carregando from '../../components/Carregando'
 import { getParecerByRequerimentoId } from '../../actions/parecer'
 
 type DispatchProps = {
-  getParecerByRequerimentoId: RequerimentoType => Promise<Action>
+  getParecerByRequerimentoId: Requerimento => Promise<Action<Requerimento>>
 }
 
 type StateProps = {
-  parecer: DefaultState<ParecerType>,
-  requerimento: DefaultState<RequerimentoType>
+  parecer: DefaultState<Parecer>
 }
 
-type Props = StateProps & DispatchProps
+type Props = StateProps &
+  DispatchProps & { requerimento: DefaultState<Requerimento> }
 
 class ParecerView extends React.Component<Props> {
   constructor(props: Props) {
     super(props)
     const { requerimento } = this.props
 
-    if (requerimento.fetched) {
-      this.props.getParecerByRequerimentoId(requerimento.payload)
-    }
+    this.props.getParecerByRequerimentoId(requerimento.payload)
   }
 
   render() {
@@ -87,8 +84,7 @@ class ParecerView extends React.Component<Props> {
 
 function mapStateToProps(store: Store): StateProps {
   return {
-    parecer: store.parecer,
-    requerimento: store.requerimento
+    parecer: store.parecer
   }
 }
 

@@ -1,61 +1,94 @@
 // @flow
 
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import autobind from 'autobind-decorator'
-import { sendParecer } from '../../actions/parecer'
-import { getRequerimentosEmAberto } from '../../actions/requerimento'
-import { handleChange } from '../../util'
-import { areFieldsEmpty } from '../../util'
-import FloatInput from '../../components/FloatInput'
+import * as React from 'react'
+
+import type { Action, Dispatch } from '../../actions/types/index'
+import type {
+  State as DefaultState,
+  Parecer,
+  Requerimento,
+  Store
+} from '../../reducers/types/index'
+
 import Alerta from '../../components/Alerta'
+import FloatInput from '../../components/FloatInput'
+import { areFieldsEmpty } from '../../util'
+import autobind from 'autobind-decorator'
+import { browserHistory } from 'react-router'
+import { connect } from 'react-redux'
+import { getRequerimentosEmAberto } from '../../actions/requerimento'
+import { sendParecer } from '../../actions/parecer'
 
-type Props = Object
+type StateProps = {
+  requerimento: DefaultState<Requerimento>
+}
 
-type State = Object
+type DispatchProps = {
+  sendParecer: Parecer => Promise<Action<Parecer>>,
+  getRequerimentosEmAberto: void => Promise<Action<Requerimento>>
+}
 
-class ParecerInsert extends Component<Props, State> {
-  constructor(props) {
-    super(props)
+type Props = StateProps & DispatchProps & { router: { push: string => void } }
 
-    this.state = {
-      deferido: '',
-      parecer: '',
-      memorando: '',
-      erro: { message: '', erro: false }
-    }
-    this.handleChange = handleChange.bind(this)
+type State = {
+  deferido: string,
+  parecer: string,
+  memorando: string,
+  erro: { message: string, erro: boolean }
+}
+
+class ParecerInsert extends React.Component<Props, State> {
+  static defaultProps = {
+    router: browserHistory
+  }
+  state = {
+    deferido: '',
+    parecer: '',
+    memorando: '',
+    erro: { message: '', erro: false }
   }
 
   @autobind
-  handleSubmit(e) {
+  handleChange(event: SyntheticInputEvent<HTMLButtonElement>) {
+    const { value, name } = event.target
+
+    this.setState({ [name]: value })
+  }
+
+  @autobind
+  handleSubmit(e: SyntheticInputEvent<HTMLInputElement>) {
     e.preventDefault()
 
     const { deferido, parecer, memorando } = this.state
     const notNullFields = [deferido, parecer, memorando]
-    const requerimento_link = this.props.requerimento.payload._links.self.href
 
-    const error = areFieldsEmpty(notNullFields)
-    if (error) {
-      this.setState({
-        erro: {
-          erro: true,
-          message: 'Algum campo obrigatório não foi preenchido.'
-        }
-      })
-    } else {
-      this.setState({ erro: { erro: false } })
-      this.props
-        .sendParecer({
-          deferido,
-          parecer,
-          memorando,
-          requerimento: requerimento_link
+    if (typeof this.props.requerimento.payload._links !== 'undefined') {
+      const requerimento_link: string = this.props.requerimento.payload._links
+        .self.href
+
+      const error = areFieldsEmpty(notNullFields)
+      if (error) {
+        this.setState({
+          erro: {
+            erro: true,
+            message: 'Algum campo obrigatório não foi preenchido.'
+          }
         })
-        .then(() => {
-          this.props.getRequerimentosEmAberto()
-        })
-      this.props.router.push('/')
+      } else {
+        this.setState({ erro: { message: '', erro: false } })
+
+        this.props
+          .sendParecer({
+            deferido,
+            parecer,
+            memorando,
+            requerimento: requerimento_link
+          })
+          .then(() => {
+            this.props.getRequerimentosEmAberto()
+          })
+        this.props.router.push('/')
+      }
     }
   }
 
@@ -133,16 +166,15 @@ class ParecerInsert extends Component<Props, State> {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(store: Store): StateProps {
   return {
-    requerimento: state.requerimento
+    requerimento: store.requerimento
   }
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
   return {
-    sendParecer: parecer => dispatch(sendParecer(parecer)),
-    reloadRequerimentoAberto: parecer => reloadRequerimentoAberto(dispatch),
+    sendParecer: (parecer: Parecer) => dispatch(sendParecer(parecer)),
     getRequerimentosEmAberto: () => dispatch(getRequerimentosEmAberto())
   }
 }
