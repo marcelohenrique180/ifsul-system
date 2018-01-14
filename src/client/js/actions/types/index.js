@@ -7,7 +7,7 @@ export type Dispatch = (Action<*> | ActionApi) => Promise<Action<*>>
 
 export type Action<T> = {
   +type: string,
-  +payload: T,
+  +payload?: T,
   +error?: Error
 }
 

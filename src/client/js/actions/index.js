@@ -1,5 +1,7 @@
 // @flow
 
+import type { Action, Dispatch } from './types/index'
+
 export const REQUEST_LOGIN: string = 'REQUEST_LOGIN'
 export const RECEIVE_LOGIN: string = 'RECEIVE_LOGIN'
 export const FAILURE_LOGIN: string = 'FAILURE_LOGIN'
@@ -7,10 +9,12 @@ export const REQUEST_LOGOUT: string = 'REQUEST_LOGOUT'
 export const RECEIVE_LOGOUT: string = 'RECEIVE_LOGOUT'
 export const FAILURE_LOGOUT: string = 'FAILURE_LOGOUT'
 
-function requestLogin(creds) {
+type LoginType = { username: string, password: string }
+
+function requestLogin(creds: LoginType): Action<LoginType> {
   return {
     type: REQUEST_LOGIN,
-    creds
+    payload: creds
   }
 }
 
@@ -25,12 +29,13 @@ function recieveLogin(user) {
   }
 }
 
-function failureLogin(error) {
+function failureLogin(error: string): Action<{}> {
   return {
     type: FAILURE_LOGIN,
+    payload: {},
     error: {
-      isAuthenticated: false,
-      message: error
+      message: error,
+      status: 403
     }
   }
 }
@@ -53,14 +58,14 @@ function recieveLogout() {
   }
 }
 
-export function loginUser(creds) {
+export function loginUser(creds: LoginType) {
   const config = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(creds)
   }
 
-  return dispatch => {
+  return (dispatch: Dispatch) => {
     dispatch(requestLogin(creds))
 
     return fetch('http://localhost:8080/loginfilter', config)
@@ -85,7 +90,7 @@ export function loginUser(creds) {
 }
 
 export function logoutUser() {
-  return dispatch => {
+  return (dispatch: Dispatch) => {
     dispatch(requestLogout())
     localStorage.removeItem('id_token')
     localStorage.removeItem('role')

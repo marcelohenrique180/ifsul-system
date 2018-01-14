@@ -69,47 +69,40 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
 
     // para cada requerimento
     requerimentos.forEach(requerimento => {
-      if (typeof requerimento._links !== 'undefined') {
+      if (typeof requerimento !== 'undefined') {
         // carregue o tipo
         this.props
           .requestTipos(requerimento._links.tipo.href)
           .then((tipo: Action<Tipo>) => {
-            tipos.push(tipo.payload.tipo)
-            this.setState({ tipos: tipos })
-          })
-          .catch(() => {
-            tipos.push('')
+            if (typeof tipo.payload !== 'undefined')
+              tipos.push(tipo.payload.tipo)
+            else tipos.push('')
             this.setState({ tipos: tipos })
           })
       }
 
-      if (typeof requerimento._links !== 'undefined') {
-        // carregue o aluno
-        this.props
-          .getAluno(requerimento._links.aluno.href)
-          .then(aluno => {
+      // carregue o aluno
+      this.props
+        .getAluno(requerimento._links.aluno.href)
+        .then((aluno: Action<Aluno>) => {
+          if (typeof aluno.payload !== 'undefined')
             alunos.push({
               nome: aluno.payload.nome,
               matricula: aluno.payload.matricula
             })
-            this.setState({ alunos: alunos })
-          })
-          .catch(() => {
-            alunos.push({ nome: '', matricula: '' })
-            this.setState({ alunos: alunos })
-          })
-      }
+          else alunos.push({ nome: '', matricula: '' })
+          this.setState({ alunos: alunos })
+        })
 
-      if (typeof requerimento._links !== 'undefined') {
-        // carregue o parecer
-        this.props
-          .getParecerByRequerimentoId(getId(requerimento._links.self.href))
-          .then((parecer: Action<Parecer>) => {
-            if (parecer.type === FAILURE_PARECER) pareceres.push(null)
-            else pareceres.push(parecer.payload.deferido)
-            this.setState({ pareceres: pareceres })
-          })
-      }
+      // carregue o parecer
+      this.props
+        .getParecerByRequerimentoId(getId(requerimento._links.self.href))
+        .then((parecer: Action<Parecer>) => {
+          if (parecer.type === FAILURE_PARECER) pareceres.push(null)
+          else if (typeof parecer.payload !== 'undefined')
+            pareceres.push(parecer.payload.deferido)
+          this.setState({ pareceres: pareceres })
+        })
     })
   }
 

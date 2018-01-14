@@ -1,12 +1,14 @@
 // @flow
 
+import type { ActionApi } from './types/index'
 import { CALL_API } from './middleware/api'
+import type { Parecer } from '../reducers/types/index'
 
 export const REQUEST_PARECER: string = 'REQUEST_PARECER'
 export const RECEIVE_PARECER: string = 'RECEIVE_PARECER'
 export const FAILURE_PARECER: string = 'FAILURE_PARECER'
 
-export function getParecer(id) {
+export function getParecer(id: string): ActionApi {
   return {
     [CALL_API]: {
       endpoint: 'pareceres/' + id,
@@ -23,7 +25,7 @@ export function getParecer(id) {
   }
 }
 
-export function getParecerByRequerimentoId(requerimento: string) {
+export function getParecerByRequerimentoId(requerimento: string): ActionApi {
   return {
     [CALL_API]: {
       endpoint: 'pareceres/search/findByRequerimentoId/?id=' + requerimento,

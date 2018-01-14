@@ -34,7 +34,7 @@ class RequerimentoView extends React.Component<Props> {
     this.props
       .getRequerimento(this.props.requerimentoId)
       .then((requerimento: Action<Requerimento>) => {
-        if (typeof requerimento.payload._links !== 'undefined')
+        if (typeof requerimento.payload !== 'undefined')
           this.props.requestTipos(requerimento.payload._links.tipo.href)
       })
   }

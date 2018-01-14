@@ -41,7 +41,7 @@ export type Aluno = {
   nome: string,
   rg: string,
   telefone: string,
-  _links?: { curso: { href: string } }
+  _links: { curso: { href: string } }
 }
 
 export type Matricula = {}
@@ -66,7 +66,7 @@ export type Requerimento = {
   data: string,
   justificativa: string,
   requerimento: string,
-  +_links?: {
+  +_links: {
     tipo: { href: string },
     aluno: { href: string },
     self: { href: string }

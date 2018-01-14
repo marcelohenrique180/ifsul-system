@@ -15,7 +15,7 @@ export function resetCurso(): Action<*> {
   }
 }
 
-export function requestCursos(endpoint) {
+export function requestCursos(endpoint: string) {
   return {
     [CALL_API]: {
       endpoint,
