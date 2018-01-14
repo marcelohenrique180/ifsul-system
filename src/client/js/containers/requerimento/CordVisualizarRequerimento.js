@@ -1,34 +1,60 @@
 // @flow
 
-import React from 'react'
-import { connect } from 'react-redux'
-import { getRequerimentoByPage } from '../../actions/requerimento'
-import { requestTipos } from '../../actions/tipo'
-import { getParecerByRequerimentoId } from '../../actions/parecer'
-import { getAluno } from '../../actions/aluno'
-import { formattedDate } from '../../util'
+import * as React from 'react'
+
+import type { Action, Dispatch } from '../../actions/types'
+import type {
+  Aluno,
+  State as DefaultState,
+  Parecer,
+  RequerimentoPage,
+  Store,
+  Tipo
+} from '../../reducers/types'
+
+import Carregando from '../../components/Carregando'
+import { FAILURE_PARECER } from '../../actions/parecer'
 import Paginator from '../../components/Paginator'
 import autobind from 'autobind-decorator'
-import Carregando from '../../components/Carregando'
+import { connect } from 'react-redux'
+import { formattedDate } from '../../util'
+import { getAluno } from '../../actions/aluno'
+import { getId } from '../../util'
+import { getParecerByRequerimentoId } from '../../actions/parecer'
+import { getRequerimentoByPage } from '../../actions/requerimento'
+import { requestTipos } from '../../actions/tipo'
 
 const requerimentosAbertosApi = 'requerimentos?size=5&'
 
-type Props = {
-  getRequerimentoByPage: Function,
-  requestTipos: Function,
-  getAluno: Function,
-  getParecerByRequerimentoId: Function,
-  requerimentos: Object,
-  location: Object
+type StateProps = {
+  requerimentos: DefaultState<RequerimentoPage>
 }
 
-type State = {}
+type DispatchProps = {
+  getRequerimentoByPage: string => Promise<Action<RequerimentoPage>>,
+  requestTipos: string => Promise<Action<Tipo>>,
+  getAluno: string => Promise<Action<Aluno>>,
+  getParecerByRequerimentoId: string => Promise<Action<Parecer>>
+}
+
+type Props = StateProps &
+  DispatchProps & {
+    location: Object
+  }
+
+type State = {
+  currentPage?: number,
+  tipos: Array<string>,
+  pareceres: Array<?boolean>,
+  alunos: Array<{ nome: string, matricula: string }>
+}
 
 class CordVisualizarRequerimento extends React.Component<Props, State> {
-  constructor(props) {
+  state = { currentPage: 0, tipos: [], pareceres: [], alunos: [] }
+
+  constructor(props: Props) {
     super(props)
 
-    this.state = { currentPage: 0, tipos: [], pareceres: [], alunos: [] }
     this.props
       .getRequerimentoByPage(requerimentosAbertosApi + 'page=0')
       .then(this.requestTableContent)
@@ -37,65 +63,71 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
   @autobind
   requestTableContent() {
     const { requerimentos } = this.props.requerimentos.payload._embedded
-    const alunos = []
-    const pareceres = []
-    const tipos = []
+    const alunos: Array<{ nome: string, matricula: string }> = []
+    const pareceres: Array<?boolean> = []
+    const tipos: Array<string> = []
 
     // para cada requerimento
     requerimentos.forEach(requerimento => {
-      // carregue o tipo
-      this.props
-        .requestTipos(requerimento._links.tipo.href)
-        .then(tipo => {
-          tipos.push(tipo.payload.tipo)
-          this.setState({ tipos: tipos })
-        })
-        .catch(() => {
-          tipos.push('')
-          this.setState({ tipos: tipos })
-        })
-
-      // carregue o aluno
-      this.props
-        .getAluno(requerimento._links.aluno.href)
-        .then(aluno => {
-          alunos.push({
-            nome: aluno.payload.nome,
-            matricula: aluno.payload.matricula
+      if (typeof requerimento._links !== 'undefined') {
+        // carregue o tipo
+        this.props
+          .requestTipos(requerimento._links.tipo.href)
+          .then((tipo: Action<Tipo>) => {
+            tipos.push(tipo.payload.tipo)
+            this.setState({ tipos: tipos })
           })
-          this.setState({ alunos: alunos })
-        })
-        .catch(() => {
-          alunos.push({ nome: '', matricula: '' })
-          this.setState({ alunos: alunos })
-        })
+          .catch(() => {
+            tipos.push('')
+            this.setState({ tipos: tipos })
+          })
+      }
 
-      // carregue o parecer
-      this.props
-        .getParecerByRequerimentoId(requerimento)
-        .then(parecer => {
-          pareceres.push(parecer.response.deferido)
-          this.setState({ pareceres: pareceres })
-        })
-        .catch(() => {
-          pareceres.push('')
-          this.setState({ pareceres: pareceres })
-        })
+      if (typeof requerimento._links !== 'undefined') {
+        // carregue o aluno
+        this.props
+          .getAluno(requerimento._links.aluno.href)
+          .then(aluno => {
+            alunos.push({
+              nome: aluno.payload.nome,
+              matricula: aluno.payload.matricula
+            })
+            this.setState({ alunos: alunos })
+          })
+          .catch(() => {
+            alunos.push({ nome: '', matricula: '' })
+            this.setState({ alunos: alunos })
+          })
+      }
+
+      if (typeof requerimento._links !== 'undefined') {
+        // carregue o parecer
+        this.props
+          .getParecerByRequerimentoId(getId(requerimento._links.self.href))
+          .then((parecer: Action<Parecer>) => {
+            if (parecer.type === FAILURE_PARECER) pareceres.push(null)
+            else pareceres.push(parecer.payload.deferido)
+            this.setState({ pareceres: pareceres })
+          })
+      }
     })
   }
 
   @autobind
-  getRequerimentoByPage(page) {
+  getRequerimentoByPage(page: string) {
     return () => {
-      const pageNum = page.match(/page=([0-9])+/)[1]
-      this.setState({
-        currentPage: parseInt(pageNum),
-        tipos: [],
-        pareceres: [],
-        alunos: []
-      })
+      const pageNum = page.match(/page=([0-9])+/)
 
-      this.props.getRequerimentoByPage(page).then(this.requestTableContent)
+      if (typeof pageNum !== 'undefined' && pageNum !== null) {
+        this.setState({
+          currentPage: parseInt(pageNum[0]),
+          tipos: [],
+          pareceres: [],
+          alunos: []
+        })
+
+        this.props.getRequerimentoByPage(page).then(this.requestTableContent)
+      }
     }
   }
 
@@ -109,7 +141,7 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
       let parecer = pareceres[i]
       const aluno = alunos[i]
       const data = formattedDate(requerimento.data)
-      let nome
+      let nome = ''
       let matricula = ''
 
       if (aluno) {
@@ -117,7 +149,7 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
         matricula = aluno.matricula
       }
 
-      if (parecer) {
+      if (parecer !== null) {
         parecer = parecer === true ? 'Deferido' : 'Indeferido'
       } else {
         parecer = 'Em Andamento'
@@ -183,13 +215,13 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(store: Store): StateProps {
   return {
-    requerimentos: state.requerimentoPage
+    requerimentos: store.requerimentoPage
   }
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
   return {
     getRequerimentoByPage: page => dispatch(getRequerimentoByPage(page)),
     requestTipos: url => dispatch(requestTipos(url)),

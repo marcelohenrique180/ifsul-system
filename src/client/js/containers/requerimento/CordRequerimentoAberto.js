@@ -1,13 +1,14 @@
 // @flow
 
-import React from 'react'
-import { connect } from 'react-redux'
-import { Link } from 'react-router'
-import autobind from 'autobind-decorator'
 import { getId, handleChange } from '../../util'
-import { getRequerimentosEmAberto } from '../../actions/requerimento'
-import { getAluno } from '../../actions/aluno'
+
 import Carregando from '../../components/Carregando'
+import { Link } from 'react-router'
+import React from 'react'
+import autobind from 'autobind-decorator'
+import { connect } from 'react-redux'
+import { getAluno } from '../../actions/aluno'
+import { getRequerimentosEmAberto } from '../../actions/requerimento'
 import { reloadCordRequerimento } from '../../containers/requerimento/CordRequerimento'
 
 type Props = {
@@ -34,12 +35,12 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
               {
                 result:
                   'Req.Nº' +
-                  getId(requerimento) +
+                  getId(requerimento._links.self.href) +
                   ' ' +
                   aluno.payload.nome +
                   ' ' +
                   aluno.payload.matricula,
-                requerimento_id: getId(requerimento)
+                requerimento_id: getId(requerimento._links.self.href)
               }
             ])
           })
@@ -69,7 +70,8 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
     const filteredRequerimentos = this.state.filteredRequerimentos.filter(
       filteredReq =>
         this.props.requerimentosAbertos.payload._embedded.requerimentos.filter(
-          openReq => filteredReq.requerimento_id === getId(openReq)
+          openReq =>
+            filteredReq.requerimento_id === getId(openReq._links.self.href)
         ).length > 0
     )
 

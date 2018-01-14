@@ -90,7 +90,7 @@ class AlunoVisualizarRequerimento extends React.Component<Props, State> {
         {requerimentos.map((requerimento, i) => {
           const tipo = tipos[i] || null
           const parecer = pareceres[i] || null
-          const requerimentoId = getId(requerimento)
+          const requerimentoId = getId(requerimento._links.self.href)
 
           return (
             <tr key={i}>

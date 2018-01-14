@@ -1,15 +1,44 @@
 // @flow
 
-import React from 'react'
-import { connect } from 'react-redux'
-import FloatInput from '../../components/FloatInput'
+import type { Action, Dispatch } from '../../actions/types'
+import type {
+  State as DefaultState,
+  Requerimento,
+  Tipo
+} from '../../reducers/types'
 
-type Props = {
-  requerimento: Object,
-  tipo: Object
+import FloatInput from '../../components/FloatInput'
+import ParecerInsert from '../../containers/parecer/ParecerInsert'
+import React from 'react'
+import type { Store } from '../../reducers/types/index'
+import { connect } from 'react-redux'
+import { getRequerimento } from '../../actions/requerimento'
+import { requestTipos } from '../../actions/tipo'
+
+type StateProps = {
+  requerimento: DefaultState<Requerimento>,
+  tipo: DefaultState<Tipo>
 }
 
+type DispatchProps = {
+  getRequerimento: string => Promise<Action<Requerimento>>,
+  requestTipos: string => Promise<Action<Tipo>>
+}
+
+type Props = StateProps & DispatchProps & { requerimentoId: string }
+
 class RequerimentoView extends React.Component<Props> {
+  constructor(props: Props) {
+    super(props)
+
+    this.props
+      .getRequerimento(this.props.requerimentoId)
+      .then((requerimento: Action<Requerimento>) => {
+        if (typeof requerimento.payload._links !== 'undefined')
+          this.props.requestTipos(requerimento.payload._links.tipo.href)
+      })
+  }
+
   render() {
     const requerimento = this.props.requerimento.payload
     const tipo = this.props.tipo.payload
@@ -54,6 +83,7 @@ class RequerimentoView extends React.Component<Props> {
                     readOnly="true"
                   />
                 </div>
+                <ParecerInsert requerimento={this.props.requerimento} />
               </div>
             )}
         </div>
@@ -62,11 +92,18 @@ class RequerimentoView extends React.Component<Props> {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: Store): StateProps {
   return {
     requerimento: state.requerimento,
     tipo: state.tipos
   }
 }
 
-export default connect(mapStateToProps)(RequerimentoView)
+function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
+  return {
+    getRequerimento: reqId => dispatch(getRequerimento(reqId)),
+    requestTipos: endpoint => dispatch(requestTipos(endpoint))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RequerimentoView)

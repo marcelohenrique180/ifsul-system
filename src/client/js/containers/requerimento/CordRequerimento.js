@@ -1,43 +1,65 @@
 // @flow
 
-import { connect } from 'react-redux'
+import type { Action, Dispatch } from '../../actions/types/index'
+import type {
+  Aluno,
+  State as DefaultState,
+  Requerimento,
+  Store
+} from '../../reducers/types/index'
 import { getAluno, resetAluno } from '../../actions/aluno'
 import { getRequerimento, resetRequerimento } from '../../actions/requerimento'
 import { requestCursos, resetCurso } from '../../actions/curso'
 import { requestTipos, resetTipo } from '../../actions/tipo'
 
-import React from 'react'
-
 import AlunoInfo from '../../containers/aluno/AlunoInfo'
 import Carregando from '../../components/Carregando'
-import RequerimentoView from '../../containers/requerimento/RequerimentoView'
 import ParecerInsert from '../../containers/parecer/ParecerInsert'
+import React from 'react'
+import RequerimentoView from '../../containers/requerimento/RequerimentoView'
+import { connect } from 'react-redux'
 
-export function reloadCordRequerimento(dispatch, requerimentoId) {
+export function reloadCordRequerimento(
+  dispatch: Dispatch,
+  requerimentoId: string
+): void {
   dispatch(resetRequerimento())
   dispatch(resetTipo())
   dispatch(resetAluno())
   dispatch(resetCurso())
 
-  dispatch(getRequerimento(requerimentoId)).then(requerimento => {
-    dispatch(requestTipos(requerimento.payload._links.tipo.href))
-    dispatch(getAluno(requerimento.payload._links.aluno.href)).then(aluno => {
-      dispatch(requestCursos(aluno.payload._links.curso.href))
-    })
-  })
+  dispatch(getRequerimento(requerimentoId)).then(
+    (requerimento: Action<Requerimento>) => {
+      if (typeof requerimento.payload._links !== 'undefined')
+        dispatch(requestTipos(requerimento.payload._links.tipo.href))
+      if (typeof requerimento.payload._links !== 'undefined')
+        dispatch(getAluno(requerimento.payload._links.aluno.href)).then(
+          (aluno: Action<Aluno>) => {
+            if (typeof aluno.payload._links !== 'undefined')
+              dispatch(requestCursos(aluno.payload._links.curso.href))
+          }
+        )
+    }
+  )
 }
 
-type Props = {
-  dispatch: Function,
-  requerimento: Object,
+type StateProps = {
+  requerimento: DefaultState<Requerimento>,
   aluno: Object,
   tipo: Object,
-  curso: Object,
-  params: Object
+  curso: Object
 }
 
+type DispatchProps = {}
+
+type Props = StateProps &
+  DispatchProps & {
+    params: { ['requerimento']: string },
+    dispatch: Dispatch
+  }
+
 class CordRequerimento extends React.Component<Props> {
-  constructor(props) {
+  constructor(props: Props) {
     super(props)
     const { dispatch } = this.props
 
@@ -53,17 +75,6 @@ class CordRequerimento extends React.Component<Props> {
   }
 
   render() {
-    const alunoProp = this.props.aluno
-    const requerimentoProp = this.props.requerimento
-    const tipoProp = this.props.tipo
-    const cursoProp = this.props.curso
-
-    const display =
-      requerimentoProp.fetched &&
-      alunoProp.fetched &&
-      tipoProp.fetched &&
-      cursoProp.fetched
-
     return (
       <div>
         <div className="panel panel-ifsul">
@@ -73,15 +84,12 @@ class CordRequerimento extends React.Component<Props> {
           <div className="panel-body">
             <div className="container-fluid">
               <div className="row">
-                {display ? (
-                  <div className="form-group col-centered">
-                    <AlunoInfo />
-                    <RequerimentoView />
-                    <ParecerInsert {...this.props} />
-                  </div>
-                ) : (
-                  <Carregando />
-                )}
+                <div className="form-group col-centered">
+                  <AlunoInfo />
+                  <RequerimentoView
+                    requerimentoId={this.props.params['requerimento']}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -91,7 +99,7 @@ class CordRequerimento extends React.Component<Props> {
   }
 }
 
-function mapStateToProps(store) {
+function mapStateToProps(store: Store): StateProps {
   return {
     requerimento: store.requerimento,
     aluno: store.aluno,

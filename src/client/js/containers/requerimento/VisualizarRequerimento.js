@@ -10,44 +10,24 @@ import type {
 import type { State as DefaultState, Store } from '../../reducers/types'
 
 import AlunoInfo from '../../containers/aluno/AlunoInfo'
-import ParecerView from '../../containers/parecer/ParecerView'
 import React from 'react'
 import RequerimentoView from '../../containers/requerimento/RequerimentoView'
 import { connect } from 'react-redux'
-import { getRequerimento } from '../../actions/requerimento'
 import { requestAluno } from '../../actions/aluno'
 import { requestCursos } from '../../actions/curso'
-import { requestTipos } from '../../actions/tipo'
 
 type StateProps = {
   requerimento: DefaultState<Requerimento>
 }
 
-type DispatchProps = {
-  getRequerimento: string => Promise<Action<Requerimento>>,
-  requestTipos: string => Promise<Action<Tipo>>
+type Props = StateProps & {
+  params: { ['requerimento']: string }
 }
 
-type Props = StateProps &
-  DispatchProps & {
-    params: { ['requerimento']: string }
-  }
-
 class VisualizarRequerimento extends React.Component<Props> {
-  constructor(props: Props) {
-    super(props)
-
+  render() {
     const reqId = this.props.params['requerimento']
 
-    this.props
-      .getRequerimento(reqId)
-      .then((requerimento: Action<Requerimento>) => {
-        if (typeof requerimento.payload._links !== 'undefined')
-          this.props.requestTipos(requerimento.payload._links.tipo.href)
-      })
-  }
-
-  render() {
     return (
       <div>
         <div className="panel panel-ifsul">
@@ -57,8 +37,7 @@ class VisualizarRequerimento extends React.Component<Props> {
           <div className="panel-body">
             <div>
               <AlunoInfo />
-              <RequerimentoView />
-              <ParecerView />
+              <RequerimentoView requerimentoId={reqId} />
             </div>
           </div>
         </div>
@@ -73,13 +52,4 @@ function mapStateToProps(state: Store): StateProps {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
-  return {
-    getRequerimento: reqId => dispatch(getRequerimento(reqId)),
-    requestTipos: endpoint => dispatch(requestTipos(endpoint))
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(
-  VisualizarRequerimento
-)
+export default connect(mapStateToProps)(VisualizarRequerimento)
