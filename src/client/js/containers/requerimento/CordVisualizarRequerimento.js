@@ -68,14 +68,14 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
     const tipos: Array<string> = []
 
     // para cada requerimento
-    requerimentos.forEach(requerimento => {
+    requerimentos.forEach((requerimento, i) => {
       if (typeof requerimento !== 'undefined') {
         // carregue o tipo
         this.props
           .requestTipos(requerimento._links.tipo.href)
           .then((tipo: Action<Tipo>) => {
             if (typeof tipo.payload !== 'undefined')
-              tipos.push(tipo.payload.tipo)
+              tipos[i] = tipo.payload.tipo
             else tipos.push('')
             this.setState({ tipos: tipos })
           })
@@ -86,10 +86,10 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
         .getAluno(requerimento._links.aluno.href)
         .then((aluno: Action<Aluno>) => {
           if (typeof aluno.payload !== 'undefined')
-            alunos.push({
+            alunos[i] = {
               nome: aluno.payload.nome,
               matricula: aluno.payload.matricula
-            })
+            }
           else alunos.push({ nome: '', matricula: '' })
           this.setState({ alunos: alunos })
         })
@@ -100,7 +100,7 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
         .then((parecer: Action<Parecer>) => {
           if (parecer.type === FAILURE_PARECER) pareceres.push(null)
           else if (typeof parecer.payload !== 'undefined')
-            pareceres.push(parecer.payload.deferido)
+            pareceres[i] = parecer.payload.deferido
           this.setState({ pareceres: pareceres })
         })
     })
