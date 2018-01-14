@@ -43,7 +43,7 @@ type Props = StateProps &
   }
 
 type State = {
-  currentPage?: number,
+  currentPage: number,
   tipos: Array<string>,
   pareceres: Array<?boolean>,
   alunos: Array<{ nome: string, matricula: string }>
@@ -98,22 +98,26 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
       this.props
         .getParecerByRequerimentoId(getId(requerimento._links.self.href))
         .then((parecer: Action<Parecer>) => {
-          if (parecer.type === FAILURE_PARECER) pareceres.push(null)
-          else if (typeof parecer.payload !== 'undefined')
-            pareceres[i] = parecer.payload.deferido
+          if (
+            parecer.type === FAILURE_PARECER ||
+            typeof parecer.payload === 'undefined'
+          )
+            pareceres[i] = null
+          else pareceres[i] = parecer.payload.deferido
           this.setState({ pareceres: pareceres })
         })
+        .catch(() => (pareceres[i] = null))
     })
   }
 
   @autobind
-  getRequerimentoByPage(page: string) {
+  getRequerimentoByPage(page: string): () => void {
     return () => {
       const pageNum = page.match(/page=([0-9])+/)
 
       if (typeof pageNum !== 'undefined' && pageNum !== null) {
         this.setState({
-          currentPage: parseInt(pageNum[0]),
+          currentPage: parseInt(pageNum[1]),
           tipos: [],
           pareceres: [],
           alunos: []

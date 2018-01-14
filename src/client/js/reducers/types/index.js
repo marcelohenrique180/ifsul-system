@@ -84,6 +84,7 @@ export type Parecer = {
 
 export type RequerimentoPage = {
   page: Page,
+  _links: { first: { href: string }, last: { href: string } },
   _embedded: {
     requerimentos: Array<Requerimento>
   }

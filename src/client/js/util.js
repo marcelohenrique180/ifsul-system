@@ -1,12 +1,10 @@
 // @flow
 
 export type Page = {
-  page: {
-    number: number,
-    size: number,
-    totalElements: number,
-    totalPages: number
-  }
+  number: number,
+  size: number,
+  totalElements: number,
+  totalPages: number
 }
 
 type EventType = {

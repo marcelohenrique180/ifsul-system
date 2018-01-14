@@ -1,12 +1,17 @@
 // @flow
 
-import { Link } from 'react-router'
-
-import React from 'react'
 import Carregando from '../components/Carregando'
+import { Link } from 'react-router'
+import React from 'react'
+import type { RequerimentoPage } from '../reducers/types/index'
 
-type Props = Object
-
+type Props = {
+  pageableEntity: RequerimentoPage,
+  currentPage: number,
+  onClickHandler: string => () => void,
+  api: string,
+  location: { pathname: string }
+}
 export default class Paginator extends React.Component<Props> {
   render() {
     const { pageableEntity, currentPage, onClickHandler, api } = this.props
