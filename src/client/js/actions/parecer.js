@@ -1,7 +1,7 @@
 // @flow
 
 import { CALL_API } from './middleware/api'
-import { getId } from '../util'
+
 export const REQUEST_PARECER: string = 'REQUEST_PARECER'
 export const RECEIVE_PARECER: string = 'RECEIVE_PARECER'
 export const FAILURE_PARECER: string = 'FAILURE_PARECER'
@@ -23,11 +23,10 @@ export function getParecer(id) {
   }
 }
 
-export function getParecerByRequerimentoId(requerimento) {
+export function getParecerByRequerimentoId(requerimento: string) {
   return {
     [CALL_API]: {
-      endpoint:
-        'pareceres/search/findByRequerimentoId/?id=' + getId(requerimento),
+      endpoint: 'pareceres/search/findByRequerimentoId/?id=' + requerimento,
       authenticated: true,
       types: [REQUEST_PARECER, RECEIVE_PARECER, FAILURE_PARECER],
       config: {
@@ -41,7 +40,7 @@ export function getParecerByRequerimentoId(requerimento) {
   }
 }
 
-export function sendParecer(parecer) {
+export function sendParecer(parecer: Parecer): ActionApi {
   return {
     [CALL_API]: {
       endpoint: 'pareceres',

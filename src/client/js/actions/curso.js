@@ -1,14 +1,17 @@
 // @flow
 
+import type { Action } from './types/index'
 import { CALL_API } from './middleware/api'
+
 export const REQUEST_CURSO: string = 'REQUEST_CURSO'
 export const RECEIVE_CURSO: string = 'RECEIVE_CURSO'
 export const FAILURE_CURSO: string = 'FAILURE_CURSO'
 export const RESET_CURSO: string = 'RESET_CURSO'
 
-export function resetCurso() {
+export function resetCurso(): Action<*> {
   return {
-    type: RESET_CURSO
+    type: RESET_CURSO,
+    payload: {}
   }
 }
 

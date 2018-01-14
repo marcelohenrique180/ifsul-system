@@ -74,7 +74,7 @@ export default (store: Store) => (next: Dispatch) => (
 
   const [requestType, successType, errorType] = types
 
-  next(({ type: requestType }: Action<*>))
+  next(({ type: requestType, payload: {} }: Action<*>))
   return callApi(endpoint, config, authenticated).then(
     (response: Object) =>
       next(

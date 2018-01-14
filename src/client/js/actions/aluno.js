@@ -1,5 +1,6 @@
 // @flow
 
+import type { Action } from './types/index'
 import type { ActionApi } from './types'
 import { CALL_API } from './middleware/api'
 
@@ -14,9 +15,10 @@ export const RECEIVE_ALUNO: string = 'RECEIVE_ALUNO'
 export const FAILURE_ALUNO: string = 'FAILURE_ALUNO'
 export const RESET_ALUNO: string = 'RESET_ALUNO'
 
-export function resetAluno() {
+export function resetAluno(): Action<*> {
   return {
-    type: RESET_ALUNO
+    type: RESET_ALUNO,
+    payload: {}
   }
 }
 

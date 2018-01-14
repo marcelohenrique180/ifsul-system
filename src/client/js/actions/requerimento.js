@@ -1,9 +1,13 @@
 // @flow
 
+import type { Action, ActionApi } from './types/index'
+
 import { CALL_API } from './middleware/api'
-export const REQUEST_REQUERIMENTO: string = 'REQUEST_REQUERIMENTO'
+import type { Requerimento } from '../reducers/types/index'
+
 export const RECEIVE_REQUERIMENTO: string = 'RECEIVE_REQUERIMENTO'
 export const FAILURE_REQUERIMENTO: string = 'FAILURE_REQUERIMENTO'
+export const REQUEST_REQUERIMENTO: string = 'FAILURE_REQUERIMENTO'
 export const REQUEST_REQUERIMENTO_PAGE: string = 'REQUEST_REQUERIMENTO_PAGE'
 export const RECEIVE_REQUERIMENTO_PAGE: string = 'RECEIVE_REQUERIMENTO_PAGE'
 export const FAILURE_REQUERIMENTO_PAGE: string = 'FAILURE_REQUERIMENTO_PAGE'
@@ -15,13 +19,13 @@ export const FAILURE_REQUERIMENTOS_ABERTOS: string =
   'FAILURE_REQUERIMENTOS_ABERTOS'
 export const RESET_REQUERIMENTO: string = 'RESET_REQUERIMENTO'
 
-export function resetRequerimento() {
+export function resetRequerimento(): Action<Requerimento> {
   return {
     type: RESET_REQUERIMENTO
   }
 }
 
-export function sendRequerimento(requerimento) {
+export function sendRequerimento(requerimento: Requerimento) {
   return {
     [CALL_API]: {
       endpoint: 'requerimentos',
@@ -39,12 +43,16 @@ export function sendRequerimento(requerimento) {
   }
 }
 
-export function getRequerimento(id) {
+export function getRequerimento(id: string): ActionApi {
   return {
     [CALL_API]: {
       endpoint: 'requerimentos/' + id,
       authenticated: true,
-      types: [REQUEST_REQUERIMENTO, RECEIVE_REQUERIMENTO, FAILURE_REQUERIMENTO],
+      types: [
+        'REQUEST_REQUERIMENTO',
+        'RECEIVE_REQUERIMENTO',
+        'FAILURE_REQUERIMENTO'
+      ],
       config: {
         headers: {
           Accept: 'application/json',
@@ -56,7 +64,7 @@ export function getRequerimento(id) {
   }
 }
 
-export function getRequerimentoByPage(page) {
+export function getRequerimentoByPage(page: string): ActionApi {
   return {
     [CALL_API]: {
       endpoint: page,
