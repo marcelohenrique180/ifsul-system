@@ -91,5 +91,5 @@ export type RequerimentoPage = {
 }
 
 export type RequerimentoAberto = {
-  _embedded: Array<Requerimento>
+  _embedded: { requerimentos: Array<Requerimento> }
 }

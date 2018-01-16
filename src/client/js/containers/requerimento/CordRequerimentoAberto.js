@@ -1,6 +1,12 @@
 // @flow
 
-import { getId, handleChange } from '../../util'
+import type { Action, Dispatch } from '../../actions/types/index'
+import type {
+  Aluno,
+  State as DefaultState,
+  RequerimentoAberto,
+  Store
+} from '../../reducers/types/index'
 
 import Carregando from '../../components/Carregando'
 import { Link } from 'react-router'
@@ -8,48 +14,71 @@ import React from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import { getAluno } from '../../actions/aluno'
+import { getId } from '../../util'
 import { getRequerimentosEmAberto } from '../../actions/requerimento'
 import { reloadCordRequerimento } from '../../containers/requerimento/CordRequerimento'
 
-type Props = {
-  getRequerimentosEmAberto: Function,
-  getAluno: Function,
-  loadRequerimento: Function,
-  reloadCordRequerimento: Function,
-  router: Object,
-  requerimentosAbertos: Object
+type StateProps = {
+  requerimentosAbertos: DefaultState<RequerimentoAberto>
 }
 
-type State = Object
+type DispatchProps = {
+  getRequerimentosEmAberto: () => Promise<Action<RequerimentoAberto>>,
+  getAluno: string => Promise<Action<Aluno>>,
+  loadRequerimento: ({
+    push: string => void,
+    id: string,
+    reload: (Dispatch, string) => void
+  }) => void
+}
+
+type Props = StateProps &
+  DispatchProps & {
+    router: {
+      push: string => void
+    }
+  }
+
+type State = {
+  search: string,
+  requerimentos: Array<{ result: string, requerimento_id: string }>,
+  filteredRequerimentos: Array<{ result: string, requerimento_id: string }>
+}
 
 class CordRequerimentoAberto extends React.Component<Props, State> {
+  state = { search: '', requerimentos: [], filteredRequerimentos: [] }
+
   constructor(props: Props) {
     super(props)
 
-    this.state = { search: '', requerimentos: [], filteredRequerimentos: [] }
     this.props.getRequerimentosEmAberto().then(reqsAbertos => {
-      reqsAbertos.payload._embedded.requerimentos.forEach(requerimento => {
-        this.props.getAluno(requerimento._links.aluno.href).then(aluno => {
-          this.setState({
-            requerimentos: this.state.requerimentos.concat([
-              {
-                result:
-                  'Req.Nº' +
-                  getId(requerimento._links.self.href) +
-                  ' ' +
-                  aluno.payload.nome +
-                  ' ' +
-                  aluno.payload.matricula,
-                requerimento_id: getId(requerimento._links.self.href)
-              }
-            ])
-          })
-          this.setState({ filteredRequerimentos: this.state.requerimentos })
+      if (typeof reqsAbertos.payload !== 'undefined')
+        reqsAbertos.payload._embedded.requerimentos.forEach(requerimento => {
+          this.props
+            .getAluno(requerimento._links.aluno.href)
+            .then(alunoResponse => {
+              const aluno =
+                typeof alunoResponse.payload !== 'undefined'
+                  ? alunoResponse.payload
+                  : { nome: '', matricula: '' }
+              this.setState({
+                requerimentos: this.state.requerimentos.concat([
+                  {
+                    result:
+                      'Req.Nº' +
+                      getId(requerimento._links.self.href) +
+                      ' ' +
+                      aluno.nome +
+                      ' ' +
+                      aluno.matricula,
+                    requerimento_id: getId(requerimento._links.self.href)
+                  }
+                ])
+              })
+              this.setState({ filteredRequerimentos: this.state.requerimentos })
+            })
         })
-      })
     })
-    this.reloadCordRequerimento = reloadCordRequerimento.bind(this)
-    this.handleChange = handleChange.bind(this)
   }
 
   @autobind
@@ -59,7 +88,7 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
         this.props.loadRequerimento({
           push: this.props.router.push,
           id,
-          reload: this.reloadCordRequerimento
+          reload: reloadCordRequerimento
         })
       }
     }
@@ -91,13 +120,14 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
   }
 
   @autobind
-  handleSearch(event) {
-    this.handleChange(event)
+  handleSearch(event: SyntheticInputEvent<HTMLInputElement>) {
+    const { name, value } = event.target
 
     this.setState({
       filteredRequerimentos: this.state.requerimentos.filter(req =>
         req.result.toLowerCase().includes(event.target.value.toLowerCase())
-      )
+      ),
+      [name]: value
     })
   }
 
@@ -143,13 +173,13 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: Store): StateProps {
   return {
     requerimentosAbertos: state.requerimentos_abertos
   }
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
   return {
     getRequerimentosEmAberto: () => dispatch(getRequerimentosEmAberto()),
     getAluno: url => dispatch(getAluno(url)),

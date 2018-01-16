@@ -79,7 +79,7 @@ class ParecerInsert extends React.Component<Props, State> {
 
         this.props
           .sendParecer({
-            deferido,
+            deferido: deferido === 'true' ? true : false,
             parecer,
             memorando,
             requerimento: requerimento_link
@@ -87,7 +87,7 @@ class ParecerInsert extends React.Component<Props, State> {
           .then(() => {
             this.props.getRequerimentosEmAberto()
           })
-        this.props.router.push('/')
+        this.props.router.push('/menu/cordcurso') // TODO pegar caminho correto
       }
     }
   }

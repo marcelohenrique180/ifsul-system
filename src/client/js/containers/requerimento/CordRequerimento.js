@@ -30,12 +30,12 @@ export function reloadCordRequerimento(
 
   dispatch(getRequerimento(requerimentoId)).then(
     (requerimento: Action<Requerimento>) => {
-      if (typeof requerimento.payload._links !== 'undefined')
+      if (typeof requerimento.payload !== 'undefined')
         dispatch(requestTipos(requerimento.payload._links.tipo.href))
-      if (typeof requerimento.payload._links !== 'undefined')
+      if (typeof requerimento.payload !== 'undefined')
         dispatch(getAluno(requerimento.payload._links.aluno.href)).then(
           (aluno: Action<Aluno>) => {
-            if (typeof aluno.payload._links !== 'undefined')
+            if (typeof aluno.payload !== 'undefined')
               dispatch(requestCursos(aluno.payload._links.curso.href))
           }
         )

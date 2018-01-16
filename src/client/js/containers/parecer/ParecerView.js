@@ -8,10 +8,11 @@ import Carregando from '../../components/Carregando'
 import FloatInput from '../../components/FloatInput'
 import React from 'react'
 import { connect } from 'react-redux'
+import { getId } from '../../util'
 import { getParecerByRequerimentoId } from '../../actions/parecer'
 
 type DispatchProps = {
-  getParecerByRequerimentoId: Requerimento => Promise<Action<Requerimento>>
+  getParecerByRequerimentoId: string => Promise<Action<Requerimento>>
 }
 
 type StateProps = {
@@ -26,17 +27,17 @@ class ParecerView extends React.Component<Props> {
     super(props)
     const { requerimento } = this.props
 
-    this.props.getParecerByRequerimentoId(requerimento.payload)
+    this.props.getParecerByRequerimentoId(
+      getId(requerimento.payload._links.self.href)
+    )
   }
 
   render() {
     const { parecer } = this.props
 
-    if (typeof parecer.payload !== 'undefined') {
-      parecer.payload.deferido = parecer.payload.deferido
-        ? 'Deferido'
-        : 'Indeferido'
-    }
+    const deferido: string = parecer.payload.deferido
+      ? 'Deferido'
+      : 'Indeferido'
 
     return (
       <div>
@@ -59,7 +60,7 @@ class ParecerView extends React.Component<Props> {
                     <FloatInput
                       name="deferimento"
                       type="text"
-                      value={parecer.payload.deferido}
+                      value={deferido}
                       textLabel="Deferimento"
                       readOnly="true"
                     />
