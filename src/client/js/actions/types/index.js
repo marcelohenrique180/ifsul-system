@@ -12,9 +12,9 @@ export type Action<T> = {
 }
 
 export type ConfigApi = {
-  headers: { Authentication: string },
-  method: string,
-  body: string
+  headers?: { Authentication: string },
+  method?: string,
+  body?: string
 }
 
 export type ActionApiData = {|

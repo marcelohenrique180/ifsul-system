@@ -2,9 +2,19 @@
 
 import * as React from 'react'
 
+import type { Action, Dispatch } from '../../actions/types/index'
+import type {
+  State as DefaultState,
+  Parecer,
+  RequerimentoPage,
+  Store,
+  Tipo
+} from '../../reducers/types/index'
+
 import Carregando from '../../components/Carregando'
 import { Link } from 'react-router'
 import Paginator from '../../components/Paginator'
+import autobind from 'autobind-decorator'
 import { callApi } from '../../actions/middleware/api'
 import { connect } from 'react-redux'
 import { getId } from '../../util'
@@ -13,74 +23,90 @@ import { requestTipos } from '../../actions/tipo'
 
 const requerimentoApi = 'requerimentos/search/findAllAlunoEndpoint?size=5&'
 
-type Props = {
-  dispatch: Function,
-  requerimentos: Object,
-  location: Object
+type StateProps = {
+  requerimentos: DefaultState<RequerimentoPage>
 }
 
-type State = {}
+type DispatchProps = {
+  getRequerimentoByPage: string => Promise<Action<RequerimentoPage>>,
+  requestTipos: string => Promise<Action<Tipo>>
+}
 
-class AlunoVisualizarRequerimento extends React.Component<Props, State> {
-  constructor(props) {
-    super(props)
-    this.state = { currentPage: 0, tipos: [], pareceres: [] }
-    const { dispatch } = this.props
-
-    this.requestTableContent = this.requestTableContent.bind(this)
-    dispatch(getRequerimentoByPage(requerimentoApi + 'page=0')).then(
-      this.requestTableContent
-    )
-
-    this.getRequerimentoByPage = this.getRequerimentoByPage.bind(this)
-    this.renderLines = this.renderLines.bind(this)
+type Props = StateProps &
+  DispatchProps & {
+    location: Object
   }
 
-  requestTableContent(response) {
-    const { dispatch } = this.props
+type State = {
+  currentPage: number,
+  tipos: Array<?Action<Tipo>>,
+  pareceres: Array<?Parecer> // TODO Criar Reducer para essa prop
+}
+
+class AlunoVisualizarRequerimento extends React.Component<Props, State> {
+  state = { currentPage: 0, tipos: [], pareceres: [] }
+
+  constructor(props: Props) {
+    super(props)
+
+    this.props
+      .getRequerimentoByPage(requerimentoApi + 'page=0')
+      .then(this.requestTableContent)
+  }
+
+  @autobind
+  requestTableContent(response: Action<RequerimentoPage>) {
+    if (typeof response.payload === 'undefined') return
     const { requerimentos } = response.payload._embedded
-    const tipos = []
-    const pareceres = []
+    const tipos: Array<?Action<Tipo>> = []
+    const pareceres: Array<?Parecer> = []
 
     for (let i = 0; i < requerimentos.length; i++) {
-      dispatch(requestTipos(requerimentos[i]._links.tipo.href))
+      this.props
+        .requestTipos(requerimentos[i]._links.tipo.href)
         .then(tipo => {
           tipos[i] = tipo
           this.setState({ tipos })
         })
         .catch(() => {
-          tipos[i] = ''
+          tipos[i] = null
           this.setState({ tipos })
         })
 
-      let requerimentoId = requerimentos[i]._links.self.href.match(/\d+$/)[0]
-      callApi(
-        'pareceres/search/findByRequerimentoId?id=' + requerimentoId,
-        {},
-        true
-      )
-        .then(parecer => {
-          pareceres[i] = parecer
-          this.setState({ pareceres })
-        })
-        .catch(() => {
-          pareceres[i] = ''
-          this.setState({ pareceres })
-        })
+      let requerimentoId = requerimentos[i]._links.self.href.match(/\d+$/)
+      if (typeof requerimentoId !== 'undefined' && requerimentoId !== null) {
+        requerimentoId = requerimentoId[0]
+        callApi(
+          'pareceres/search/findByRequerimentoId?id=' + requerimentoId,
+          {},
+          true
+        )
+          .then(parecer => {
+            pareceres[i] = parecer
+            this.setState({ pareceres })
+          })
+          .catch(() => {
+            pareceres[i] = null
+            this.setState({ pareceres })
+          })
+      }
     }
   }
 
-  getRequerimentoByPage(page) {
+  @autobind
+  getRequerimentoByPage(page: string) {
     return () => {
-      const pageNum = page.match(/page=([0-9])+/)[1]
-      this.setState({ currentPage: parseInt(pageNum) })
+      const pageNum = page.match(/page=([0-9])+/)
 
-      this.props
-        .dispatch(getRequerimentoByPage(page))
-        .then(this.requestTableContent)
+      if (typeof pageNum !== 'undefined' && pageNum !== null) {
+        this.setState({ currentPage: parseInt(pageNum[1]) })
+
+        this.props.getRequerimentoByPage(page).then(this.requestTableContent)
+      }
     }
   }
 
+  @autobind
   renderLines() {
     const { requerimentos } = this.props.requerimentos.payload._embedded
     const { tipos, pareceres } = this.state
@@ -88,18 +114,21 @@ class AlunoVisualizarRequerimento extends React.Component<Props, State> {
     return (
       <tbody>
         {requerimentos.map((requerimento, i) => {
-          const tipo = tipos[i] || null
-          const parecer = pareceres[i] || null
+          const tipo = tipos[i]
+          const parecer = pareceres[i]
           const requerimentoId = getId(requerimento._links.self.href)
 
           return (
             <tr key={i}>
               <td>
-                {tipo !== null ? (
+                {typeof tipo !== 'undefined' && tipo !== null ? (
                   <Link
                     to={'/menu/aluno/requerimento/visualizar/' + requerimentoId}
                   >
-                    {tipo.payload.tipo}
+                    {tipo.payload !== null &&
+                    typeof tipo.payload !== 'undefined'
+                      ? tipo.payload.tipo
+                      : ''}
                   </Link>
                 ) : (
                   <p>&nbsp;</p>
@@ -114,7 +143,11 @@ class AlunoVisualizarRequerimento extends React.Component<Props, State> {
                 <td>Em Andamento</td>
               )}
               <td>
-                {parecer === null ? <span>&nbsp;</span> : parecer.parecer}
+                {parecer === null || typeof parecer === 'undefined' ? (
+                  <span>&nbsp;</span>
+                ) : (
+                  parecer.parecer
+                )}
               </td>
             </tr>
           )
@@ -173,10 +206,19 @@ class AlunoVisualizarRequerimento extends React.Component<Props, State> {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: Store): StateProps {
   return {
     requerimentos: state.requerimentoPage
   }
 }
 
-export default connect(mapStateToProps)(AlunoVisualizarRequerimento)
+function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
+  return {
+    getRequerimentoByPage: page => dispatch(getRequerimentoByPage(page)),
+    requestTipos: url => dispatch(requestTipos(url))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+  AlunoVisualizarRequerimento
+)
