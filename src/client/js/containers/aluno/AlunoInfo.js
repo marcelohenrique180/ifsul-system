@@ -4,11 +4,11 @@ import type { Action, Dispatch } from '../../actions/types/index'
 import type { Aluno, Curso } from '../../reducers/types/index'
 import type { State as DefaultState, Store } from '../../reducers/types/'
 
-import { requestCursos } from '../../actions/curso'
 import FloatInput from '../../components/FloatInput'
 import React from 'react'
 import { connect } from 'react-redux'
 import { requestAluno } from '../../actions/aluno'
+import { requestCursos } from '../../actions/curso'
 
 type StateProps = {
   aluno: DefaultState<Aluno>,
@@ -27,7 +27,7 @@ class AlunoInfo extends React.Component<Props> {
     super(props)
 
     this.props.requestAluno().then((aluno: Action<Aluno>) => {
-      if (typeof aluno.payload._links !== 'undefined')
+      if (typeof aluno.payload !== 'undefined')
         this.props.requestCursos(aluno.payload._links.curso.href)
     })
   }
