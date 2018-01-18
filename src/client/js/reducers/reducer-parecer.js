@@ -1,44 +1,23 @@
+// @flow
+
+import type { Case, State } from './types'
 import {
-    RECEIVE_SEND_PARECER,
-    REQUEST_SEND_PARECER,
-    FAILURE_SEND_PARECER
+  FAILURE_PARECER,
+  RECEIVE_PARECER,
+  REQUEST_PARECER
 } from '../actions/parecer'
+import genericReducer, { defaultState } from './generic-reducer'
+
+import type { Action } from '../actions/types'
+import type { Parecer } from './types/index'
 
 export function parecerReducer(
-    state = {
-        isFetching: false,
-        error: false,
-        fetched: false,
-        parecer: {},
-        errorMessage: ''
-    },action
-) {
-    switch (action.type){
-        case RECEIVE_SEND_PARECER:
-            return Object.assign({}, state,{
-                isFetching: false,
-                error: false,
-                fetched: true,
-                parecer: action.response,
-                errorMessage: ''
-            });
-        case FAILURE_SEND_PARECER:
-            return Object.assign({}, state,{
-                isFetching: false,
-                error: true,
-                fetched: false,
-                parecer: {},
-                errorMessage: action.errorMessage
-            });
-        case REQUEST_SEND_PARECER:
-            return Object.assign({}, state,{
-                isFetching: true,
-                error: false,
-                fetched: false,
-                parecer: {},
-                errorMessage: ''
-            });
-        default:
-            return state
-    }
+  state: State<Parecer> = defaultState,
+  action: Action<Parecer>
+): State<Parecer> {
+  return genericReducer(state, action, {
+    receive: RECEIVE_PARECER,
+    request: REQUEST_PARECER,
+    failure: FAILURE_PARECER
+  })
 }

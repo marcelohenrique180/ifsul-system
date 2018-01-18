@@ -1,47 +1,29 @@
+// @flow
+
+import type { Case, State } from './types'
 import {
-    RECEIVE_SEND_REQUERIMENTO,
-    REQUEST_SEND_REQUERIMENTO,
-    FAILURE_SEND_REQUERIMENTO,
-    RESET_REQUERIMENTO
+  FAILURE_REQUERIMENTO,
+  RECEIVE_REQUERIMENTO,
+  REQUEST_REQUERIMENTO,
+  RESET_REQUERIMENTO
 } from '../actions/requerimento'
+import genericReducer, { defaultState } from './generic-reducer'
 
-const defaultState = {
-    isFetching: false,
-    error: false,
-    fetched: false,
-    requerimento: {},
-    errorMessage: ''
-}
+import type { Action } from '../actions/types'
+import type { Requerimento } from './types/index'
 
-export function requerimentoReducer(state = defaultState, action){
-    switch (action.type){
-        case RECEIVE_SEND_REQUERIMENTO:
-            return Object.assign({}, state,{
-                isFetching: false,
-                error: false,
-                fetched: true,
-                requerimento: action.response,
-                errorMessage: ''
-            });
-        case FAILURE_SEND_REQUERIMENTO:
-            return Object.assign({}, state,{
-                isFetching: false,
-                error: true,
-                fetched: false,
-                requerimento: {},
-                errorMessage: action.errorMessage
-            });
-        case REQUEST_SEND_REQUERIMENTO:
-            return Object.assign({}, state,{
-                isFetching: true,
-                error: false,
-                fetched: false,
-                requerimento: {},
-                errorMessage: ''
-            });
-        case RESET_REQUERIMENTO:
-            return defaultState;
-        default:
-            return state
-    }
+export function requerimentoReducer(
+  state: State<Requerimento> = defaultState,
+  action: Action<Requerimento>
+): State<Requerimento> {
+  switch (action.type) {
+    case RESET_REQUERIMENTO:
+      return defaultState
+    default:
+      return genericReducer(state, action, {
+        request: REQUEST_REQUERIMENTO,
+        receive: RECEIVE_REQUERIMENTO,
+        failure: FAILURE_REQUERIMENTO
+      })
+  }
 }

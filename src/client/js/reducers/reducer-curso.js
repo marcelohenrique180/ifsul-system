@@ -1,47 +1,29 @@
+// @flow
+
+import type { Case, State } from './types'
 import {
-    REQUEST_SEND_CURSO,
-    RECEIVE_SEND_CURSO,
-    FAILURE_SEND_CURSO,
-    RESET_CURSO
+  FAILURE_CURSO,
+  RECEIVE_CURSO,
+  REQUEST_CURSO,
+  RESET_CURSO
 } from '../actions/curso'
+import genericReducer, { defaultState } from './generic-reducer'
 
-const defaultState = {
-    isFetching: false,
-    error: false,
-    fetched: false,
-    cursos: {},
-    errorMessage: ''
-};
+import type { Action } from '../actions/types'
+import type { Curso } from './types/index'
 
-export function cursosReducer(state = defaultState,action){
-    switch (action.type){
-        case FAILURE_SEND_CURSO:
-            return Object.assign({}, state,{
-                isFetching: false,
-                error: true,
-                fetched: false,
-                cursos: {},
-                errorMessage: action.errorMessage
-            });
-        case RECEIVE_SEND_CURSO:
-            return Object.assign({}, state,{
-                isFetching: false,
-                error: false,
-                fetched: true,
-                cursos: action.response,
-                errorMessage: ''
-            });
-        case REQUEST_SEND_CURSO:
-            return Object.assign({}, state,{
-                isFetching: true,
-                error: false,
-                fetched: false,
-                cursos: {},
-                errorMessage: ''
-            });
-        case RESET_CURSO:
-            return defaultState;
-        default:
-            return state
-    }
+export function cursosReducer(
+  state: State<Curso> = defaultState,
+  action: Action<Curso>
+): State<Curso> {
+  switch (action.type) {
+    case RESET_CURSO:
+      return defaultState
+    default:
+      return genericReducer(state, action, {
+        request: REQUEST_CURSO,
+        receive: RECEIVE_CURSO,
+        failure: FAILURE_CURSO
+      })
+  }
 }

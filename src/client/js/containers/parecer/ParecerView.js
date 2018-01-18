@@ -1,67 +1,99 @@
-import React from 'react'
-import {connect} from 'react-redux'
-import FloatInput from '../../components/FloatInput'
+// @flow
+
+import type { Action, Dispatch } from '../../actions/types'
+import type { State as DefaultState, Store } from '../../reducers/types'
+import type { Parecer, Requerimento } from '../../reducers/types/index'
+
 import Carregando from '../../components/Carregando'
-import {getParecerByRequerimentoId} from '../../actions/parecer'
+import FloatInput from '../../components/FloatInput'
+import React from 'react'
+import { connect } from 'react-redux'
+import { getId } from '../../util'
+import { getParecerByRequerimentoId } from '../../actions/parecer'
 
+type DispatchProps = {
+  getParecerByRequerimentoId: string => Promise<Action<Requerimento>>
+}
 
-class ParecerView extends React.Component {
+type StateProps = {
+  parecer: DefaultState<Parecer>
+}
 
-    constructor(props) {
-        super(props);
-        const {dispatch, requerimento} = this.props;
+type Props = StateProps &
+  DispatchProps & { requerimento: DefaultState<Requerimento> }
 
-        if (requerimento.fetched) {
-            dispatch(getParecerByRequerimentoId(requerimento.requerimento))
-        }
-    }
+class ParecerView extends React.Component<Props> {
+  constructor(props: Props) {
+    super(props)
+    const { requerimento } = this.props
 
-    render() {
-        const {parecer} = this.props;
+    this.props.getParecerByRequerimentoId(
+      getId(requerimento.payload._links.self.href)
+    )
+  }
 
-        if (typeof parecer.parecer !== "undefined") {
-            parecer.parecer.deferido = (parecer.parecer.deferido) ? "Deferido" : "Indeferido";
-        }
+  render() {
+    const { parecer } = this.props
 
-        return (
+    const deferido: string = parecer.payload.deferido
+      ? 'Deferido'
+      : 'Indeferido'
+
+    return (
+      <div>
+        <h3 style={{ textAlign: 'center' }}>Parecer</h3>
+        <div>
+          {parecer.hasError === false ? (
             <div>
-                <h3 style={{textAlign: "center"}}>Parecer</h3>
+              {parecer.fetched === true ? (
                 <div>
-                    {
-                        parecer.error === false ?
-                            <div>
-                                {
-                                    parecer.fetched === true ?
-                                        <div>
-                                            <div className="input-group">
-                                                <FloatInput name="parecer" type="text" value={parecer.parecer.parecer}
-                                                            textLabel="Parecer" readOnly="true"/>
-                                            </div>
-                                            <div className="input-group">
-                                                <FloatInput name="deferimento" type="text" value={parecer.parecer.deferido}
-                                                            textLabel="Deferimento" readOnly="true"/>
-                                            </div>
-                                        </div>
-                                        :
-                                        <Carregando />
-                                }
-                            </div>
-                            :
-                            <div>
-                                <p style={{textAlign: "center"}}>Nenhum parecer foi dado até agora.</p>
-                            </div>
-                    }
+                  <div className="input-group">
+                    <FloatInput
+                      name="parecer"
+                      type="text"
+                      value={parecer.payload.parecer}
+                      textLabel="Parecer"
+                      readOnly="true"
+                    />
+                  </div>
+                  <div className="input-group">
+                    <FloatInput
+                      name="deferimento"
+                      type="text"
+                      value={deferido}
+                      textLabel="Deferimento"
+                      readOnly="true"
+                    />
+                  </div>
                 </div>
+              ) : (
+                <Carregando />
+              )}
             </div>
-        )
-    }
+          ) : (
+            <div>
+              <p style={{ textAlign: 'center' }}>
+                Nenhum parecer foi dado até agora.
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
 }
 
-function mapStateToProps(state) {
-    return {
-        parecer: state.parecer,
-        requerimento: state.requerimento
-    }
+function mapStateToProps(store: Store): StateProps {
+  return {
+    parecer: store.parecer
+  }
 }
 
-export default connect(mapStateToProps)(ParecerView)
+function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
+  return {
+    getParecerByRequerimentoId: requerimento =>
+      dispatch(getParecerByRequerimentoId(requerimento))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ParecerView)

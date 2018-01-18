@@ -1,48 +1,29 @@
+// @flow
+
+import type { Case, State } from './types'
 import {
-    REQUEST_SEND_TIPO,
-    RECEIVE_SEND_TIPO,
-    FAILURE_SEND_TIPO,
-    RESET_TIPO
+  FAILURE_TIPO,
+  RECEIVE_TIPO,
+  REQUEST_TIPO,
+  RESET_TIPO
 } from '../actions/tipo'
-import {extractEmbedded} from '../util'
+import genericReducer, { defaultState } from './generic-reducer'
 
-const defaultState = {
-    isFetching: false,
-    error: false,
-    fetched: false,
-    tipo: {},
-    errorMessage: ''
-};
+import type { Action } from '../actions/types'
+import type { Tipo } from './types/index'
 
-export function tiposReducer(state = defaultState, action){
-    switch (action.type){
-        case FAILURE_SEND_TIPO:
-            return Object.assign({}, state,{
-                isFetching: false,
-                error: true,
-                fetched: false,
-                tipo: {},
-                errorMessage: action.errorMessage
-            });
-        case RECEIVE_SEND_TIPO:
-            return Object.assign({}, state,{
-                isFetching: false,
-                error: false,
-                fetched: true,
-                tipo: extractEmbedded(action.response),
-                errorMessage: ''
-            });
-        case REQUEST_SEND_TIPO:
-            return Object.assign({}, state,{
-                isFetching: true,
-                error: false,
-                fetched: false,
-                tipo: {},
-                errorMessage: ''
-            });
-        case RESET_TIPO:
-            return defaultState;
-        default:
-            return state
-    }
+export function tiposReducer(
+  state: State<Tipo> = defaultState,
+  action: Action<Tipo>
+): State<Tipo> {
+  switch (action.type) {
+    case RESET_TIPO:
+      return defaultState
+    default:
+      return genericReducer(state, action, {
+        request: REQUEST_TIPO,
+        receive: RECEIVE_TIPO,
+        failure: FAILURE_TIPO
+      })
+  }
 }

@@ -1,40 +1,82 @@
-export function findField(error) {
-    const exp = /\[([A-Za-z]+)]/g;
+// @flow
 
-    const match = exp.exec(error);
-    if (match !== null){
-        return match[1];
+export type Page = {
+  number: number,
+  size: number,
+  totalElements: number,
+  totalPages: number
+}
+
+type EventType = {
+  target: {
+    name: string,
+    value: string
+  }
+}
+
+type EntityType = {
+  _links: {
+    self: {
+      href: string
     }
-    return error
+  }
 }
 
-export function handleChange(event) {
-    const {name, value} = event.target;
+export function findField(error: string): string {
+  const exp = /\[([A-Za-z]+)]/g
 
-    this.setState({[name] : value});
+  const match = exp.exec(error)
+  if (match !== null) {
+    return match[1]
+  }
+  return error
 }
 
-export function indexRoute() {
-    const role = localStorage.getItem('role');
-    if (role){
-        return ("/menu/".concat(role.toLowerCase()))
-    }
-    return "login"
+/**
+ * @deprecated
+ *
+ * Altera estado do componente
+ *
+ */
+export function handleChange(event: EventType) {
+  const { name, value } = event.target
+
+  this.setState({ [name]: value })
 }
 
-export function areFieldsEmpty(notNullFields) {
-    return (notNullFields.filter((field) => {return (field.length === 0)}).length > 0)
+export function indexRoute(): string {
+  const role: ?string = localStorage.getItem('role')
+  if (role) {
+    return '/menu/'.concat(role.toLowerCase())
+  }
+  return 'login'
 }
 
-export function getId(entity) {
-    return entity._links.self.href.match(/\/(\d+)/)[1]
+export function areFieldsEmpty(notNullFields: Array<string>): boolean {
+  return (
+    notNullFields.filter((field: string): boolean => field.length === 0)
+      .length > 0
+  )
 }
 
-export function extractEmbedded(data) {
-    return data._embedded === undefined ? data : data._embedded
+/**
+ * @deprecated
+ */
+export function getId(str: string): string {
+  const matches = str.match(/\/(\d+)/)
+
+  if (matches) return matches[1]
+
+  return ''
 }
 
-export function formattedDate(date) {
-    let data = new Date(date);
-    return (data.getDate()+1)+"/"+(data.getMonth()+1)+"/"+data.getFullYear();
+export function extractEmbedded(data: { _embedded: mixed }): mixed {
+  return data._embedded === undefined ? data : data._embedded
+}
+
+export function formattedDate(date: string): string {
+  let data: Date = new Date(date)
+  return (
+    data.getDate() + 1 + '/' + (data.getMonth() + 1) + '/' + data.getFullYear()
+  )
 }

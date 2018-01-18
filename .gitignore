@@ -1,6 +1,7 @@
 target/
 node_modules/
 src/main/resources/static/js/bundle.min.js
+src/main/resources/static/**/*.map
 !.mvn/wrapper/maven-wrapper.jar
 src/main/resources/static/css/
 

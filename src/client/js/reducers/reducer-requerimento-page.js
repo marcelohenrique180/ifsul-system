@@ -1,44 +1,23 @@
+// @flow
+
+import type { Case, State } from './types'
 import {
-    RECEIVE_SEND_REQUERIMENTO_PAGE,
-    REQUEST_SEND_REQUERIMENTO_PAGE,
-    FAILURE_SEND_REQUERIMENTO_PAGE
+  FAILURE_REQUERIMENTO_PAGE,
+  RECEIVE_REQUERIMENTO_PAGE,
+  REQUEST_REQUERIMENTO_PAGE
 } from '../actions/requerimento'
+import genericReducer, { defaultState } from './generic-reducer'
+
+import type { Action } from '../actions/types'
+import type { RequerimentoPage } from './types/index'
 
 export function requerimentoPageReducer(
-    state = {
-        isFetching: false,
-        error: false,
-        fetched: false,
-        requerimento: {},
-        errorMessage: ''
-    },action
-) {
-    switch (action.type){
-        case RECEIVE_SEND_REQUERIMENTO_PAGE:
-            return Object.assign({}, state,{
-                isFetching: false,
-                error: false,
-                fetched: true,
-                requerimento: action.response,
-                errorMessage: ''
-            });
-        case FAILURE_SEND_REQUERIMENTO_PAGE:
-            return Object.assign({}, state,{
-                isFetching: false,
-                error: true,
-                fetched: false,
-                requerimento: {},
-                errorMessage: action.errorMessage
-            });
-        case REQUEST_SEND_REQUERIMENTO_PAGE:
-            return Object.assign({}, state,{
-                isFetching: true,
-                error: false,
-                fetched: false,
-                requerimento: {},
-                errorMessage: ''
-            });
-        default:
-            return state
-    }
+  state: State<RequerimentoPage> = defaultState,
+  action: Action<RequerimentoPage>
+): State<RequerimentoPage> {
+  return genericReducer(state, action, {
+    request: REQUEST_REQUERIMENTO_PAGE,
+    receive: RECEIVE_REQUERIMENTO_PAGE,
+    failure: FAILURE_REQUERIMENTO_PAGE
+  })
 }

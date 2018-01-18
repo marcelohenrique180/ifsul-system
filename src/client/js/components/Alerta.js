@@ -1,22 +1,39 @@
+// @flow
+
 import React from 'react'
 
-export default class Alert extends React.Component{
-    render(){
-        const {show, message, alertClass} = this.props;
+type Props = {
+  show?: ?boolean,
+  message: ?string,
+  alertClass: string
+}
 
-        const shouldApear = typeof show === "undefined" ? true : show;
+export default class Alert extends React.Component<Props> {
+  static defaultProps = {
+    alertClass: ''
+  }
 
-        return (
-            <div>
-                {
-                    shouldApear &&
-                    <div>
-                        <div className={alertClass+" alert text-center col-xs-8 col-xs-offset-2"} role="alert">
-                            {message}
-                        </div>
-                    </div>
-                }
+  render() {
+    const { show, message, alertClass } = this.props
+
+    const shouldApear: boolean =
+      typeof show === 'undefined' || show === null ? true : show
+
+    return (
+      <div>
+        {shouldApear && (
+          <div>
+            <div
+              className={
+                alertClass + ' alert text-center col-xs-8 col-xs-offset-2'
+              }
+              role="alert"
+            >
+              {message}
             </div>
-        )
-    }
+          </div>
+        )}
+      </div>
+    )
+  }
 }

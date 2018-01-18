@@ -1,16 +1,16 @@
 import React from 'react'
 
 export default class RouterHandler extends React.Component {
-    constructor(props){
-        super(props)
-    }
+  constructor (props) {
+    super(props)
+  }
 
-    render() {
-        const { children } = this.props;
+  render () {
+    const { children } = this.props
 
-        if (!children) {
-            return null;
-        }
-        return children
+    if (!children) {
+      return null
     }
+    return children
+  }
 }

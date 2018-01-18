@@ -1,17 +1,27 @@
-import React from 'react';
+// @flow
 
-class AuthorizedContainer extends React.Component {
+import * as React from 'react'
 
-    componentWillMount() {
-        const { authorize } = this.props.route;
-        const { router } = this.props;
+type Props = {
+  router: {
+    push: Function
+  },
+  route: {
+    authorize: Array<string>
+  }
+}
 
-        const role = localStorage.getItem('role');
+class AuthorizedContainer extends React.Component<Props> {
+  componentWillMount() {
+    const { authorize } = this.props.route
+    const { router } = this.props
 
-        if(typeof role === "undefined" || authorize.indexOf(role) === -1) {
-            router.push('/nao-autorizado');
-        }
+    const role = localStorage.getItem('role')
+
+    if (typeof role === 'undefined' || authorize.indexOf(role) === -1) {
+      router.push('/nao-autorizado')
     }
+  }
 }
 
 export default AuthorizedContainer

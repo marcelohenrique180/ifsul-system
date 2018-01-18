@@ -1,76 +1,96 @@
-const BASE_URL = 'http://localhost:8080/api/';
+// @flow
 
-export const CALL_API = Symbol('Call API');
+import type {
+  Action,
+  ActionApi,
+  ActionApiData,
+  ConfigApi,
+  Dispatch
+} from '../types'
 
-export function callApi(endpoint, customConfig, authenticated) {
+import type { Store } from '../../reducers/types'
 
-    let token = localStorage.getItem('id_token') || null;
-    let config = customConfig || {};
+export const CALL_API: string = 'Call API'
 
-    if(authenticated) {
-        if(token) {
-            config.headers = Object.assign({}, config.headers, {
-                'Authorization': token
-            })
-        }
-        else {
-            throw "No token saved!"
-        }
+const BASE_URL = 'http://localhost:8080/api/'
+
+export function callApi(
+  endpoint: string,
+  customConfig: ConfigApi,
+  authenticated: ?boolean
+) {
+  let config: ConfigApi = customConfig || {}
+
+  if (authenticated) {
+    let token: ?string = localStorage.getItem('id_token') || null
+
+    if (token) {
+      config.headers = {
+        ...config.headers,
+        Authorization: token
+      }
+    } else {
+      throw new Error('No token saved!')
     }
+  }
 
-    return doFetch(endpoint, config)
+  return doFetch(endpoint, config)
 }
 
 function status(response) {
-    if (response.ok) {
-        return Promise.resolve(response)
-    } else {
-        // erro deve ser lançado para entrar em catch
-        throw new (() => {
-            return response // a response é retornada
-        })
-    }
+  if (response.ok) {
+    return Promise.resolve(response)
+  } else {
+    return Promise.reject(response)
+  }
 }
 
 function json(response) {
-    return response.json()
+  return response.json()
 }
 
 // Realiza Fetch
-function doFetch(endpoint, config) {
-    const url = BASE_URL + endpoint.replace(BASE_URL, "");
+function doFetch(endpoint: string, config: ConfigApi) {
+  const url = BASE_URL + endpoint.replace(BASE_URL, '')
 
-    return fetch(url, config)
-        .then(status)
-        .then(json)
-        .catch( error => {
-            return error.json().then(error => Promise.reject(error.message));
-        });
+  return fetch(url, ((config: Object): RequestOptions))
+    .then(status)
+    .then(json)
+    .catch((error: Response) => {
+      return error
+        .json()
+        .then((error: { message: string }) => Promise.reject(error.message))
+    })
 }
 
-export default store => next => action => {
+export default (store: Store) => (next: Dispatch) => (
+  action: ActionApi
+): Action<*> | Promise<Action<*>> => {
+  const callAPI: ?ActionApiData = action[CALL_API]
 
-    const callAPI = action[CALL_API];
+  if (typeof callAPI === 'undefined' || callAPI === null) return next(action)
 
-    if (typeof callAPI === 'undefined') {
-        return next(action)
-    }
+  let { endpoint, types, authenticated, config } = callAPI
 
-    let { endpoint, types, authenticated, config } = callAPI;
+  const [requestType, successType, errorType] = types
 
-    const [ requestType, successType, errorType ] = types;
-
-    next({type: requestType});
-    return callApi(endpoint, config, authenticated).then(
-        response =>
-            next({
-                response,
-                authenticated,
-                type: successType
-            }),
-        error => next({
-            errorMessage: error || 'Houve um erro.',
-            type: errorType
-        })
-    )
+  next(({ type: requestType, payload: {} }: Action<*>))
+  return callApi(endpoint, config, authenticated).then(
+    (response: Object) =>
+      next(
+        ({
+          payload: response,
+          type: successType
+        }: Action<*>)
+      ),
+    (error: ?string) =>
+      next({
+        payload: {},
+        error: {
+          message: error || 'Houve um erro.',
+          status: 400
+        },
+        type: errorType
+      })
+  )
 }

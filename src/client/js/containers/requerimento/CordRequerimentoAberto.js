@@ -1,132 +1,195 @@
-import React from 'react'
-import {connect} from 'react-redux'
-import {Link}from 'react-router'
-import autobind from 'autobind-decorator'
-import {getId} from '../../util'
-import {handleChange} from '../../util'
-import {getRequerimentosEmAberto} from '../../actions/requerimento'
-import {getAluno} from '../../actions/aluno'
+// @flow
+
+import type { Action, Dispatch } from '../../actions/types/index'
+import type {
+  Aluno,
+  State as DefaultState,
+  RequerimentoAberto,
+  Store
+} from '../../reducers/types/index'
+
 import Carregando from '../../components/Carregando'
-import {reloadCordRequerimento} from '../../containers/requerimento/CordRequerimento'
+import { Link } from 'react-router'
+import React from 'react'
+import autobind from 'autobind-decorator'
+import { connect } from 'react-redux'
+import { getAluno } from '../../actions/aluno'
+import { getId } from '../../util'
+import { getRequerimentosEmAberto } from '../../actions/requerimento'
+import { reloadCordRequerimento } from '../../containers/requerimento/CordRequerimento'
 
-class CordRequerimentoAberto extends React.Component {
+type StateProps = {
+  requerimentosAbertos: DefaultState<RequerimentoAberto>
+}
 
-    constructor(props){
-        super(props);
+type DispatchProps = {
+  getRequerimentosEmAberto: () => Promise<Action<RequerimentoAberto>>,
+  getAluno: string => Promise<Action<Aluno>>,
+  loadRequerimento: ({
+    push: string => void,
+    id: string,
+    reload: (Dispatch, string) => void
+  }) => void
+}
 
-        this.state = {search: "", requerimentos: [], filteredRequerimentos: []};
-        this.props.getRequerimentosEmAberto().then(reqsAbertos => {
-            reqsAbertos.response._embedded.requerimentos.forEach( requerimento => {
-                this.props.getAluno(requerimento._links.aluno.href).then( aluno => {
+type Props = StateProps &
+  DispatchProps & {
+    router: {
+      push: string => void
+    }
+  }
 
-                    this.setState({
-                        requerimentos: this.state.requerimentos.concat([{
-                            result: "Req.Nº"+getId(requerimento) + " " + aluno.response.nome + " " + aluno.response.matricula,
-                            requerimento_id: getId(requerimento)
-                        }])
-                    });
-                    this.setState({filteredRequerimentos: this.state.requerimentos})
-                })
+type State = {
+  search: string,
+  requerimentos: Array<{ result: string, requerimento_id: string }>,
+  filteredRequerimentos: Array<{ result: string, requerimento_id: string }>
+}
+
+class CordRequerimentoAberto extends React.Component<Props, State> {
+  state = { search: '', requerimentos: [], filteredRequerimentos: [] }
+
+  constructor(props: Props) {
+    super(props)
+
+    this.props.getRequerimentosEmAberto().then(reqsAbertos => {
+      if (typeof reqsAbertos.payload !== 'undefined')
+        reqsAbertos.payload._embedded.requerimentos.forEach(requerimento => {
+          this.props
+            .getAluno(requerimento._links.aluno.href)
+            .then(alunoResponse => {
+              const aluno =
+                typeof alunoResponse.payload !== 'undefined'
+                  ? alunoResponse.payload
+                  : { nome: '', matricula: '' }
+              this.setState({
+                requerimentos: this.state.requerimentos.concat([
+                  {
+                    result:
+                      'Req.Nº' +
+                      getId(requerimento._links.self.href) +
+                      ' ' +
+                      aluno.nome +
+                      ' ' +
+                      aluno.matricula,
+                    requerimento_id: getId(requerimento._links.self.href)
+                  }
+                ])
+              })
+              this.setState({ filteredRequerimentos: this.state.requerimentos })
             })
-        });
-        this.reloadCordRequerimento = reloadCordRequerimento.bind(this);
-        this.handleChange = handleChange.bind(this);
-    }
-
-    @autobind
-    onItemClick(id){
-        if (typeof id !== "undefined"){
-            return () => {
-                this.props.loadRequerimento({
-                    push: this.props.router.push,
-                    id,
-                    reload: this.reloadCordRequerimento
-                });
-            }
-        }
-    }
-
-    @autobind
-    renderRequerimentos(){
-
-        const filteredRequerimentos =
-            this.state.filteredRequerimentos
-                .filter(filteredReq =>
-                    this.props.requerimentos_abertos.requerimentos_abertos._embedded.requerimentos
-                        .filter(openReq => filteredReq.requerimento_id === getId(openReq)).length > 0
-                );
-
-        return filteredRequerimentos.map( (reqAberto, i) => {
-            return (
-                <li key={i} className="list-group-item list-group-item--clickable" tabIndex={0}
-                    onKeyPress={this.onItemClick(reqAberto.requerimento_id)}
-                    onClick={this.onItemClick(reqAberto.requerimento_id)} >{reqAberto.result} </li>
-            )
         })
+    })
+  }
+
+  @autobind
+  onItemClick(id) {
+    if (typeof id !== 'undefined') {
+      return () => {
+        this.props.loadRequerimento({
+          push: this.props.router.push,
+          id,
+          reload: reloadCordRequerimento
+        })
+      }
     }
+  }
 
-    @autobind
-    handleSearch(event){
-        this.handleChange(event);
+  @autobind
+  renderRequerimentos() {
+    const filteredRequerimentos = this.state.filteredRequerimentos.filter(
+      filteredReq =>
+        this.props.requerimentosAbertos.payload._embedded.requerimentos.filter(
+          openReq =>
+            filteredReq.requerimento_id === getId(openReq._links.self.href)
+        ).length > 0
+    )
 
-        this.setState( {filteredRequerimentos:
-            this.state.requerimentos.filter(req => req.result.toLowerCase().includes(event.target.value.toLowerCase()))
-        });
+    return filteredRequerimentos.map((reqAberto, i) => {
+      return (
+        <li
+          key={i}
+          className="list-group-item list-group-item--clickable"
+          tabIndex={0}
+          onKeyPress={this.onItemClick(reqAberto.requerimento_id)}
+          onClick={this.onItemClick(reqAberto.requerimento_id)}
+        >
+          {reqAberto.result}{' '}
+        </li>
+      )
+    })
+  }
 
-    }
+  @autobind
+  handleSearch(event: SyntheticInputEvent<HTMLInputElement>) {
+    const { name, value } = event.target
 
-    render(){
-        const {requerimentos_abertos} = this.props;
+    this.setState({
+      filteredRequerimentos: this.state.requerimentos.filter(req =>
+        req.result.toLowerCase().includes(event.target.value.toLowerCase())
+      ),
+      [name]: value
+    })
+  }
 
-        return (
-            <div>
-                <div className="panel panel-default panel--requerimentos">
-                    <div className="panel-heading">Requerimentos em Aberto</div>
-                    <div className="panel-body">
-                        <div className="panel panel-default">
-                            <div className="panel-heading">
-                                <div className="input-group">
-                                    <input id="search" className="form-control" type="text" placeholder="Pesquisar"
-                                           name="search"
-                                           onChange={this.handleSearch} value={this.state.search} />
-                                </div>
-                            </div>
-                            <div className="panel-body panel-body--requerimentos">
-                                {
-                                    requerimentos_abertos.isFetching &&
-                                    <Carregando />
-                                }
-                                {
-                                    requerimentos_abertos.fetched &&
-                                    <ul className="list-group">
-                                        {this.renderRequerimentos()}
-                                    </ul>
-                                }
-                            </div>
-                        </div>
-                        <Link to="/menu/cordcurso/requerimento/visualizar" className="center-block text-center"><b>Ver Todos</b></Link>
-                    </div>
+  render() {
+    const { requerimentosAbertos } = this.props
+
+    return (
+      <div>
+        <div className="panel panel-default panel--requerimentos">
+          <div className="panel-heading">Requerimentos em Aberto</div>
+          <div className="panel-body">
+            <div className="panel panel-default">
+              <div className="panel-heading">
+                <div className="input-group">
+                  <input
+                    id="search"
+                    className="form-control"
+                    type="text"
+                    placeholder="Pesquisar"
+                    name="search"
+                    onChange={this.handleSearch}
+                    value={this.state.search}
+                  />
                 </div>
+              </div>
+              <div className="panel-body panel-body--requerimentos">
+                {requerimentosAbertos.isFetching && <Carregando />}
+                {requerimentosAbertos.fetched && (
+                  <ul className="list-group">{this.renderRequerimentos()}</ul>
+                )}
+              </div>
             </div>
-        )
-    }
+            <Link
+              to="/menu/cordcurso/requerimento/visualizar"
+              className="center-block text-center"
+            >
+              <b>Ver Todos</b>
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
+  }
 }
 
-function mapStateToProps(state) {
-    return {
-        requerimentos_abertos: state.requerimentos_abertos
-    }
+function mapStateToProps(state: Store): StateProps {
+  return {
+    requerimentosAbertos: state.requerimentos_abertos
+  }
 }
 
-function mapDispatchToProps(dispatch){
-    return {
-        getRequerimentosEmAberto: () => dispatch(getRequerimentosEmAberto()),
-        getAluno: url => dispatch(getAluno(url)),
-        loadRequerimento: ({push, id, reload}) => {
-            push("/menu/cordcurso/requerimento/"+id);
-            reload(dispatch, id)
-        }
+function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
+  return {
+    getRequerimentosEmAberto: () => dispatch(getRequerimentosEmAberto()),
+    getAluno: url => dispatch(getAluno(url)),
+    loadRequerimento: ({ push, id, reload }) => {
+      push('/menu/cordcurso/requerimento/' + id)
+      reload(dispatch, id)
     }
+  }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CordRequerimentoAberto)
+export default connect(mapStateToProps, mapDispatchToProps)(
+  CordRequerimentoAberto
+)

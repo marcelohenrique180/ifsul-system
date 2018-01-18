@@ -1,89 +1,111 @@
-import React from 'react'
-import {connect} from 'react-redux'
-import Carregando from '../../components/Carregando'
-import RequerimentoView from '../../containers/requerimento/RequerimentoView'
+// @flow
+
+import type { Action, Dispatch } from '../../actions/types/index'
+import type {
+  Aluno,
+  State as DefaultState,
+  Requerimento,
+  Store
+} from '../../reducers/types/index'
+import { getAluno, resetAluno } from '../../actions/aluno'
+import { getRequerimento, resetRequerimento } from '../../actions/requerimento'
+import { requestCursos, resetCurso } from '../../actions/curso'
+import { requestTipos, resetTipo } from '../../actions/tipo'
+
 import AlunoInfo from '../../containers/aluno/AlunoInfo'
+import Carregando from '../../components/Carregando'
 import ParecerInsert from '../../containers/parecer/ParecerInsert'
-import {getRequerimento, resetRequerimento} from '../../actions/requerimento'
-import {requestTipos, resetTipo} from '../../actions/tipo'
-import {getAluno, resetAluno} from '../../actions/aluno'
-import {requestCursos, resetCurso} from '../../actions/curso'
+import React from 'react'
+import RequerimentoView from '../../containers/requerimento/RequerimentoView'
+import { connect } from 'react-redux'
 
-require('../../../scss/panel-ifsul.scss');
+export function reloadCordRequerimento(
+  dispatch: Dispatch,
+  requerimentoId: string
+): void {
+  dispatch(resetRequerimento())
+  dispatch(resetTipo())
+  dispatch(resetAluno())
+  dispatch(resetCurso())
 
-export function reloadCordRequerimento(dispatch, requerimentoId) {
-
-    dispatch(resetRequerimento());
-    dispatch(resetTipo());
-    dispatch(resetAluno());
-    dispatch(resetCurso());
-
-    dispatch(getRequerimento(requerimentoId)).then(
-        requerimento => {
-            dispatch(requestTipos(requerimento.response._links.tipo.href));
-            dispatch(getAluno(requerimento.response._links.aluno.href)).then(
-                aluno => {
-                    dispatch(requestCursos(aluno.response._links.curso.href))
-                }
-            );
-        }
-    );
-}
-
-class CordRequerimento extends React.Component {
-
-    constructor(props){
-        super(props);
-        const {dispatch} = this.props;
-
-        if (this.props.requerimento.fetched === false && this.props.requerimento.isFetching === false){
-            reloadCordRequerimento.bind(this)(dispatch, this.props.params["requerimento"])
-        }
-    }
-
-    render(){
-        const alunoProp = this.props.aluno;
-        const requerimentoProp = this.props.requerimento;
-        const tipoProp = this.props.tipo;
-        const cursoProp = this.props.curso;
-
-        return (
-            <div>
-                <div className="panel panel-ifsul">
-                    <div className="panel-heading text-center">
-                        <h3 className="panel-title">
-                            Requerimento
-                        </h3>
-                    </div>
-                    <div className="panel-body">
-                        <div className="container-fluid">
-                            <div className="row">
-                                {
-                                    requerimentoProp.fetched && alunoProp.fetched && tipoProp.fetched && cursoProp.fetched ?
-                                        <div className="form-group col-centered">
-                                            <AlunoInfo />
-                                            <RequerimentoView />
-                                            <ParecerInsert {...this.props} />
-                                        </div>
-                                    :
-                                        <Carregando />
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  dispatch(getRequerimento(requerimentoId)).then(
+    (requerimento: Action<Requerimento>) => {
+      if (typeof requerimento.payload !== 'undefined')
+        dispatch(requestTipos(requerimento.payload._links.tipo.href))
+      if (typeof requerimento.payload !== 'undefined')
+        dispatch(getAluno(requerimento.payload._links.aluno.href)).then(
+          (aluno: Action<Aluno>) => {
+            if (typeof aluno.payload !== 'undefined')
+              dispatch(requestCursos(aluno.payload._links.curso.href))
+          }
         )
     }
+  )
 }
 
-function mapStateToProps(state) {
-    return {
-        requerimento: state.requerimento,
-        aluno: state.aluno,
-        tipo: state.tipos,
-        curso: state.curso
+type StateProps = {
+  requerimento: DefaultState<Requerimento>,
+  aluno: Object,
+  tipo: Object,
+  curso: Object
+}
+
+type DispatchProps = {}
+
+type Props = StateProps &
+  DispatchProps & {
+    params: { ['requerimento']: string },
+    dispatch: Dispatch
+  }
+
+class CordRequerimento extends React.Component<Props> {
+  constructor(props: Props) {
+    super(props)
+    const { dispatch } = this.props
+
+    if (
+      this.props.requerimento.fetched === false &&
+      this.props.requerimento.isFetching === false
+    ) {
+      reloadCordRequerimento.bind(this)(
+        dispatch,
+        this.props.params['requerimento']
+      )
     }
+  }
+
+  render() {
+    return (
+      <div>
+        <div className="panel panel-ifsul">
+          <div className="panel-heading text-center">
+            <h3 className="panel-title">Requerimento</h3>
+          </div>
+          <div className="panel-body">
+            <div className="container-fluid">
+              <div className="row">
+                <div className="form-group col-centered">
+                  <AlunoInfo />
+                  <RequerimentoView
+                    requerimentoId={this.props.params['requerimento']}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 }
 
-export default connect(mapStateToProps)(CordRequerimento);
+function mapStateToProps(store: Store): StateProps {
+  return {
+    requerimento: store.requerimento,
+    aluno: store.aluno,
+    tipo: store.tipos,
+    curso: store.curso
+  }
+}
+
+export default connect(mapStateToProps)(CordRequerimento)

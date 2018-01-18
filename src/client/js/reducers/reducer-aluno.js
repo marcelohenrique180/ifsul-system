@@ -1,47 +1,28 @@
+// @flow
+
 import {
-    FAILURE_SEND_ALUNO,
-    RECEIVE_SEND_ALUNO,
-    REQUEST_SEND_ALUNO,
-    RESET_ALUNO
+  FAILURE_ALUNO,
+  RECEIVE_ALUNO,
+  REQUEST_ALUNO,
+  RESET_ALUNO
 } from '../actions/aluno'
+import genericReducer, { defaultState } from './generic-reducer'
 
-const defaultState = {
-    isFetching: false,
-    error: false,
-    fetched: false,
-    aluno: {},
-    errorMessage: ''
-};
+import type { Action } from '../actions/types'
+import type { State } from './types'
 
-export function alunoReducer(state = defaultState, action){
-    switch (action.type){
-        case FAILURE_SEND_ALUNO:
-            return Object.assign({}, state,{
-                isFetching: false,
-                error: true,
-                fetched: false,
-                aluno: {},
-                errorMessage: action.errorMessage
-            });
-        case RECEIVE_SEND_ALUNO:
-            return Object.assign({}, state,{
-                isFetching: false,
-                error: false,
-                fetched: true,
-                aluno: action.response,
-                errorMessage: ''
-            });
-        case REQUEST_SEND_ALUNO:
-            return Object.assign({}, state,{
-                isFetching: true,
-                error: false,
-                fetched: false,
-                aluno: {},
-                errorMessage: ''
-            });
-        case RESET_ALUNO:
-            return defaultState;
-        default:
-            return state
-    }
+export function alunoReducer(
+  state: State<any> = defaultState,
+  action: Action<any>
+): State<any> {
+  switch (action.type) {
+    case RESET_ALUNO:
+      return defaultState
+    default:
+      return genericReducer(state, action, {
+        request: REQUEST_ALUNO,
+        receive: RECEIVE_ALUNO,
+        failure: FAILURE_ALUNO
+      })
+  }
 }

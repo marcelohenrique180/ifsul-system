@@ -1,54 +1,104 @@
-import React from 'react'
-import {connect} from 'react-redux'
+// @flow
+
+import type { Action, Dispatch } from '../../actions/types/index'
+import type { Aluno, Curso } from '../../reducers/types/index'
+import type { State as DefaultState, Store } from '../../reducers/types/'
+
 import FloatInput from '../../components/FloatInput'
+import React from 'react'
+import { connect } from 'react-redux'
+import { requestAluno } from '../../actions/aluno'
+import { requestCursos } from '../../actions/curso'
 
-class AlunoInfo extends React.Component {
+type StateProps = {
+  aluno: DefaultState<Aluno>,
+  curso: DefaultState<Curso>
+}
 
-    constructor(props){
-        super(props);
-    }
+type DispatchProps = {
+  requestAluno: void => Promise<Action<Aluno>>,
+  requestCursos: string => Promise<Action<Curso>>
+}
 
-    render(){
-        const {aluno, curso} = this.props;
+type Props = StateProps & DispatchProps
 
-        return (
+class AlunoInfo extends React.Component<Props> {
+  constructor(props: Props) {
+    super(props)
+
+    this.props.requestAluno().then((aluno: Action<Aluno>) => {
+      if (typeof aluno.payload !== 'undefined')
+        this.props.requestCursos(aluno.payload._links.curso.href)
+    })
+  }
+
+  render() {
+    const { aluno, curso } = this.props
+
+    const loaded: boolean = aluno.fetched && curso.fetched
+
+    return (
+      <div>
+        <h3 className="text-center">Aluno</h3>
+        <div>
+          {loaded && (
             <div>
-                <h3 className="text-center">Aluno</h3>
-                <div>
-                    {
-                        aluno.fetched && curso.fetched &&
-                            <div>
-                                <div className="input-group">
-                                    <FloatInput name="nome" type="text" value={aluno.aluno.nome}
-                                                textLabel="Nome"
-                                                readOnly="true"/>
-                                </div>
-                                <div className="input-group">
-                                    <FloatInput name="nome" type="text" value={aluno.aluno.matricula}
-                                                textLabel="Matricula" readOnly="true"/>
-                                </div>
-                                <div className="input-group">
-                                    <FloatInput name="nome" type="text" value={aluno.aluno.telefone}
-                                                textLabel="Telefone" readOnly="true"/>
-                                </div>
-                                <div className="input-group">
-                                    <FloatInput name="nome" type="text" value={curso.cursos.nome}
-                                                textLabel="Curso"
-                                                readOnly="true"/>
-                                </div>
-                            </div>
-                    }
-                </div>
+              <div className="input-group">
+                <FloatInput
+                  name="nome"
+                  type="text"
+                  value={aluno.payload.nome}
+                  textLabel="Nome"
+                  readOnly="true"
+                />
+              </div>
+              <div className="input-group">
+                <FloatInput
+                  name="nome"
+                  type="text"
+                  value={aluno.payload.matricula}
+                  textLabel="Matricula"
+                  readOnly="true"
+                />
+              </div>
+              <div className="input-group">
+                <FloatInput
+                  name="nome"
+                  type="text"
+                  value={aluno.payload.telefone}
+                  textLabel="Telefone"
+                  readOnly="true"
+                />
+              </div>
+              <div className="input-group">
+                <FloatInput
+                  name="nome"
+                  type="text"
+                  value={curso.payload.nome}
+                  textLabel="Curso"
+                  readOnly="true"
+                />
+              </div>
             </div>
-        )
-    }
+          )}
+        </div>
+      </div>
+    )
+  }
 }
 
-function mapStateToProps(state){
-    return {
-        aluno: state.aluno,
-        curso: state.curso
-    };
+function mapStateToProps(store: Store): StateProps {
+  return {
+    aluno: store.aluno,
+    curso: store.curso
+  }
 }
 
-export default connect(mapStateToProps)(AlunoInfo);
+function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
+  return {
+    requestAluno: () => dispatch(requestAluno()),
+    requestCursos: endpoint => dispatch(requestCursos(endpoint))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AlunoInfo)

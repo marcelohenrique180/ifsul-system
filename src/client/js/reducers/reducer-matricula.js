@@ -1,48 +1,31 @@
+// @flow
+
+import type { Case, State } from './types'
 import {
-    FAILURE_SEND_ALUNO_MATRICULA,
-    RECEIVE_SEND_ALUNO_MATRICULA,
-    REQUEST_SEND_ALUNO_MATRICULA,
+  FAILURE_ALUNO_MATRICULA,
+  RECEIVE_ALUNO_MATRICULA,
+  REQUEST_ALUNO_MATRICULA
 } from '../actions/aluno'
+import genericReducer, { defaultState } from './generic-reducer'
 
-import {NOVA_MATRICULA} from '../actions/matricula'
+import type { Action } from '../actions/types'
+import type { Matricula } from './types/index'
+import { NOVA_MATRICULA } from '../actions/matricula'
 
-const defaultState = {
-    isFetching: false,
-    fetched: false,
-    error: false,
-    errorMessage: ''
-};
-export function matriculaReducer(state = defaultState, action){
-
-    switch (action.type) {
-        case REQUEST_SEND_ALUNO_MATRICULA:
-            return Object.assign({}, state, {
-                isFetching: true,
-                error: false,
-                fetched: false,
-                errorMessage: "",
-                matricula: action.response
-            });
-            break;
-        case RECEIVE_SEND_ALUNO_MATRICULA:
-            return Object.assign({}, state, {
-                isFetching: false,
-                fetched: true,
-                error: false,
-                errorMessage: ""
-            });
-        case FAILURE_SEND_ALUNO_MATRICULA:
-            return Object.assign({}, state, {
-                isFetching: false,
-                error: true,
-                fetched: false,
-                errorMessage: action.errorMessage
-            });
-        case NOVA_MATRICULA:
-            return Object.assign({}, state, {
-                fetched: false,
-            });
-        default:
-            return state
-    }
+export function matriculaReducer(
+  state: State<Matricula> = defaultState,
+  action: Action<Matricula>
+): State<Matricula> {
+  switch (action.type) {
+    case NOVA_MATRICULA:
+      return Object.assign({}, state, {
+        fetched: false
+      })
+    default:
+      return genericReducer(state, action, {
+        request: REQUEST_ALUNO_MATRICULA,
+        receive: RECEIVE_ALUNO_MATRICULA,
+        failure: FAILURE_ALUNO_MATRICULA
+      })
+  }
 }
