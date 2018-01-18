@@ -25,7 +25,13 @@ export function resetRequerimento(): Action<Requerimento> {
   }
 }
 
-export function sendRequerimento(requerimento: Requerimento) {
+export type SendRequerimento = {
+  tipo: string,
+  requerimento: string,
+  justificativa: string,
+  aluno: string
+}
+export function sendRequerimento(requerimento: SendRequerimento): ActionApi {
   return {
     [CALL_API]: {
       endpoint: 'requerimentos',

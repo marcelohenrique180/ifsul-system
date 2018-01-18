@@ -41,7 +41,7 @@ export type Aluno = {
   nome: string,
   rg: string,
   telefone: string,
-  _links: { curso: { href: string } }
+  _links: { curso: { href: string }, aluno: { href: string } }
 }
 
 export type Matricula = {}
@@ -55,7 +55,11 @@ export type Usuario = {
 export type AlunoUsuario = {}
 
 export type Tipo = {
-  tipo: string
+  tipo: string,
+  _links: { self: { href: string } },
+  _embedded: {
+    tipos: Array<Tipo>
+  }
 }
 
 export type Curso = {
@@ -66,7 +70,9 @@ export type Requerimento = {
   data: string,
   justificativa: string,
   requerimento: string,
-  +_links: {
+  aluno?: string,
+  tipo?: string,
+  _links: {
     tipo: { href: string },
     aluno: { href: string },
     self: { href: string }

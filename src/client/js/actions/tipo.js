@@ -16,7 +16,7 @@ export function resetTipo(): Action<*> {
   }
 }
 
-export function requestTipos(url: string): ActionApi {
+export function requestTipos(url?: ?string): ActionApi {
   return {
     [CALL_API]: {
       endpoint: url || 'tipos',

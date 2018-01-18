@@ -2,11 +2,21 @@
 
 import * as React from 'react'
 
-import { areFieldsEmpty, handleChange } from '../../util'
+import type { Action, ActionApi, Dispatch } from '../../actions/types/index'
+import type {
+  Aluno,
+  Curso,
+  State as DefaultState,
+  Requerimento,
+  Store,
+  Tipo
+} from '../../reducers/types/index'
 
 import Alerta from '../../components/Alerta'
 import AlunoInfo from '../../containers/aluno/AlunoInfo'
 import Carregando from '../../components/Carregando'
+import type { SendRequerimento } from '../../actions/requerimento'
+import { areFieldsEmpty } from '../../util'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import { requestAluno } from '../../actions/aluno'
@@ -22,29 +32,55 @@ const defaultState = {
   enviado: false
 }
 
-type Props = Object
+type StateProps = {
+  aluno: DefaultState<Aluno>,
+  tipos: DefaultState<Tipo>,
+  curso: DefaultState<Curso>,
+  requerimento: DefaultState<Requerimento>
+}
 
-type State = Object
+type DispatchProps = {
+  requestTipos: (?string) => Promise<Action<Tipo>>,
+  requestAluno: () => Promise<Action<Aluno>>,
+  requestCursos: string => Promise<Action<Curso>>,
+  sendRequerimento: SendRequerimento => Promise<Action<Requerimento>>
+}
+
+type Props = StateProps &
+  DispatchProps & {
+    router: { push: string => void }
+  }
+
+type State = {
+  tipo: string,
+  requerimento: string,
+  justificativa: string,
+  erro: { erro: boolean, message: string },
+  enviado: boolean
+}
 
 class AlunoRequerimento extends React.Component<Props, State> {
-  constructor(props) {
+  constructor(props: Props) {
     super(props)
     this.state = defaultState
-    const { dispatch } = this.props
 
-    dispatch(requestTipos())
-    dispatch(requestAluno()).then(aluno =>
-      dispatch(requestCursos(aluno.payload._links.curso.href))
-    )
-
-    this.handleChange = handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
+    this.props.requestTipos()
+    this.props
+      .requestAluno()
+      .then(
+        aluno =>
+          aluno.payload !== null && typeof aluno.payload !== 'undefined'
+            ? this.props.requestCursos(aluno.payload._links.curso.href)
+            : null
+      )
   }
 
   renderTipos() {
-    const { _embedded } = this.props.tipos.payload
-    if (_embedded) {
-      return _embedded.tipos.map(tipo => {
+    if (
+      typeof this.props.tipos.payload._embedded !== 'undefined' &&
+      typeof this.props.tipos.payload !== 'undefined'
+    ) {
+      return this.props.tipos.payload._embedded.tipos.map(tipo => {
         return (
           <option key={tipo._links.self.href} value={tipo._links.self.href}>
             {tipo.tipo}
@@ -55,7 +91,8 @@ class AlunoRequerimento extends React.Component<Props, State> {
     return ''
   }
 
-  handleSubmit(e) {
+  @autobind
+  handleSubmit(e: SyntheticInputEvent<HTMLInputElement>) {
     const { tipo, requerimento, justificativa } = this.state
     const notNullFields = [tipo, requerimento, justificativa]
     const aluno = this.props.aluno.payload._links.aluno.href
@@ -69,12 +106,10 @@ class AlunoRequerimento extends React.Component<Props, State> {
         }
       })
     } else {
-      this.setState({ erro: { erro: false } })
+      this.setState({ erro: { erro: false, message: '' } })
       this.props
-        .dispatch(
-          sendRequerimento({ tipo, requerimento, justificativa, aluno })
-        )
-        .then(this.setState({ enviado: true }))
+        .sendRequerimento({ tipo, requerimento, justificativa, aluno })
+        .then(() => this.setState({ enviado: true }))
     }
     e.preventDefault()
   }
@@ -83,6 +118,13 @@ class AlunoRequerimento extends React.Component<Props, State> {
   onVoltar() {
     this.setState(defaultState)
     this.props.router.push('/menu/aluno/requerimento/visualizar')
+  }
+
+  @autobind
+  handleChange(event: SyntheticInputEvent<HTMLInputElement>) {
+    const { value, name } = event.target
+
+    this.setState({ [name]: value })
   }
 
   render() {
@@ -186,13 +228,22 @@ class AlunoRequerimento extends React.Component<Props, State> {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(store: Store): StateProps {
   return {
-    aluno: state.aluno,
-    tipos: state.tipos,
-    curso: state.curso,
-    requerimento: state.requerimento
+    aluno: store.aluno,
+    tipos: store.tipos,
+    curso: store.curso,
+    requerimento: store.requerimento
   }
 }
 
-export default connect(mapStateToProps)(AlunoRequerimento)
+function mapsDispatchToProps(dispatch: Dispatch): DispatchProps {
+  return {
+    requestTipos: (url?: ?string) => dispatch(requestTipos(url)),
+    requestAluno: () => dispatch(requestAluno()),
+    requestCursos: url => dispatch(requestCursos(url)),
+    sendRequerimento: requerimento => dispatch(sendRequerimento(requerimento))
+  }
+}
+
+export default connect(mapStateToProps, mapsDispatchToProps)(AlunoRequerimento)
