@@ -63,7 +63,7 @@ class ParecerInsert extends React.Component<Props, State> {
     const notNullFields = [deferido, parecer, memorando]
 
     if (typeof this.props.requerimento.payload._links !== 'undefined') {
-      const requerimento_link: string = this.props.requerimento.payload._links
+      const requerimentoLink: string = this.props.requerimento.payload._links
         .self.href
 
       const error = areFieldsEmpty(notNullFields)
@@ -79,10 +79,10 @@ class ParecerInsert extends React.Component<Props, State> {
 
         this.props
           .sendParecer({
-            deferido: deferido === 'true' ? true : false,
+            deferido: deferido === 'true',
             parecer,
             memorando,
-            requerimento: requerimento_link
+            requerimento: requerimentoLink
           })
           .then(() => {
             this.props.getRequerimentosEmAberto()

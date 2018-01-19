@@ -1,8 +1,12 @@
 // @flow
 
 import type { Action, Dispatch } from '../../actions/types/index'
-import type { Aluno, Curso } from '../../reducers/types/index'
-import type { State as DefaultState, Store } from '../../reducers/types/'
+import type {
+  Aluno,
+  Curso,
+  State as DefaultState,
+  Store
+} from '../../reducers/types/index'
 
 import FloatInput from '../../components/FloatInput'
 import React from 'react'
@@ -27,8 +31,9 @@ class AlunoInfo extends React.Component<Props> {
     super(props)
 
     this.props.requestAluno().then((aluno: Action<Aluno>) => {
-      if (typeof aluno.payload !== 'undefined')
+      if (typeof aluno.payload !== 'undefined') {
         this.props.requestCursos(aluno.payload._links.curso.href)
+      }
     })
   }
 

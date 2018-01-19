@@ -1,9 +1,9 @@
 // @flow
 
 import type { Action, Dispatch } from '../types'
-import type { State, Store } from '../../reducers/types'
 
 import { RECEIVE_LOGIN } from '../index'
+import type { Store } from '../../reducers/types'
 import { browserHistory } from 'react-router'
 
 export default (store: Store) => (next: Dispatch) => (action: Action<*>) => {

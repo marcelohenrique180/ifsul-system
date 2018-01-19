@@ -1,7 +1,6 @@
 // @flow
 
 import type { Action } from './types/index'
-import type { ActionApi } from './types'
 import { CALL_API } from './middleware/api'
 
 export const REQUEST_ALUNO_MATRICULA: string = 'REQUEST_ALUNO_MATRICULA'

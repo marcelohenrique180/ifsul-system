@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 
-import type { Action, ActionApi, Dispatch } from '../../actions/types/index'
+import type { Action, Dispatch } from '../../actions/types/index'
 import type {
   Aluno,
   Curso,

@@ -1,6 +1,6 @@
 // @flow
 
-import type { Case, State } from './types'
+import type { Curso, State } from './types'
 import {
   FAILURE_CURSO,
   RECEIVE_CURSO,
@@ -10,7 +10,6 @@ import {
 import genericReducer, { defaultState } from './generic-reducer'
 
 import type { Action } from '../actions/types'
-import type { Curso } from './types/index'
 
 export function cursosReducer(
   state: State<Curso> = defaultState,

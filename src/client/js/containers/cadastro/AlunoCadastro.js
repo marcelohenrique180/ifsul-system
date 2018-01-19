@@ -14,7 +14,6 @@ import Carregando from '../../components/Carregando'
 import FloatInput from '../../components/FloatInput'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
-import { handleChange } from '../../util'
 import { novaMatricula } from '../../actions/matricula'
 import { sendAlunoMatricula } from '../../actions/aluno'
 

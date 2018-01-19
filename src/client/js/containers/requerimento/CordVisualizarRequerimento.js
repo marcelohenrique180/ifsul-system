@@ -11,16 +11,17 @@ import type {
   Store,
   Tipo
 } from '../../reducers/types'
+import {
+  FAILURE_PARECER,
+  getParecerByRequerimentoId
+} from '../../actions/parecer'
+import { formattedDate, getId } from '../../util'
 
 import Carregando from '../../components/Carregando'
-import { FAILURE_PARECER } from '../../actions/parecer'
 import Paginator from '../../components/Paginator'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
-import { formattedDate } from '../../util'
 import { getAluno } from '../../actions/aluno'
-import { getId } from '../../util'
-import { getParecerByRequerimentoId } from '../../actions/parecer'
 import { getRequerimentoByPage } from '../../actions/requerimento'
 import { requestTipos } from '../../actions/tipo'
 
@@ -74,9 +75,9 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
         this.props
           .requestTipos(requerimento._links.tipo.href)
           .then((tipo: Action<Tipo>) => {
-            if (typeof tipo.payload !== 'undefined')
+            if (typeof tipo.payload !== 'undefined') {
               tipos[i] = tipo.payload.tipo
-            else tipos.push('')
+            } else tipos.push('')
             this.setState({ tipos: tipos })
           })
       }
@@ -85,12 +86,12 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
       this.props
         .getAluno(requerimento._links.aluno.href)
         .then((aluno: Action<Aluno>) => {
-          if (typeof aluno.payload !== 'undefined')
+          if (typeof aluno.payload !== 'undefined') {
             alunos[i] = {
               nome: aluno.payload.nome,
               matricula: aluno.payload.matricula
             }
-          else alunos.push({ nome: '', matricula: '' })
+          } else alunos.push({ nome: '', matricula: '' })
           this.setState({ alunos: alunos })
         })
 
@@ -101,9 +102,9 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
           if (
             parecer.type === FAILURE_PARECER ||
             typeof parecer.payload === 'undefined'
-          )
+          ) {
             pareceres[i] = null
-          else pareceres[i] = parecer.payload.deferido
+          } else pareceres[i] = parecer.payload.deferido
           this.setState({ pareceres: pareceres })
         })
         .catch(() => (pareceres[i] = null))

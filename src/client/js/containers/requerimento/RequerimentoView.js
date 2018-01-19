@@ -4,13 +4,13 @@ import type { Action, Dispatch } from '../../actions/types'
 import type {
   State as DefaultState,
   Requerimento,
+  Store,
   Tipo
 } from '../../reducers/types'
 
 import FloatInput from '../../components/FloatInput'
 import ParecerInsert from '../../containers/parecer/ParecerInsert'
 import React from 'react'
-import type { Store } from '../../reducers/types/index'
 import { connect } from 'react-redux'
 import { getRequerimento } from '../../actions/requerimento'
 import { requestTipos } from '../../actions/tipo'
@@ -34,8 +34,9 @@ class RequerimentoView extends React.Component<Props> {
     this.props
       .getRequerimento(this.props.requerimentoId)
       .then((requerimento: Action<Requerimento>) => {
-        if (typeof requerimento.payload !== 'undefined')
+        if (typeof requerimento.payload !== 'undefined') {
           this.props.requestTipos(requerimento.payload._links.tipo.href)
+        }
       })
   }
 

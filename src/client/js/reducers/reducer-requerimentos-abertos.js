@@ -5,11 +5,10 @@ import {
   RECEIVE_REQUERIMENTOS_ABERTOS,
   REQUEST_REQUERIMENTOS_ABERTOS
 } from '../actions/requerimento'
+import type { RequerimentoAberto, State } from './types/index'
 import genericReducer, { defaultState } from './generic-reducer'
 
 import type { Action } from '../actions/types'
-import type { RequerimentoAberto } from './types/index'
-import type { State } from './types'
 
 export function requerimentosAbertosReducer(
   state: State<RequerimentoAberto> = defaultState,
