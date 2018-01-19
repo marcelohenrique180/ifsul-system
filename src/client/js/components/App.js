@@ -1,17 +1,19 @@
 // @flow
 
+import * as React from 'react'
+
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import Navbar from './Navbar'
-import React from 'react'
 
 export default class App extends React.Component<{ children: React$Node }> {
   render() {
     return (
-      <div>
+      <MuiThemeProvider>
         <Navbar />
         <div className="container-fluid">
           <div className="row">{this.props.children}</div>
         </div>
-      </div>
+      </MuiThemeProvider>
     )
   }
 }

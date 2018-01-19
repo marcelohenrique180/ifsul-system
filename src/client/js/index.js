@@ -27,11 +27,6 @@ import { indexRoute } from './util'
 import logged from './actions/middleware/logged'
 import thunk from 'redux-thunk'
 
-require('bootstrap-loader')
-require('../scss/floating-label.scss')
-require('../scss/style.scss')
-require('../scss/loading.scss')
-
 const logger = createLogger()
 const store = createStore(
   allReducers,

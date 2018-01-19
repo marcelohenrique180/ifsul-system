@@ -11,6 +11,7 @@ import Alerta from '../components/Alerta'
 import FloatInput from '../components/FloatInput'
 import { Link } from 'react-router'
 import type { LoginType } from '../actions/index'
+import RaisedButton from 'material-ui/RaisedButton'
 import React from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
@@ -81,9 +82,7 @@ class Login extends React.Component<Props, State> {
             <Alerta alertClass="alert-danger" message={error.message} />
           )}
           <div className="input-group text-center">
-            <button onClick={this.handleClick} className="btn btn-primary">
-              Login
-            </button>
+            <RaisedButton onClick={this.handleClick} label="Login" />
           </div>
           <div className="text-center">
             <Link to="/cadastro/aluno">Ainda não tem conta?</Link>
