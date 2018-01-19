@@ -85,6 +85,7 @@ ReactDOM.render(
         </Route>
         <Route path="/nao-autorizado" component={NaoAutorizado} />
         <Route path="/login" component={Login} />
+        <Route path="/logout" component={Login} />
       </Route>
     </Router>
   </Provider>,

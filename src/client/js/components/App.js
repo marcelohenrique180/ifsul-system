@@ -9,9 +9,11 @@ export default class App extends React.Component<{ children: React$Node }> {
   render() {
     return (
       <MuiThemeProvider>
-        <Navbar />
-        <div className="container-fluid">
-          <div className="row">{this.props.children}</div>
+        <div>
+          <Navbar />
+          <div className="container-fluid">
+            <div className="row">{this.props.children}</div>
+          </div>
         </div>
       </MuiThemeProvider>
     )
