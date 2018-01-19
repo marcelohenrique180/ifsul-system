@@ -49,7 +49,7 @@ class ParecerInsert extends React.Component<Props, State> {
   }
 
   @autobind
-  handleChange(event: SyntheticInputEvent<HTMLButtonElement>) {
+  handleChange(event: SyntheticInputEvent<HTMLInputElement>) {
     const { value, name } = event.target
 
     this.setState({ [name]: value })

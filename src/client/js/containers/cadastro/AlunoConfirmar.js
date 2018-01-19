@@ -49,7 +49,7 @@ class AlunoCadastro extends React.Component<Props, State> {
   }
 
   @autobind
-  handleChange(event: SyntheticInputEvent<HTMLButtonElement>) {
+  handleChange(event: SyntheticInputEvent<HTMLInputElement>) {
     const { name, value } = event.target
 
     this.setState({ [name]: value })
