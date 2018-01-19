@@ -14,14 +14,6 @@ type EventType = {
   }
 }
 
-type EntityType = {
-  _links: {
-    self: {
-      href: string
-    }
-  }
-}
-
 export function findField(error: string): string {
   const exp = /\[([A-Za-z]+)]/g
 

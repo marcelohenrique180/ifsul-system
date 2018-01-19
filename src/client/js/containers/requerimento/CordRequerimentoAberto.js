@@ -52,7 +52,7 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
     super(props)
 
     this.props.getRequerimentosEmAberto().then(reqsAbertos => {
-      if (typeof reqsAbertos.payload !== 'undefined')
+      if (typeof reqsAbertos.payload !== 'undefined') {
         reqsAbertos.payload._embedded.requerimentos.forEach(requerimento => {
           this.props
             .getAluno(requerimento._links.aluno.href)
@@ -78,6 +78,7 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
               this.setState({ filteredRequerimentos: this.state.requerimentos })
             })
         })
+      }
     })
   }
 

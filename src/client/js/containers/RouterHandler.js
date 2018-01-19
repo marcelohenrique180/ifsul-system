@@ -1,11 +1,11 @@
-import React from 'react'
+// @flow
 
-export default class RouterHandler extends React.Component {
-  constructor (props) {
-    super(props)
-  }
+import * as React from 'react'
 
-  render () {
+type Props = { children: React$Node }
+
+export default class RouterHandler extends React.Component<Props> {
+  render() {
     const { children } = this.props
 
     if (!children) {

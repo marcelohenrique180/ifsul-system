@@ -1,7 +1,11 @@
-import React from 'react'
+// @flow
 
-export default class Cadastro extends React.Component {
-  render () {
+import * as React from 'react'
+
+export default class Cadastro extends React.Component<{
+  children: React$Node
+}> {
+  render() {
     return (
       <div>
         <h1 className="text-center">Cadastro</h1>

@@ -1,15 +1,14 @@
 // @flow
 
-import type { Case, State } from './types'
 import {
   FAILURE_NOTIFICACAO,
   RECEIVE_NOTIFICACAO,
   REQUEST_NOTIFICACAO
 } from '../actions/notificacao'
+import type { Notificacao, State } from './types'
 import genericReducer, { defaultState } from './generic-reducer'
 
 import type { Action } from '../actions/types'
-import type { Notificacao } from './types/index'
 
 export function notificacaoReducer(
   state: State<Notificacao> = defaultState,

@@ -2,6 +2,8 @@
 
 import type { Action, Dispatch } from './types/index'
 
+import type { Usuario } from '../reducers/types/index'
+
 export const REQUEST_LOGIN: string = 'REQUEST_LOGIN'
 export const RECEIVE_LOGIN: string = 'RECEIVE_LOGIN'
 export const FAILURE_LOGIN: string = 'FAILURE_LOGIN'
@@ -9,7 +11,7 @@ export const REQUEST_LOGOUT: string = 'REQUEST_LOGOUT'
 export const RECEIVE_LOGOUT: string = 'RECEIVE_LOGOUT'
 export const FAILURE_LOGOUT: string = 'FAILURE_LOGOUT'
 
-type LoginType = { username: string, password: string }
+export type LoginType = { username: string, password: string }
 
 function requestLogin(creds: LoginType): Action<LoginType> {
   return {
@@ -58,7 +60,9 @@ function recieveLogout() {
   }
 }
 
-export function loginUser(creds: LoginType) {
+export function loginUser(
+  creds: LoginType
+): Dispatch => Promise<Action<Usuario>> | Action<Usuario> {
   const config = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

@@ -1,15 +1,14 @@
 // @flow
 
-import type { Case, State } from './types'
 import {
   FAILURE_ALUNO_MATRICULA,
   RECEIVE_ALUNO_MATRICULA,
   REQUEST_ALUNO_MATRICULA
 } from '../actions/aluno'
+import type { Matricula, State } from './types'
 import genericReducer, { defaultState } from './generic-reducer'
 
 import type { Action } from '../actions/types'
-import type { Matricula } from './types/index'
 import { NOVA_MATRICULA } from '../actions/matricula'
 
 export function matriculaReducer(

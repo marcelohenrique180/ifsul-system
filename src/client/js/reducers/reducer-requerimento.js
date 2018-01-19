@@ -1,16 +1,15 @@
 // @flow
 
-import type { Case, State } from './types'
 import {
   FAILURE_REQUERIMENTO,
   RECEIVE_REQUERIMENTO,
   REQUEST_REQUERIMENTO,
   RESET_REQUERIMENTO
 } from '../actions/requerimento'
+import type { Requerimento, State } from './types'
 import genericReducer, { defaultState } from './generic-reducer'
 
 import type { Action } from '../actions/types'
-import type { Requerimento } from './types/index'
 
 export function requerimentoReducer(
   state: State<Requerimento> = defaultState,

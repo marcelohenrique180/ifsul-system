@@ -1,10 +1,21 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router'
-import { connect } from 'react-redux'
-import { logoutUser } from '../actions/index'
-import { indexRoute } from '../util'
+// @flow
 
-class Navbar extends Component {
+import React, { Component } from 'react'
+
+import type { Dispatch } from '../actions/types/index'
+import { Link } from 'react-router'
+import type { Store } from '../reducers/types/index'
+import { connect } from 'react-redux'
+import { indexRoute } from '../util'
+import { logoutUser } from '../actions/index'
+
+type StateProps = { isAuthenticated: boolean }
+
+type DispatchProps = { logoutUser: () => any }
+
+type Props = StateProps & DispatchProps
+
+class Navbar extends Component<Props> {
   render() {
     const { isAuthenticated } = this.props
 
@@ -45,7 +56,7 @@ class Navbar extends Component {
                     className="nav-link"
                     to="/login"
                     onClick={() => {
-                      this.props.dispatch(logoutUser())
+                      this.props.logoutUser()
                     }}
                   >
                     <img src="img/glyphicons-388-log-out.png" alt="" /> Logout
@@ -64,11 +75,16 @@ class Navbar extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: Store): StateProps {
   return {
-    isAuthenticated: state.usuario.payload.isAuthenticated,
-    dispatch: state.usuario.dispatch
+    isAuthenticated: state.usuario.payload.isAuthenticated
   }
 }
 
-export default connect(mapStateToProps)(Navbar)
+function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
+  return {
+    logoutUser: () => dispatch(logoutUser())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar)

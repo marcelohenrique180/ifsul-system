@@ -8,16 +8,14 @@ import type {
   State as DefaultState,
   Store
 } from '../../reducers/types'
+import { FAILURE_ALUNO_SENHA, sendAlunoSenha } from '../../actions/aluno'
 
 import Alerta from '../../components/Alerta'
 import Carregando from '../../components/Carregando'
-import { FAILURE_ALUNO_SENHA } from '../../actions/aluno'
 import FloatInput from '../../components/FloatInput'
 import autobind from 'autobind-decorator'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
-import { handleChange } from '../../util'
-import { sendAlunoSenha } from '../../actions/aluno'
 
 type StateProps = {
   usuario: DefaultState<AlunoUsuario>
@@ -30,7 +28,7 @@ type DispatchProps = {
 type Props = StateProps &
   DispatchProps & {
     params: {
-      ['token']: string
+      token: string
     }
   }
 

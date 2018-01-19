@@ -1,6 +1,6 @@
 // @flow
 
-import type { Case, Error, State } from './types'
+import type { Case, State } from './types'
 
 import type { Action } from '../actions/types'
 

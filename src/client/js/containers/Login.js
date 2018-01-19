@@ -1,20 +1,51 @@
-import { connect } from 'react-redux'
-import { handleChange } from '../util'
-import { loginUser } from '../actions/'
-import { Link } from 'react-router'
+// @flow
 
-import React from 'react'
+import type { Action, Dispatch } from '../actions/types/index'
+import type {
+  State as DefaultState,
+  Store,
+  Usuario
+} from '../reducers/types/index'
 
 import Alerta from '../components/Alerta'
 import FloatInput from '../components/FloatInput'
+import { Link } from 'react-router'
+import type { LoginType } from '../actions/index'
+import React from 'react'
+import autobind from 'autobind-decorator'
+import { connect } from 'react-redux'
+import { loginUser } from '../actions/'
 
-class Login extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { email: '', senha: '' }
+type StateProps = {
+  user: DefaultState<Usuario>
+}
 
-    this.handleChange = handleChange.bind(this)
-    this.handleClick = this.handleClick.bind(this)
+type DispatchProps = {
+  loginUser: LoginType => Promise<Action<Usuario>>
+}
+
+type Props = StateProps & DispatchProps & {}
+
+type State = { email: string, senha: string }
+
+class Login extends React.Component<Props, State> {
+  state = { email: '', senha: '' }
+
+  @autobind
+  handleClick(e: SyntheticInputEvent<HTMLButtonElement>) {
+    e.preventDefault()
+    const { email, senha } = this.state
+
+    const creds: LoginType = { username: email.trim(), password: senha.trim() }
+
+    this.props.loginUser(creds)
+  }
+
+  @autobind
+  handleChange(event: SyntheticInputEvent<HTMLInputElement>) {
+    const { value, name } = event.target
+
+    this.setState({ [name]: value })
   }
 
   render() {
@@ -61,22 +92,18 @@ class Login extends React.Component {
       </div>
     )
   }
-
-  handleClick(e) {
-    e.preventDefault()
-    const { dispatch } = this.props
-    const { email, senha } = this.state
-
-    const creds = { username: email.trim(), password: senha.trim() }
-
-    dispatch(loginUser(creds))
-  }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(store: Store): StateProps {
   return {
-    user: state.usuario
+    user: store.usuario
   }
 }
 
-export default connect(mapStateToProps)(Login)
+function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
+  return {
+    loginUser: (creds: LoginType) => dispatch(loginUser(creds))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

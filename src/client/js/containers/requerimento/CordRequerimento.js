@@ -13,8 +13,6 @@ import { requestCursos, resetCurso } from '../../actions/curso'
 import { requestTipos, resetTipo } from '../../actions/tipo'
 
 import AlunoInfo from '../../containers/aluno/AlunoInfo'
-import Carregando from '../../components/Carregando'
-import ParecerInsert from '../../containers/parecer/ParecerInsert'
 import React from 'react'
 import RequerimentoView from '../../containers/requerimento/RequerimentoView'
 import { connect } from 'react-redux'
@@ -30,15 +28,18 @@ export function reloadCordRequerimento(
 
   dispatch(getRequerimento(requerimentoId)).then(
     (requerimento: Action<Requerimento>) => {
-      if (typeof requerimento.payload !== 'undefined')
+      if (typeof requerimento.payload !== 'undefined') {
         dispatch(requestTipos(requerimento.payload._links.tipo.href))
-      if (typeof requerimento.payload !== 'undefined')
+      }
+      if (typeof requerimento.payload !== 'undefined') {
         dispatch(getAluno(requerimento.payload._links.aluno.href)).then(
           (aluno: Action<Aluno>) => {
-            if (typeof aluno.payload !== 'undefined')
+            if (typeof aluno.payload !== 'undefined') {
               dispatch(requestCursos(aluno.payload._links.curso.href))
+            }
           }
         )
+      }
     }
   )
 }
@@ -54,7 +55,7 @@ type DispatchProps = {}
 
 type Props = StateProps &
   DispatchProps & {
-    params: { ['requerimento']: string },
+    params: { requerimento: string },
     dispatch: Dispatch
   }
 
