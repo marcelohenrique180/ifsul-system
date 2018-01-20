@@ -7,15 +7,17 @@ import type {
   Usuario
 } from '../reducers/types/index'
 
-import Alerta from '../components/Alerta'
-import FloatInput from '../components/FloatInput'
 import { Link } from 'react-router'
 import type { LoginType } from '../actions/index'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import Paper from 'material-ui/Paper'
 import RaisedButton from 'material-ui/RaisedButton'
 import React from 'react'
+import TextField from 'material-ui/TextField'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import { loginUser } from '../actions/'
+import { muiTheme } from '../components/App'
 
 type StateProps = {
   user: DefaultState<Usuario>
@@ -28,6 +30,25 @@ type DispatchProps = {
 type Props = StateProps & DispatchProps & {}
 
 type State = { email: string, senha: string }
+
+const styleLogin = {
+  display: 'grid',
+  gridTemplateRows: '.5fr 2fr auto 1fr'
+}
+
+const styles = {
+  fontFamily: 'Roboto, sans-serif',
+  position: 'absolute',
+  transform: 'translate(-50%)',
+  left: '50%',
+  textAlign: 'center',
+  height: 500,
+  maxWidth: 400,
+  marginTop: 20,
+  padding: '1em 2em',
+  display: 'grid',
+  gridTemplateRows: '1fr 3em'
+}
 
 class Login extends React.Component<Props, State> {
   state = { email: '', senha: '' }
@@ -54,41 +75,36 @@ class Login extends React.Component<Props, State> {
     const { email, senha } = this.state
 
     return (
-      <div>
-        <h2 className="text-center">Login</h2>
-        <form
-          id="login-form"
-          className="form-group col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-4"
-        >
-          <div className="input-group">
-            <FloatInput
-              name="email"
-              value={email}
-              textLabel="E-mail"
-              handleChange={this.handleChange}
-              autofocus="true"
+      <MuiThemeProvider muiTheme={muiTheme}>
+        <Paper style={styles} zDepth={5}>
+          <form id="login-form" style={styleLogin}>
+            <h2>Login</h2>
+            <div>
+              <TextField
+                name="email"
+                floatingLabelText="E-mail"
+                defaultValue={email}
+                onChange={this.handleChange}
+                errorText={hasError ? ' ' : ''}
+              />
+              <TextField
+                name="senha"
+                defaultValue={senha}
+                type="password"
+                floatingLabelText="Senha"
+                onChange={this.handleChange}
+                errorText={hasError ? error.message : ''}
+              />
+            </div>
+            <RaisedButton
+              secondary={true}
+              onClick={this.handleClick}
+              label="Login"
             />
-          </div>
-          <div className="input-group">
-            <FloatInput
-              name="senha"
-              value={senha}
-              type="password"
-              textLabel="Senha"
-              handleChange={this.handleChange}
-            />
-          </div>
-          {hasError && (
-            <Alerta alertClass="alert-danger" message={error.message} />
-          )}
-          <div className="input-group text-center">
-            <RaisedButton onClick={this.handleClick} label="Login" />
-          </div>
-          <div className="text-center">
-            <Link to="/cadastro/aluno">Ainda não tem conta?</Link>
-          </div>
-        </form>
-      </div>
+          </form>
+          <Link to="/cadastro/aluno">Ainda não tem conta?</Link>
+        </Paper>
+      </MuiThemeProvider>
     )
   }
 }

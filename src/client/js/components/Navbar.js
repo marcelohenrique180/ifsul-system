@@ -54,25 +54,12 @@ class Navbar extends React.Component<Props> {
       : this.props.usuario.payload
 
     const rightButton = isAuthenticated ? (
-      <FlatButton
-        label="Logout"
-        backgroundColor={green300}
-        onClick={this.handleLogout}
-      />
+      <FlatButton label="Logout" onClick={this.handleLogout} />
     ) : (
-      <FlatButton
-        label="Login"
-        backgroundColor={green300}
-        onClick={this.handleLogin}
-      />
+      <FlatButton label="Login" onClick={this.handleLogin} />
     )
 
-    return (
-      <AppBar
-        style={{ backgroundColor: green300 }}
-        iconElementRight={rightButton}
-      />
-    )
+    return <AppBar iconElementRight={rightButton} />
   }
 }
 

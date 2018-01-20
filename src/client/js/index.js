@@ -1,4 +1,5 @@
 import 'babel-polyfill'
+import '../scss/style.scss'
 
 import { IndexRedirect, Route, Router, browserHistory } from 'react-router'
 import { applyMiddleware, createStore } from 'redux'
@@ -47,6 +48,7 @@ const index = indexRoute()
 ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory}>
+      <Route path="/login" component={Login} />
       <Route path="/" component={App}>
         <IndexRedirect to={index} />
         <Route path="menu" component={Menu} onEnter={requireAuth}>
@@ -84,7 +86,6 @@ ReactDOM.render(
           <Route path="aluno/:token" component={AlunoConfirmar} />
         </Route>
         <Route path="/nao-autorizado" component={NaoAutorizado} />
-        <Route path="/login" component={Login} />
         <Route path="/logout" component={Login} />
       </Route>
     </Router>
