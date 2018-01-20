@@ -14,7 +14,6 @@ import FlatButton from 'material-ui/FlatButton'
 import autobind from 'autobind-decorator'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
-import { green300 } from 'material-ui/styles/colors'
 import { logoutUser } from '../actions/index'
 
 type StateProps = {

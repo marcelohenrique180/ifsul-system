@@ -9,15 +9,12 @@ import type {
 
 import { Link } from 'react-router'
 import type { LoginType } from '../actions/index'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import Paper from 'material-ui/Paper'
 import RaisedButton from 'material-ui/RaisedButton'
 import React from 'react'
 import TextField from 'material-ui/TextField'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import { loginUser } from '../actions/'
-import { muiTheme } from '../components/App'
 
 type StateProps = {
   user: DefaultState<Usuario>
@@ -34,20 +31,6 @@ type State = { email: string, senha: string }
 const styleLogin = {
   display: 'grid',
   gridTemplateRows: '.5fr 2fr auto 1fr'
-}
-
-const styles = {
-  fontFamily: 'Roboto, sans-serif',
-  position: 'absolute',
-  transform: 'translate(-50%)',
-  left: '50%',
-  textAlign: 'center',
-  height: 500,
-  maxWidth: 400,
-  marginTop: 20,
-  padding: '1em 2em',
-  display: 'grid',
-  gridTemplateRows: '1fr 3em'
 }
 
 class Login extends React.Component<Props, State> {
@@ -75,32 +58,30 @@ class Login extends React.Component<Props, State> {
     const { email, senha } = this.state
 
     return (
-      <MuiThemeProvider muiTheme={muiTheme}>
-        <Paper style={styles} zDepth={5}>
-          <form id="login-form" style={styleLogin} onSubmit={this.handleClick}>
-            <h2>Login</h2>
-            <div>
-              <TextField
-                name="email"
-                floatingLabelText="E-mail"
-                defaultValue={email}
-                onChange={this.handleChange}
-                errorText={hasError ? ' ' : ''}
-              />
-              <TextField
-                name="senha"
-                defaultValue={senha}
-                type="password"
-                floatingLabelText="Senha"
-                onChange={this.handleChange}
-                errorText={hasError ? error.message : ''}
-              />
-            </div>
-            <RaisedButton secondary={true} label="Login" type="submit" />
-          </form>
-          <Link to="/cadastro/aluno">Ainda não tem conta?</Link>
-        </Paper>
-      </MuiThemeProvider>
+      <section>
+        <form id="login-form" style={styleLogin} onSubmit={this.handleClick}>
+          <h2>Login</h2>
+          <div>
+            <TextField
+              name="email"
+              floatingLabelText="E-mail"
+              defaultValue={email}
+              onChange={this.handleChange}
+              errorText={hasError ? ' ' : ''}
+            />
+            <TextField
+              name="senha"
+              defaultValue={senha}
+              type="password"
+              floatingLabelText="Senha"
+              onChange={this.handleChange}
+              errorText={hasError ? error.message : ''}
+            />
+          </div>
+          <RaisedButton secondary={true} label="Login" type="submit" />
+        </form>
+        <Link to="/cadastro/aluno">Ainda não tem conta?</Link>
+      </section>
     )
   }
 }

@@ -17,6 +17,7 @@ import CordVisualizarRequerimento from './containers/requerimento/CordVisualizar
 import Login from './containers/Login'
 import Menu from './containers/menu/Menu'
 import NaoAutorizado from './components/NaoAutorizado'
+import PlainPaper from './components/PlainPaper'
 import { Provider } from 'react-redux'
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -48,7 +49,13 @@ const index = indexRoute()
 ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory}>
-      <Route path="/login" component={Login} />
+      <Router path="/" component={PlainPaper}>
+        <Route path="/login" component={Login} />
+        <Route path="cadastro" component={Cadastro}>
+          <Route path="aluno" component={AlunoCadastro} />
+          <Route path="aluno/:token" component={AlunoConfirmar} />
+        </Route>
+      </Router>
       <Route path="/" component={App}>
         <IndexRedirect to={index} />
         <Route path="menu" component={Menu} onEnter={requireAuth}>
@@ -80,10 +87,6 @@ ReactDOM.render(
               component={VisualizarRequerimento}
             />
           </Route>
-        </Route>
-        <Route path="cadastro" component={Cadastro}>
-          <Route path="aluno" component={AlunoCadastro} />
-          <Route path="aluno/:token" component={AlunoConfirmar} />
         </Route>
         <Route path="/nao-autorizado" component={NaoAutorizado} />
         <Route path="/logout" component={Login} />
