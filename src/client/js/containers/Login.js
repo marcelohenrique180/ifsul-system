@@ -77,7 +77,7 @@ class Login extends React.Component<Props, State> {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <Paper style={styles} zDepth={5}>
-          <form id="login-form" style={styleLogin}>
+          <form id="login-form" style={styleLogin} onSubmit={this.handleClick}>
             <h2>Login</h2>
             <div>
               <TextField
@@ -96,11 +96,7 @@ class Login extends React.Component<Props, State> {
                 errorText={hasError ? error.message : ''}
               />
             </div>
-            <RaisedButton
-              secondary={true}
-              onClick={this.handleClick}
-              label="Login"
-            />
+            <RaisedButton secondary={true} label="Login" type="submit" />
           </form>
           <Link to="/cadastro/aluno">Ainda não tem conta?</Link>
         </Paper>
