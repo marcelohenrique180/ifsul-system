@@ -27,16 +27,6 @@ type DispatchProps = {
 type Props = StateProps & DispatchProps
 
 class AlunoInfo extends React.Component<Props> {
-  constructor(props: Props) {
-    super(props)
-
-    this.props.requestAluno().then((aluno: Action<Aluno>) => {
-      if (typeof aluno.payload !== 'undefined') {
-        this.props.requestCursos(aluno.payload._links.curso.href)
-      }
-    })
-  }
-
   render() {
     const { aluno, curso } = this.props
 
