@@ -36,8 +36,8 @@ class Navbar extends React.Component<Props> {
   handleLogout(event: SyntheticInputEvent<HTMLInputElement>) {
     event.preventDefault()
 
-    browserHistory.push('/')
     this.props.logoutUser()
+    browserHistory.push('/')
   }
 
   @autobind
