@@ -9,11 +9,8 @@ import type {
   Store
 } from '../../reducers/types'
 
-import Alerta from '../../components/Alerta'
-import Carregando from '../../components/Carregando'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
-import Snackbar from 'material-ui/Snackbar'
 import TextField from 'material-ui/TextField'
 import autobind from 'autobind-decorator'
 import { browserHistory } from 'react-router'
@@ -102,8 +99,7 @@ class AlunoCadastro extends React.Component<Props, State> {
   }
 
   render() {
-    const matriculaRequest = this.props.matricula
-    const { matricula, formError } = this.state
+    const { matricula } = this.state
     const { hasError, error } = this.props.matricula
 
     return (

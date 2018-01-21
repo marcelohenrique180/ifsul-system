@@ -40,12 +40,13 @@ class PlainPaper extends React.Component<Props, State> {
   }
 
   render() {
+    const cProp = {
+      toggleSnackBar: this.toggleSnackBar
+    }
     const children =
-      this.props.children !== null
-        ? React.cloneElement(this.props.children, {
-            toggleSnackBar: this.toggleSnackBar
-          })
-        : this.props.children
+      this.props.children === null
+        ? this.props.children
+        : React.cloneElement(this.props.children, cProp)
 
     return (
       <MuiThemeProvider muiTheme={muiTheme}>

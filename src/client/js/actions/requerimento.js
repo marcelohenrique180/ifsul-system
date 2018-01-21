@@ -3,7 +3,6 @@
 import type { Action, ActionApi } from './types/index'
 
 import { CALL_API } from './middleware/api'
-import type { Requerimento } from '../reducers/types/index'
 
 export const RECEIVE_REQUERIMENTO: string = 'RECEIVE_REQUERIMENTO'
 export const FAILURE_REQUERIMENTO: string = 'FAILURE_REQUERIMENTO'
