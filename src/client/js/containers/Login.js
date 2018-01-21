@@ -84,7 +84,7 @@ class Login extends React.Component<Props, State> {
               errorText={hasError ? error.message : ''}
             />
           </div>
-          <RaisedButton primary={true} label="Login" type="submit" zDepth={4} />
+          <RaisedButton primary={true} label="Login" type="submit" />
         </form>
         <Link to="/cadastro/aluno">Ainda não tem conta?</Link>
       </section>
