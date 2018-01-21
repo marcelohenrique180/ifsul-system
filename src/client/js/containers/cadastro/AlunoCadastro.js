@@ -11,11 +11,33 @@ import type {
 
 import Alerta from '../../components/Alerta'
 import Carregando from '../../components/Carregando'
-import FloatInput from '../../components/FloatInput'
+import FlatButton from 'material-ui/FlatButton'
+import RaisedButton from 'material-ui/RaisedButton'
+import Snackbar from 'material-ui/Snackbar'
+import TextField from 'material-ui/TextField'
 import autobind from 'autobind-decorator'
+import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { novaMatricula } from '../../actions/matricula'
 import { sendAlunoMatricula } from '../../actions/aluno'
+
+const styles = {
+  height: '100%',
+  display: 'grid',
+  gridTemplateRows: '1fr 1fr auto 2fr'
+}
+
+const voltarContainerStyle = {
+  display: 'grid',
+  gridTemplateRows: 'repeat(3, 1fr)',
+  gridTemplateColumns: 'repeat(3, 1fr)'
+}
+
+const voltarStyle = {
+  gridRowStart: 3,
+  gridColumnStart: 1,
+  margin: 'auto'
+}
 
 type StateProps = {
   matricula: DefaultState<Matricula>
@@ -26,9 +48,13 @@ type DispatchProps = {
   novaMatricula: () => Action<Matricula> | Promise<Action<Matricula>>
 }
 
-type Props = StateProps & DispatchProps
+type Props = StateProps &
+  DispatchProps & {
+    toggleSnackBar: string => void
+  }
 
 type State = {
+  alert: boolean,
   matricula: string,
   formError: {
     [string]: boolean
@@ -37,6 +63,7 @@ type State = {
 
 class AlunoCadastro extends React.Component<Props, State> {
   state = {
+    alert: false,
     matricula: '',
     formError: { matricula: false }
   }
@@ -65,7 +92,12 @@ class AlunoCadastro extends React.Component<Props, State> {
       this.setState({ formError: { matricula: true } })
     } else {
       this.setState({ formError: { matricula: false } })
-      this.props.sendAlunoMatricula(matricula)
+      this.props.sendAlunoMatricula(matricula).then(matricula => {
+        if (typeof matricula.payload.matricula !== 'undefined') {
+          this.props.toggleSnackBar('Aguarde o e-mail de confirmação')
+          browserHistory.push('/login')
+        }
+      })
     }
   }
 
@@ -74,52 +106,26 @@ class AlunoCadastro extends React.Component<Props, State> {
     const { matricula, formError } = this.state
     const { hasError, error } = this.props.matricula
 
-    return matriculaRequest.fetched ? (
-      <div className="text-center">
-        <h5 className="text-success">
-          Brevemente será enviado um e-mail à você com o link de cadastro!
-        </h5>
-        <button onClick={this.novaMatricula} className="btn btn-success">
-          Novo Cadastro
-        </button>
-      </div>
-    ) : (
-      <form
-        target="#"
-        className="form-group col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-4"
-      >
-        <div className="input-group">
-          <FloatInput
-            name="matricula"
-            value={matricula}
-            textLabel="Insira sua matrícula"
-            handleChange={this.handleChangeForm}
+    return (
+      <form onSubmit={this.handleClickMatricula} style={styles}>
+        <h1>Cadastro</h1>
+        <TextField
+          name="matricula"
+          defaultValue={matricula}
+          floatingLabelText="Insira sua matrícula"
+          onChange={this.handleChangeForm}
+          errorText={hasError ? error.message : ''}
+        />
+        <RaisedButton primary={true} label="Enviar" type="submit" />
+        <div style={voltarContainerStyle}>
+          <FlatButton
+            primary={true}
+            label="Voltar"
+            style={voltarStyle}
+            onClick={() => {
+              browserHistory.goBack()
+            }}
           />
-        </div>
-        {formError.matricula ? (
-          <Alerta
-            alertClass="alert-danger"
-            message="Favor, insira a Matrícula."
-          />
-        ) : (
-          <Alerta
-            show={hasError}
-            alertClass="alert-danger"
-            message={error.message}
-          />
-        )}
-        <div className="input-group text-center">
-          {!matriculaRequest.isFetching ? (
-            <button
-              onClick={this.handleClickMatricula}
-              type="submit"
-              className="btn btn-primary"
-            >
-              Enviar
-            </button>
-          ) : (
-            <Carregando />
-          )}
         </div>
       </form>
     )

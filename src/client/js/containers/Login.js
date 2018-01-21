@@ -30,6 +30,12 @@ type State = { email: string, senha: string }
 
 const styleLogin = {
   display: 'grid',
+  gridTemplateRows: '1fr 3em',
+  height: '100%'
+}
+
+const styleLoginBox = {
+  display: 'grid',
   gridTemplateRows: '.5fr 2fr auto 1fr'
 }
 
@@ -58,8 +64,8 @@ class Login extends React.Component<Props, State> {
     const { email, senha } = this.state
 
     return (
-      <section>
-        <form id="login-form" style={styleLogin} onSubmit={this.handleClick}>
+      <section style={styleLogin}>
+        <form id="login-form" style={styleLoginBox} onSubmit={this.handleClick}>
           <h2>Login</h2>
           <div>
             <TextField
@@ -78,7 +84,7 @@ class Login extends React.Component<Props, State> {
               errorText={hasError ? error.message : ''}
             />
           </div>
-          <RaisedButton secondary={true} label="Login" type="submit" />
+          <RaisedButton primary={true} label="Login" type="submit" zDepth={4} />
         </form>
         <Link to="/cadastro/aluno">Ainda não tem conta?</Link>
       </section>

@@ -19,9 +19,10 @@ export const FAILURE_REQUERIMENTOS_ABERTOS: string =
   'FAILURE_REQUERIMENTOS_ABERTOS'
 export const RESET_REQUERIMENTO: string = 'RESET_REQUERIMENTO'
 
-export function resetRequerimento(): Action<Requerimento> {
+export function resetRequerimento(): Action<{}> {
   return {
-    type: RESET_REQUERIMENTO
+    type: RESET_REQUERIMENTO,
+    payload: {}
   }
 }
 

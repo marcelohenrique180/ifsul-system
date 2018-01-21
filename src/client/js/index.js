@@ -10,7 +10,6 @@ import AlunoMenu from './containers/menu/AlunoMenu'
 import AlunoRequerimento from './containers/requerimento/AlunoRequerimento'
 import AlunoVisualizarRequerimento from './containers/requerimento/AlunoVisualizarRequerimento'
 import App from './components/App'
-import Cadastro from './components/cadastro/Cadastro'
 import CordMenu from './containers/menu/CordMenu'
 import CordRequerimento from './containers/requerimento/CordRequerimento'
 import CordVisualizarRequerimento from './containers/requerimento/CordVisualizarRequerimento'
@@ -50,11 +49,10 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory}>
       <Router path="/" component={PlainPaper}>
+        <IndexRedirect to={index} />
         <Route path="/login" component={Login} />
-        <Route path="cadastro" component={Cadastro}>
-          <Route path="aluno" component={AlunoCadastro} />
-          <Route path="aluno/:token" component={AlunoConfirmar} />
-        </Route>
+        <Route path="cadastro/aluno" component={AlunoCadastro} />
+        <Route path="cadastro/aluno/:token" component={AlunoConfirmar} />
       </Router>
       <Route path="/" component={App}>
         <IndexRedirect to={index} />
