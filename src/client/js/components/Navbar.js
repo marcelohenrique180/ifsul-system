@@ -37,7 +37,7 @@ class Navbar extends React.Component<Props> {
     event.preventDefault()
 
     this.props.logoutUser()
-    browserHistory.push('/')
+    browserHistory.push('/login')
   }
 
   @autobind
