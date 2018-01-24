@@ -112,7 +112,9 @@ class AlunoCadastro extends React.Component<Props, State> {
           onChange={this.handleChangeForm}
           errorText={hasError ? error.message : ''}
         />
-        <RaisedButton primary={true} label="Enviar" type="submit" />
+        <div>
+          <RaisedButton primary={true} label="Enviar" type="submit" />
+        </div>
         <div style={voltarContainerStyle}>
           <FlatButton
             primary={true}
