@@ -16,6 +16,18 @@ import autobind from 'autobind-decorator'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 
+const styles = {
+  height: '100%',
+  display: 'grid',
+  gridTemplateRows: 'repeat(2, 1fr) 2fr'
+}
+
+const buttonStyle = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center'
+}
+
 type StateProps = {
   usuario: DefaultState<AlunoUsuario>
 }
@@ -111,32 +123,38 @@ class AlunoCadastro extends React.Component<Props, State> {
     const { error, hasError } = this.props.usuario
 
     return (
-      <form>
+      <form style={styles}>
         <h1>Cadastre-se</h1>
-        <TextField
-          name="senha"
-          defaultValue={senha}
-          floatingLabelText="Nova Senha"
-          type="password"
-          onChange={this.handleChange}
-          errorText={formError.senha || hasError ? ' ' : ''}
-        />
-        <TextField
-          name="confirmaSenha"
-          defaultValue={confirmaSenha}
-          floatingLabelText="Confirmar Nova Senha"
-          type="password"
-          onChange={this.handleChange}
-          errorText={
-            formError.senha ? formError.message : hasError ? error.message : ''
-          }
-        />
-        <RaisedButton
-          primary={true}
-          onClick={this.handleClickSenha}
-          type="submit"
-          label="Pronto"
-        />
+        <div>
+          <TextField
+            name="senha"
+            defaultValue={senha}
+            floatingLabelText="Nova Senha"
+            type="password"
+            onChange={this.handleChange}
+            errorText={formError.senha || hasError ? ' ' : ''}
+          />
+          <TextField
+            name="confirmaSenha"
+            defaultValue={confirmaSenha}
+            floatingLabelText="Confirmar Nova Senha"
+            type="password"
+            onChange={this.handleChange}
+            errorText={
+              formError.senha
+                ? formError.message
+                : hasError ? error.message : ''
+            }
+          />
+        </div>
+        <div style={buttonStyle}>
+          <RaisedButton
+            primary={true}
+            onClick={this.handleClickSenha}
+            type="submit"
+            label="Pronto"
+          />
+        </div>
       </form>
     )
   }
