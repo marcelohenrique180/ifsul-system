@@ -34,6 +34,9 @@ class CordMenu extends AuthorizedContainer<States> {
       case 0:
         browserHistory.push(`${indexRoute()}/requerimento/abertos`)
         break
+      case 1:
+        browserHistory.push(`${indexRoute()}/requerimento/visualizar`)
+        break
       default:
     }
     this.setState({ selectedIndex: i })
@@ -60,7 +63,7 @@ class CordMenu extends AuthorizedContainer<States> {
             onClick={() => this.select(0)}
           />
           <BottomNavigationItem
-            label="Fechados"
+            label="Todos"
             icon={menuIcon}
             onClick={() => this.select(1)}
           />

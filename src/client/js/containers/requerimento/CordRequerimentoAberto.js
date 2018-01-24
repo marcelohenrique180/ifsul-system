@@ -9,7 +9,6 @@ import type {
 } from '../../reducers/types/index'
 
 import Carregando from '../../components/Carregando'
-import { Link } from 'react-router'
 import React from 'react'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
@@ -161,12 +160,6 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
                 )}
               </div>
             </div>
-            <Link
-              to="/menu/cordcurso/requerimento/visualizar"
-              className="center-block text-center"
-            >
-              <b>Ver Todos</b>
-            </Link>
           </div>
         </div>
       </div>
