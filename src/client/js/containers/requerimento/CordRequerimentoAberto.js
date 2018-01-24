@@ -108,7 +108,6 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
       return (
         <li
           key={i}
-          className="list-group-item list-group-item--clickable"
           tabIndex={0}
           onKeyPress={this.onItemClick(reqAberto.requerimento_id)}
           onClick={this.onItemClick(reqAberto.requerimento_id)}
@@ -136,31 +135,22 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
 
     return (
       <div>
+        <h3>Requerimentos em Aberto</h3>
         <div>
-          <div>Requerimentos em Aberto</div>
-          <div>
-            <div>
-              <div>
-                <div>
-                  <input
-                    id="search"
-                    className="form-control"
-                    type="text"
-                    placeholder="Pesquisar"
-                    name="search"
-                    onChange={this.handleSearch}
-                    value={this.state.search}
-                  />
-                </div>
-              </div>
-              <div>
-                {requerimentosAbertos.isFetching && <Carregando />}
-                {requerimentosAbertos.fetched && (
-                  <ul>{this.renderRequerimentos()}</ul>
-                )}
-              </div>
-            </div>
-          </div>
+          <input
+            id="search"
+            type="text"
+            placeholder="Pesquisar"
+            name="search"
+            onChange={this.handleSearch}
+            value={this.state.search}
+          />
+        </div>
+        <div>
+          {requerimentosAbertos.isFetching && <Carregando />}
+          {requerimentosAbertos.fetched && (
+            <ul>{this.renderRequerimentos()}</ul>
+          )}
         </div>
       </div>
     )
