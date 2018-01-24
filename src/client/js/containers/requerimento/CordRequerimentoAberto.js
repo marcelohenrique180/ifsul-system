@@ -136,12 +136,12 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
 
     return (
       <div>
-        <div className="panel panel-default panel--requerimentos">
-          <div className="panel-heading">Requerimentos em Aberto</div>
-          <div className="panel-body">
-            <div className="panel panel-default">
-              <div className="panel-heading">
-                <div className="input-group">
+        <div>
+          <div>Requerimentos em Aberto</div>
+          <div>
+            <div>
+              <div>
+                <div>
                   <input
                     id="search"
                     className="form-control"
@@ -153,10 +153,10 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
                   />
                 </div>
               </div>
-              <div className="panel-body panel-body--requerimentos">
+              <div>
                 {requerimentosAbertos.isFetching && <Carregando />}
                 {requerimentosAbertos.fetched && (
-                  <ul className="list-group">{this.renderRequerimentos()}</ul>
+                  <ul>{this.renderRequerimentos()}</ul>
                 )}
               </div>
             </div>
