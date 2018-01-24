@@ -16,6 +16,17 @@ import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import { loginUser } from '../actions/'
 
+const styleLogin = {
+  display: 'grid',
+  gridTemplateRows: '1fr 3em',
+  height: '100%'
+}
+
+const styleLoginBox = {
+  display: 'grid',
+  gridTemplateRows: '.5fr 2fr auto 1fr'
+}
+
 type StateProps = {
   user: DefaultState<Usuario>
 }
@@ -27,17 +38,6 @@ type DispatchProps = {
 type Props = StateProps & DispatchProps & {}
 
 type State = { email: string, senha: string }
-
-const styleLogin = {
-  display: 'grid',
-  gridTemplateRows: '1fr 3em',
-  height: '100%'
-}
-
-const styleLoginBox = {
-  display: 'grid',
-  gridTemplateRows: '.5fr 2fr auto 1fr'
-}
 
 class Login extends React.Component<Props, State> {
   state = { email: '', senha: '' }
