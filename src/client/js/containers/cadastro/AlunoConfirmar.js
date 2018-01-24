@@ -10,9 +10,7 @@ import type {
 } from '../../reducers/types'
 import { FAILURE_ALUNO_SENHA, sendAlunoSenha } from '../../actions/aluno'
 
-import Alerta from '../../components/Alerta'
-import Carregando from '../../components/Carregando'
-import FloatInput from '../../components/FloatInput'
+import TextField from 'material-ui/TextField'
 import autobind from 'autobind-decorator'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
@@ -110,46 +108,30 @@ class AlunoCadastro extends React.Component<Props, State> {
   render() {
     const { senha, confirmaSenha, formError } = this.state
     const { error, hasError } = this.props.usuario
-    const usuario = this.props.usuario
 
     return (
       <form>
-        <div>
-          <FloatInput
-            name="senha"
-            value={senha}
-            textLabel="Nova Senha"
-            type="password"
-            handleChange={this.handleChange}
-          />
-        </div>
-        <div>
-          <FloatInput
-            name="confirmaSenha"
-            value={confirmaSenha}
-            textLabel="Confirmar Nova Senha"
-            type="password"
-            handleChange={this.handleChange}
-          />
-        </div>
-        {formError.senha === true ? (
-          <Alerta alertClass="alert-danger" message={formError.message} />
-        ) : (
-          <Alerta
-            show={hasError}
-            alertClass="alert-danger"
-            message={error.message}
-          />
-        )}
-        <div>
-          {!usuario.isFetching ? (
-            <button onClick={this.handleClickSenha} type="submit">
-              Enviar
-            </button>
-          ) : (
-            <Carregando />
-          )}
-        </div>
+        <TextField
+          name="senha"
+          defaultValue={senha}
+          floatingLabelText="Nova Senha"
+          type="password"
+          onChange={this.handleChange}
+          errorText={formError.senha || hasError ? ' ' : ''}
+        />
+        <TextField
+          name="confirmaSenha"
+          defaultValue={confirmaSenha}
+          floatingLabelText="Confirmar Nova Senha"
+          type="password"
+          onChange={this.handleChange}
+          errorText={
+            formError.senha ? formError.message : hasError ? error.message : ''
+          }
+        />
+        <button onClick={this.handleClickSenha} type="submit">
+          Enviar
+        </button>
       </form>
     )
   }
