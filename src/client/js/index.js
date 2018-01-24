@@ -12,6 +12,7 @@ import AlunoVisualizarRequerimento from './containers/requerimento/AlunoVisualiz
 import App from './components/App'
 import CordMenu from './containers/menu/CordMenu'
 import CordRequerimento from './containers/requerimento/CordRequerimento'
+import CordRequerimentoAberto from './containers/requerimento/CordRequerimentoAberto'
 import CordVisualizarRequerimento from './containers/requerimento/CordVisualizarRequerimento'
 import Login from './containers/Login'
 import Menu from './containers/menu/Menu'
@@ -62,6 +63,10 @@ ReactDOM.render(
             authorize={['CORDCURSO']}
             component={CordMenu}
           >
+            <Route
+              path="requerimento/abertos"
+              component={CordRequerimentoAberto}
+            />
             <Route
               path="requerimento/visualizar"
               component={CordVisualizarRequerimento}

@@ -8,11 +8,12 @@ import {
 } from 'material-ui/BottomNavigation'
 
 import AuthorizedContainer from '../AuthorizedContainer'
-import CordRequerimentoAberto from '../requerimento/CordRequerimentoAberto'
 import FontIcon from 'material-ui/FontIcon'
 import RouterHandler from '../RouterHandler'
 import autobind from 'autobind-decorator'
+import { browserHistory } from 'react-router'
 import { gray500 } from 'material-ui/styles/colors'
+import { indexRoute } from '../../util'
 
 const NavigationStyle = {
   position: 'fixed',
@@ -29,6 +30,12 @@ class CordMenu extends AuthorizedContainer<States> {
   }
   @autobind
   select(i: number) {
+    switch (i) {
+      case 0:
+        browserHistory.push(`${indexRoute()}/requerimento/abertos`)
+        break
+      default:
+    }
     this.setState({ selectedIndex: i })
   }
   render() {
@@ -40,9 +47,6 @@ class CordMenu extends AuthorizedContainer<States> {
 
     return (
       <div>
-        <div className="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-0 col-lg-3">
-          <CordRequerimentoAberto {...this.props} />
-        </div>
         <div>
           <RouterHandler {...this.props} />
         </div>
