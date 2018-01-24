@@ -21,24 +21,31 @@ const NavigationStyle = {
 }
 
 type States = {
-  selectedIndex: number
+  selectedIndex: number,
+  history: Array<string>
 }
 
 class CordMenu extends AuthorizedContainer<States> {
   state = {
-    selectedIndex: 0
+    selectedIndex: 0,
+    history: [
+      `${indexRoute()}/requerimento/abertos`,
+      `${indexRoute()}/requerimento/visualizar`
+    ]
   }
+
+  componentDidMount() {
+    this.locate(window.location.pathname)
+  }
+
+  @autobind
+  locate(path: string) {
+    this.setState({ selectedIndex: this.state.history.indexOf(path) })
+  }
+
   @autobind
   select(i: number) {
-    switch (i) {
-      case 0:
-        browserHistory.push(`${indexRoute()}/requerimento/abertos`)
-        break
-      case 1:
-        browserHistory.push(`${indexRoute()}/requerimento/visualizar`)
-        break
-      default:
-    }
+    browserHistory.push(this.state.history[i])
     this.setState({ selectedIndex: i })
   }
   render() {
