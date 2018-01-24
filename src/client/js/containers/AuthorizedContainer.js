@@ -11,7 +11,7 @@ type Props = {
   }
 }
 
-class AuthorizedContainer extends React.Component<Props> {
+class AuthorizedContainer<States> extends React.Component<Props, States> {
   componentWillMount() {
     const { authorize } = this.props.route
     const { router } = this.props
