@@ -10,6 +10,7 @@ import type {
 
 import Carregando from '../../components/Carregando'
 import React from 'react'
+import TextField from 'material-ui/TextField'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import { getAluno } from '../../actions/aluno'
@@ -137,13 +138,12 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
       <div>
         <h3>Requerimentos em Aberto</h3>
         <div>
-          <input
-            id="search"
-            type="text"
-            placeholder="Pesquisar"
+          <TextField
             name="search"
+            hintText="Pesquisar"
+            fullWidth={true}
             onChange={this.handleSearch}
-            value={this.state.search}
+            defaultValue={this.state.search}
           />
         </div>
         <div>
