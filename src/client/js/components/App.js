@@ -70,12 +70,12 @@ export default class App extends React.Component<
             style={NavigationStyle}
           >
             <BottomNavigationItem
-              label="Notificações"
+              label="Novos"
               icon={notificationIcon}
               onClick={() => this.select(0)}
             />
             <BottomNavigationItem
-              label="Todos"
+              label="Fechados"
               icon={menuIcon}
               onClick={() => this.select(1)}
             />
