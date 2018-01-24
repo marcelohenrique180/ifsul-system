@@ -10,6 +10,7 @@ import type {
 } from '../../reducers/types'
 import { FAILURE_ALUNO_SENHA, sendAlunoSenha } from '../../actions/aluno'
 
+import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import autobind from 'autobind-decorator'
 import { browserHistory } from 'react-router'
@@ -111,6 +112,7 @@ class AlunoCadastro extends React.Component<Props, State> {
 
     return (
       <form>
+        <h1>Cadastre-se</h1>
         <TextField
           name="senha"
           defaultValue={senha}
@@ -129,9 +131,12 @@ class AlunoCadastro extends React.Component<Props, State> {
             formError.senha ? formError.message : hasError ? error.message : ''
           }
         />
-        <button onClick={this.handleClickSenha} type="submit">
-          Enviar
-        </button>
+        <RaisedButton
+          primary={true}
+          onClick={this.handleClickSenha}
+          type="submit"
+          label="Pronto"
+        />
       </form>
     )
   }
