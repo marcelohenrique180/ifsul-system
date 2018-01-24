@@ -113,8 +113,8 @@ class AlunoCadastro extends React.Component<Props, State> {
     const usuario = this.props.usuario
 
     return (
-      <form className="form-group col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-4">
-        <div className="input-group ">
+      <form>
+        <div>
           <FloatInput
             name="senha"
             value={senha}
@@ -123,7 +123,7 @@ class AlunoCadastro extends React.Component<Props, State> {
             handleChange={this.handleChange}
           />
         </div>
-        <div className="input-group ">
+        <div>
           <FloatInput
             name="confirmaSenha"
             value={confirmaSenha}
@@ -141,13 +141,9 @@ class AlunoCadastro extends React.Component<Props, State> {
             message={error.message}
           />
         )}
-        <div className="input-group text-center">
+        <div>
           {!usuario.isFetching ? (
-            <button
-              onClick={this.handleClickSenha}
-              type="submit"
-              className="btn btn-primary"
-            >
+            <button onClick={this.handleClickSenha} type="submit">
               Enviar
             </button>
           ) : (
