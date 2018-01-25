@@ -13,6 +13,7 @@ import { List, ListItem } from 'material-ui/List'
 
 import FontIcon from 'material-ui/FontIcon'
 import React from 'react'
+import Subheader from 'material-ui/Subheader'
 import TextField from 'material-ui/TextField'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
@@ -183,7 +184,7 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
 
     return (
       <div>
-        <h3>Requerimentos em Aberto</h3>
+        <Subheader>Requerimentos em Aberto</Subheader>
         <div style={searchStyle}>
           <FontIcon className="material-icons">search</FontIcon>
           <TextField

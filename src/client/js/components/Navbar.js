@@ -58,7 +58,7 @@ class Navbar extends React.Component<Props> {
       <FlatButton label="Login" onClick={this.handleLogin} />
     )
 
-    return <AppBar iconElementRight={rightButton} />
+    return <AppBar showMenuIconButton={false} iconElementRight={rightButton} />
   }
 }
 
