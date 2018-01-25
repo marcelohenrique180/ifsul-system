@@ -8,6 +8,7 @@ import type {
   Store
 } from '../../reducers/types/index'
 
+import FontIcon from 'material-ui/FontIcon'
 import React from 'react'
 import TextField from 'material-ui/TextField'
 import autobind from 'autobind-decorator'
@@ -16,6 +17,11 @@ import { getAluno } from '../../actions/aluno'
 import { getId } from '../../util'
 import { getRequerimentosEmAberto } from '../../actions/requerimento'
 import { reloadCordRequerimento } from '../../containers/requerimento/CordRequerimento'
+
+const searchStyle = {
+  display: 'flex',
+  alignItems: 'center'
+}
 
 type StateProps = {
   requerimentosAbertos: DefaultState<RequerimentoAberto>
@@ -136,7 +142,8 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
     return (
       <div>
         <h3>Requerimentos em Aberto</h3>
-        <div>
+        <div style={searchStyle}>
+          <FontIcon className="material-icons">search</FontIcon>
           <TextField
             name="search"
             hintText="Pesquisar"
