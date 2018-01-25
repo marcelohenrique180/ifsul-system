@@ -8,7 +8,6 @@ import type {
   Store
 } from '../../reducers/types/index'
 
-import Carregando from '../../components/Carregando'
 import React from 'react'
 import TextField from 'material-ui/TextField'
 import autobind from 'autobind-decorator'
@@ -147,7 +146,6 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
           />
         </div>
         <div>
-          {requerimentosAbertos.isFetching && <Carregando />}
           {requerimentosAbertos.fetched && (
             <ul>{this.renderRequerimentos()}</ul>
           )}
