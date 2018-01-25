@@ -46,8 +46,8 @@ type Props = StateProps &
 
 type State = {
   search: string,
-  requerimentos: Array<{ result: string, requerimento_id: string }>,
-  filteredRequerimentos: Array<{ result: string, requerimento_id: string }>
+  requerimentos: Array<{ search: string, requerimento_id: string }>,
+  filteredRequerimentos: Array<{ search: string, requerimento_id: string }>
 }
 
 class CordRequerimentoAberto extends React.Component<Props, State> {
@@ -69,7 +69,7 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
               this.setState({
                 requerimentos: this.state.requerimentos.concat([
                   {
-                    result:
+                    search:
                       getId(requerimento._links.self.href) +
                       ' ' +
                       aluno.nome +
@@ -117,7 +117,7 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
           onKeyPress={this.onItemClick(reqAberto.requerimento_id)}
           onClick={this.onItemClick(reqAberto.requerimento_id)}
         >
-          {reqAberto.result}{' '}
+          {reqAberto.search}{' '}
         </li>
       )
     })
@@ -129,7 +129,7 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
 
     this.setState({
       filteredRequerimentos: this.state.requerimentos.filter(req =>
-        req.result.toLowerCase().includes(event.target.value.toLowerCase())
+        req.search.toLowerCase().includes(event.target.value.toLowerCase())
       ),
       [name]: value
     })
