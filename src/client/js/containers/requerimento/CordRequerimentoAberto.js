@@ -4,6 +4,7 @@ import type { Action, Dispatch } from '../../actions/types/index'
 import type {
   Aluno,
   State as DefaultState,
+  Requerimento,
   RequerimentoAberto,
   Store
 } from '../../reducers/types/index'
@@ -47,41 +48,55 @@ type Props = StateProps &
 type State = {
   search: string,
   requerimentos: Array<{ search: string, requerimento_id: string }>,
-  filteredRequerimentos: Array<{ search: string, requerimento_id: string }>
+  filteredRequerimentos: Array<{ search: string, requerimento_id: string }>,
+  viewData: Array<{ requerimento: Requerimento, aluno: Aluno }>
 }
 
 class CordRequerimentoAberto extends React.Component<Props, State> {
-  state = { search: '', requerimentos: [], filteredRequerimentos: [] }
+  state = {
+    search: '',
+    requerimentos: [],
+    filteredRequerimentos: [],
+    viewData: []
+  }
 
   constructor(props: Props) {
     super(props)
 
     this.props.getRequerimentosEmAberto().then(reqsAbertos => {
       if (typeof reqsAbertos.payload !== 'undefined') {
-        reqsAbertos.payload._embedded.requerimentos.forEach(requerimento => {
-          this.props
-            .getAluno(requerimento._links.aluno.href)
-            .then(alunoResponse => {
-              const aluno =
-                typeof alunoResponse.payload !== 'undefined'
-                  ? alunoResponse.payload
-                  : { nome: '', matricula: '' }
-              this.setState({
-                requerimentos: this.state.requerimentos.concat([
-                  {
-                    search:
-                      getId(requerimento._links.self.href) +
-                      ' ' +
-                      aluno.nome +
-                      ' ' +
-                      aluno.matricula,
-                    requerimento_id: getId(requerimento._links.self.href)
-                  }
-                ])
+        reqsAbertos.payload._embedded.requerimentos.forEach(
+          (requerimento: Requerimento) => {
+            this.props
+              .getAluno(requerimento._links.aluno.href)
+              .then((alunoResponse: Action<Aluno>) => {
+                if (typeof alunoResponse.payload !== 'undefined') {
+                  this.setState({
+                    requerimentos: this.state.requerimentos.concat([
+                      {
+                        search:
+                          getId(requerimento._links.self.href) +
+                          ' ' +
+                          alunoResponse.payload.nome +
+                          ' ' +
+                          alunoResponse.payload.matricula,
+                        requerimento_id: getId(requerimento._links.self.href)
+                      }
+                    ]),
+                    viewData: this.state.viewData.concat([
+                      {
+                        requerimento: requerimento,
+                        aluno: alunoResponse.payload
+                      }
+                    ])
+                  })
+                }
+                this.setState({
+                  filteredRequerimentos: this.state.requerimentos
+                })
               })
-              this.setState({ filteredRequerimentos: this.state.requerimentos })
-            })
-        })
+          }
+        )
       }
     })
   }
