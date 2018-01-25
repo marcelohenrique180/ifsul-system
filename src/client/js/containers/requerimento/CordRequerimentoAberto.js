@@ -6,8 +6,10 @@ import type {
   State as DefaultState,
   Requerimento,
   RequerimentoAberto,
-  Store
+  Store,
+  Tipo
 } from '../../reducers/types/index'
+import { List, ListItem } from 'material-ui/List'
 
 import FontIcon from 'material-ui/FontIcon'
 import React from 'react'
@@ -18,6 +20,7 @@ import { getAluno } from '../../actions/aluno'
 import { getId } from '../../util'
 import { getRequerimentosEmAberto } from '../../actions/requerimento'
 import { reloadCordRequerimento } from '../../containers/requerimento/CordRequerimento'
+import { requestTipos } from '../../actions/tipo'
 
 const searchStyle = {
   display: 'flex',
@@ -29,6 +32,7 @@ type StateProps = {
 }
 
 type DispatchProps = {
+  requestTipos: string => Promise<Action<Tipo>>,
   getRequerimentosEmAberto: () => Promise<Action<RequerimentoAberto>>,
   getAluno: string => Promise<Action<Aluno>>,
   loadRequerimento: ({
@@ -47,9 +51,20 @@ type Props = StateProps &
 
 type State = {
   search: string,
-  requerimentos: Array<{ search: string, requerimento_id: string }>,
-  filteredRequerimentos: Array<{ search: string, requerimento_id: string }>,
-  viewData: Array<{ requerimento: Requerimento, aluno: Aluno }>
+  requerimentos: Array<{
+    requerimento: Requerimento,
+    aluno: Aluno,
+    requerimento_id: string,
+    search: string,
+    tipo: Tipo
+  }>,
+  filteredRequerimentos: Array<{
+    requerimento: Requerimento,
+    aluno: Aluno,
+    requerimento_id: string,
+    search: string,
+    tipo: Tipo
+  }>
 }
 
 class CordRequerimentoAberto extends React.Component<Props, State> {
@@ -70,30 +85,36 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
             this.props
               .getAluno(requerimento._links.aluno.href)
               .then((alunoResponse: Action<Aluno>) => {
-                if (typeof alunoResponse.payload !== 'undefined') {
-                  this.setState({
-                    requerimentos: this.state.requerimentos.concat([
-                      {
-                        search:
-                          getId(requerimento._links.self.href) +
-                          ' ' +
-                          alunoResponse.payload.nome +
-                          ' ' +
-                          alunoResponse.payload.matricula,
-                        requerimento_id: getId(requerimento._links.self.href)
-                      }
-                    ]),
-                    viewData: this.state.viewData.concat([
-                      {
-                        requerimento: requerimento,
-                        aluno: alunoResponse.payload
-                      }
-                    ])
+                this.props
+                  .requestTipos(requerimento._links.tipo.href)
+                  .then(tipo => {
+                    if (
+                      typeof alunoResponse.payload !== 'undefined' &&
+                      typeof tipo.payload !== 'undefined'
+                    ) {
+                      this.setState({
+                        requerimentos: this.state.requerimentos.concat([
+                          {
+                            search:
+                              getId(requerimento._links.self.href) +
+                              ' ' +
+                              alunoResponse.payload.nome +
+                              ' ' +
+                              alunoResponse.payload.matricula,
+                            requerimento: requerimento,
+                            aluno: alunoResponse.payload,
+                            requerimento_id: getId(
+                              requerimento._links.self.href
+                            ),
+                            tipo: tipo.payload
+                          }
+                        ])
+                      })
+                    }
+                    this.setState({
+                      filteredRequerimentos: this.state.requerimentos
+                    })
                   })
-                }
-                this.setState({
-                  filteredRequerimentos: this.state.requerimentos
-                })
               })
           }
         )
@@ -125,15 +146,22 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
     )
 
     return filteredRequerimentos.map((reqAberto, i) => {
+      const icon = <FontIcon className="material-icons">description</FontIcon>
       return (
-        <li
+        <ListItem
           key={i}
-          tabIndex={0}
-          onKeyPress={this.onItemClick(reqAberto.requerimento_id)}
+          primaryText={reqAberto.aluno.nome}
+          secondaryText={
+            <p>
+              {reqAberto.requerimento.data} - {reqAberto.tipo.tipo}
+              <br />
+              {reqAberto.requerimento.requerimento}
+            </p>
+          }
+          secondaryTextLines={2}
+          leftIcon={icon}
           onClick={this.onItemClick(reqAberto.requerimento_id)}
-        >
-          {reqAberto.search}{' '}
-        </li>
+        />
       )
     })
   }
@@ -168,7 +196,7 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
         </div>
         <div>
           {requerimentosAbertos.fetched && (
-            <ul>{this.renderRequerimentos()}</ul>
+            <List>{this.renderRequerimentos()}</List>
           )}
         </div>
       </div>
@@ -184,6 +212,7 @@ function mapStateToProps(state: Store): StateProps {
 
 function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
   return {
+    requestTipos: (url: string) => dispatch(requestTipos(url)),
     getRequerimentosEmAberto: () => dispatch(getRequerimentosEmAberto()),
     getAluno: url => dispatch(getAluno(url)),
     loadRequerimento: ({ push, id, reload }) => {
