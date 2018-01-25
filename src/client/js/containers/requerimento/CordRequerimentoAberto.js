@@ -70,7 +70,6 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
                 requerimentos: this.state.requerimentos.concat([
                   {
                     result:
-                      'Req.Nº' +
                       getId(requerimento._links.self.href) +
                       ' ' +
                       aluno.nome +
