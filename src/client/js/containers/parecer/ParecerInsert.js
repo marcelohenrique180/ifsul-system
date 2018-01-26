@@ -12,7 +12,6 @@ import type {
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
 
 import Alerta from '../../components/Alerta'
-import FloatInput from '../../components/FloatInput'
 import RaisedButton from 'material-ui/RaisedButton'
 import Subheader from 'material-ui/Subheader'
 import TextField from 'material-ui/TextField'

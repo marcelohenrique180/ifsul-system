@@ -7,13 +7,13 @@ import type {
   Requerimento,
   Store
 } from '../../reducers/types/index'
-import { Divider, Paper } from 'material-ui'
 import { getAluno, resetAluno } from '../../actions/aluno'
 import { getRequerimento, resetRequerimento } from '../../actions/requerimento'
 import { requestCursos, resetCurso } from '../../actions/curso'
 import { requestTipos, resetTipo } from '../../actions/tipo'
 
 import AlunoInfo from '../../containers/aluno/AlunoInfo'
+import { Divider } from 'material-ui'
 import React from 'react'
 import RequerimentoView from '../../containers/requerimento/RequerimentoView'
 import { connect } from 'react-redux'
