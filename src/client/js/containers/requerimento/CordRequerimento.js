@@ -7,6 +7,7 @@ import type {
   Requerimento,
   Store
 } from '../../reducers/types/index'
+import { Divider, Paper } from 'material-ui'
 import { getAluno, resetAluno } from '../../actions/aluno'
 import { getRequerimento, resetRequerimento } from '../../actions/requerimento'
 import { requestCursos, resetCurso } from '../../actions/curso'
@@ -77,24 +78,11 @@ class CordRequerimento extends React.Component<Props> {
 
   render() {
     return (
-      <div>
-        <div className="panel panel-ifsul">
-          <div className="panel-heading text-center">
-            <h3 className="panel-title">Requerimento</h3>
-          </div>
-          <div className="panel-body">
-            <div className="container-fluid">
-              <div className="row">
-                <div className="form-group col-centered">
-                  <AlunoInfo />
-                  <RequerimentoView
-                    requerimentoId={this.props.params['requerimento']}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div style={{ margin: '0 1em' }}>
+        <h3 style={{ textAlign: 'center' }}>Requerimento</h3>
+        <AlunoInfo />
+        <Divider />
+        <RequerimentoView requerimentoId={this.props.params['requerimento']} />
       </div>
     )
   }

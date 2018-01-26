@@ -9,15 +9,25 @@ import type {
   Requerimento,
   Store
 } from '../../reducers/types/index'
+import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
 
 import Alerta from '../../components/Alerta'
 import FloatInput from '../../components/FloatInput'
+import RaisedButton from 'material-ui/RaisedButton'
+import Subheader from 'material-ui/Subheader'
+import TextField from 'material-ui/TextField'
 import { areFieldsEmpty } from '../../util'
 import autobind from 'autobind-decorator'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { getRequerimentosEmAberto } from '../../actions/requerimento'
 import { sendParecer } from '../../actions/parecer'
+
+const style = {
+  radioButton: {
+    marginBottom: 16
+  }
+}
 
 type StateProps = {
   requerimento: DefaultState<Requerimento>
@@ -97,69 +107,56 @@ class ParecerInsert extends React.Component<Props, State> {
 
     return (
       <div>
-        <h3 className="text-center">Parecer</h3>
-        <form className="form-group">
-          <div className="form-group">
-            <label htmlFor="parecer">Parecer</label>
-            <textarea
-              name="parecer"
-              id="parecer"
-              rows="5"
-              className="form-control"
-              value={this.state.parecer}
-              onChange={this.handleChange}
-            />
-          </div>
-          <div className="form-group radio-inline-flex">
-            <div className="radio-inline">
-              <label>
-                <input
-                  type="radio"
-                  name="deferido"
-                  value="true"
-                  checked={this.state.deferido === 'true'}
-                  onChange={this.handleChange}
-                />Deferir
-              </label>
-            </div>
-            <div className="radio-inline">
-              <label>
-                <input
-                  type="radio"
-                  name="deferido"
-                  value="false"
-                  checked={this.state.deferido === 'false'}
-                  onChange={this.handleChange}
-                />Não Deferir
-              </label>
-            </div>
-          </div>
-          <div className="input-group">
-            <FloatInput
-              name="memorando"
-              type="text"
-              value={this.state.memorando}
-              handleChange={this.handleChange}
-              textLabel="Nº do Memorando"
-            />
-          </div>
-          <a href="#" target="_blank" className="pull-right">
+        <Subheader>Parecer</Subheader>
+        <form>
+          <TextField
+            name="parecer"
+            rows={1}
+            hintText="Parecer"
+            multiLine={true}
+            defaultValue={this.state.parecer}
+            onChange={this.handleChange}
+            fullWidth={true}
+          />
+          <TextField
+            name="memorando"
+            defaultValue={this.state.memorando}
+            handleChange={this.handleChange}
+            floatingLabelText="Nº do Memorando"
+            fullWidth={true}
+          />
+          <a href="#" target="_blank" style={{ float: 'right' }}>
             Gerar Memorando
           </a>
+          <RadioButtonGroup name="deferido">
+            <RadioButton
+              value="true"
+              label="Deferir"
+              onClick={this.handleChange}
+              style={style.radioButton}
+            />
+            <RadioButton
+              value="false"
+              onClick={this.handleChange}
+              label="Não Deferir"
+              style={style.radioButton}
+            />
+          </RadioButtonGroup>
           <Alerta
             show={erro.erro}
             alertClass="alert alert-danger"
             message={erro.message}
           />
-          <div className="input-group text-center">
-            <button
-              type="submit"
-              className="btn btn-custom"
-              onClick={this.handleSubmit}
-            >
-              Enviar
-            </button>
-          </div>
+          <RaisedButton
+            primary={true}
+            label="Enviar"
+            onClick={this.handleSubmit}
+            style={{
+              display: 'block',
+              width: '4em',
+              margin: '0 auto'
+            }}
+          />
         </form>
       </div>
     )

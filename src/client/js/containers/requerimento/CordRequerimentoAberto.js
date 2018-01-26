@@ -151,7 +151,11 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
     )
 
     return filteredRequerimentos.map((reqAberto, i) => {
-      const icon = <FontIcon className="material-icons">description</FontIcon>
+      const icon = (
+        <FontIcon className="material-icons" style={{ margin: '30px 12px' }}>
+          description
+        </FontIcon>
+      )
       return (
         <ListItem
           key={i}
@@ -190,7 +194,9 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
       <div>
         <Subheader>Requerimentos em Aberto</Subheader>
         <div style={searchStyle}>
-          <FontIcon className="material-icons">search</FontIcon>
+          <FontIcon className="material-icons" style={{ margin: '.5em' }}>
+            search
+          </FontIcon>
           <TextField
             name="search"
             hintText="Pesquisar"

@@ -7,8 +7,8 @@ import type {
   State as DefaultState,
   Store
 } from '../../reducers/types/index'
+import { Subheader, TextField } from 'material-ui'
 
-import FloatInput from '../../components/FloatInput'
 import React from 'react'
 import { connect } from 'react-redux'
 import { requestAluno } from '../../actions/aluno'
@@ -34,46 +34,34 @@ class AlunoInfo extends React.Component<Props> {
 
     return (
       <div>
-        <h3 className="text-center">Aluno</h3>
+        <Subheader>Aluno</Subheader>
         <div>
           {loaded && (
             <div>
-              <div className="input-group">
-                <FloatInput
-                  name="nome"
-                  type="text"
-                  value={aluno.payload.nome}
-                  textLabel="Nome"
-                  readOnly="true"
-                />
-              </div>
-              <div className="input-group">
-                <FloatInput
-                  name="nome"
-                  type="text"
-                  value={aluno.payload.matricula}
-                  textLabel="Matricula"
-                  readOnly="true"
-                />
-              </div>
-              <div className="input-group">
-                <FloatInput
-                  name="nome"
-                  type="text"
-                  value={aluno.payload.telefone}
-                  textLabel="Telefone"
-                  readOnly="true"
-                />
-              </div>
-              <div className="input-group">
-                <FloatInput
-                  name="nome"
-                  type="text"
-                  value={curso.payload.nome}
-                  textLabel="Curso"
-                  readOnly="true"
-                />
-              </div>
+              <TextField
+                defaultValue={aluno.payload.nome}
+                floatingLabelText="Nome"
+                fullWidth={true}
+                disabled={true}
+              />
+              <TextField
+                defaultValue={aluno.payload.matricula}
+                floatingLabelText="Matricula"
+                fullWidth={true}
+                disabled={true}
+              />
+              <TextField
+                defaultValue={aluno.payload.telefone}
+                floatingLabelText="Telefone"
+                fullWidth={true}
+                disabled={true}
+              />
+              <TextField
+                defaultValue={curso.payload.nome}
+                floatingLabelText="Curso"
+                fullWidth={true}
+                disabled={true}
+              />
             </div>
           )}
         </div>
