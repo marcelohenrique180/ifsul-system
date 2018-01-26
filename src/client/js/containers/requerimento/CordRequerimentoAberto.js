@@ -101,7 +101,11 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
                               ' ' +
                               alunoResponse.payload.nome +
                               ' ' +
-                              alunoResponse.payload.matricula,
+                              alunoResponse.payload.matricula +
+                              ' ' +
+                              requerimento.data +
+                              ' ' +
+                              tipo.payload.tipo,
                             requerimento: requerimento,
                             aluno: alunoResponse.payload,
                             requerimento_id: getId(
