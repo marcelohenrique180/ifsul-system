@@ -11,7 +11,6 @@ import type {
 } from '../../reducers/types/index'
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
 
-import Alerta from '../../components/Alerta'
 import RaisedButton from 'material-ui/RaisedButton'
 import Subheader from 'material-ui/Subheader'
 import TextField from 'material-ui/TextField'
@@ -43,7 +42,7 @@ type State = {
   deferido: string,
   parecer: string,
   memorando: string,
-  erro: { message: string, erro: boolean }
+  formComplete: boolean
 }
 
 class ParecerInsert extends React.Component<Props, State> {
@@ -54,56 +53,48 @@ class ParecerInsert extends React.Component<Props, State> {
     deferido: '',
     parecer: '',
     memorando: '',
-    erro: { message: '', erro: false }
+    formComplete: false
   }
 
   @autobind
   handleChange(event: SyntheticInputEvent<HTMLInputElement>) {
     const { value, name } = event.target
 
-    this.setState({ [name]: value })
+    const { deferido, parecer, memorando } = { ...this.state, [name]: value }
+    const notNullFields = [deferido, parecer, memorando]
+    const error = areFieldsEmpty(notNullFields)
+    if (!error) {
+      this.setState({ formComplete: true, [name]: value })
+    } else {
+      this.setState({ formComplete: false, [name]: value })
+    }
   }
 
   @autobind
   handleSubmit(e: SyntheticInputEvent<HTMLInputElement>) {
     e.preventDefault()
 
-    const { deferido, parecer, memorando } = this.state
-    const notNullFields = [deferido, parecer, memorando]
-
     if (typeof this.props.requerimento.payload._links !== 'undefined') {
       const requerimentoLink: string = this.props.requerimento.payload._links
         .self.href
 
-      const error = areFieldsEmpty(notNullFields)
-      if (error) {
-        this.setState({
-          erro: {
-            erro: true,
-            message: 'Algum campo obrigatório não foi preenchido.'
-          }
-        })
-      } else {
-        this.setState({ erro: { message: '', erro: false } })
+      const { deferido, parecer, memorando } = this.state
 
-        this.props
-          .sendParecer({
-            deferido: deferido === 'true',
-            parecer,
-            memorando,
-            requerimento: requerimentoLink
-          })
-          .then(() => {
-            this.props.getRequerimentosEmAberto()
-          })
-        this.props.router.push('/menu/cordcurso') // TODO pegar caminho correto
-      }
+      this.props
+        .sendParecer({
+          deferido: deferido === 'true',
+          parecer,
+          memorando,
+          requerimento: requerimentoLink
+        })
+        .then(() => {
+          this.props.getRequerimentosEmAberto()
+        })
+      this.props.router.push('/menu/cordcurso') // TODO pegar caminho correto
     }
   }
 
   render() {
-    const { erro } = this.state
-
     return (
       <div>
         <Subheader>Parecer</Subheader>
@@ -111,7 +102,7 @@ class ParecerInsert extends React.Component<Props, State> {
           <TextField
             name="parecer"
             rows={1}
-            hintText="Parecer"
+            floatingLabelText="Parecer"
             multiLine={true}
             defaultValue={this.state.parecer}
             onChange={this.handleChange}
@@ -120,7 +111,7 @@ class ParecerInsert extends React.Component<Props, State> {
           <TextField
             name="memorando"
             defaultValue={this.state.memorando}
-            handleChange={this.handleChange}
+            onChange={this.handleChange}
             floatingLabelText="Nº do Memorando"
             fullWidth={true}
           />
@@ -141,15 +132,11 @@ class ParecerInsert extends React.Component<Props, State> {
               style={style.radioButton}
             />
           </RadioButtonGroup>
-          <Alerta
-            show={erro.erro}
-            alertClass="alert alert-danger"
-            message={erro.message}
-          />
           <RaisedButton
             primary={true}
             label="Enviar"
             onClick={this.handleSubmit}
+            disabled={!this.state.formComplete}
             style={{
               display: 'block',
               width: '4em',
