@@ -97,13 +97,14 @@ class ParecerInsert extends React.Component<Props, State> {
   render() {
     return (
       <div>
-        <Subheader>Parecer</Subheader>
+        <Subheader style={{ color: 'black' }}>Parecer</Subheader>
         <form>
           <TextField
             name="parecer"
             rows={1}
             floatingLabelText="Parecer"
             multiLine={true}
+            floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.57)' }}
             defaultValue={this.state.parecer}
             onChange={this.handleChange}
             fullWidth={true}
@@ -112,6 +113,7 @@ class ParecerInsert extends React.Component<Props, State> {
             name="memorando"
             defaultValue={this.state.memorando}
             onChange={this.handleChange}
+            floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.57)' }}
             floatingLabelText="Nº do Memorando"
             fullWidth={true}
           />

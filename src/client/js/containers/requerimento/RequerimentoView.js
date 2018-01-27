@@ -60,7 +60,7 @@ class RequerimentoView extends React.Component<Props> {
                   disabled={true}
                 />
                 <TextField
-                  rows={3}
+                  rows={1}
                   floatingLabelText="Requerimento"
                   multiLine={true}
                   defaultValue={requerimento.requerimento}
@@ -68,7 +68,7 @@ class RequerimentoView extends React.Component<Props> {
                   disabled={true}
                 />
                 <TextField
-                  rows={3}
+                  rows={1}
                   floatingLabelText="Justificativa"
                   multiLine={true}
                   defaultValue={requerimento.justificativa}
