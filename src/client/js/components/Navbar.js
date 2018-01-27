@@ -52,13 +52,23 @@ class Navbar extends React.Component<Props> {
       ? this.props
       : this.props.usuario.payload
 
+    const Logo = (
+      <img
+        alt="IFSul"
+        width="45"
+        height="57"
+        src="/img/logo.png"
+        style={{ margin: '.1em .1em .4em .1em' }}
+      />
+    )
+
     const rightButton = isAuthenticated ? (
       <FlatButton label="Logout" onClick={this.handleLogout} />
     ) : (
       <FlatButton label="Login" onClick={this.handleLogin} />
     )
 
-    return <AppBar showMenuIconButton={false} iconElementRight={rightButton} />
+    return <AppBar iconElementLeft={Logo} iconElementRight={rightButton} />
   }
 }
 
