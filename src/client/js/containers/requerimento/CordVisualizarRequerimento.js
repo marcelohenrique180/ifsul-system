@@ -15,6 +15,14 @@ import {
   FAILURE_PARECER,
   getParecerByRequerimentoId
 } from '../../actions/parecer'
+import {
+  Table,
+  TableBody,
+  TableHeader,
+  TableHeaderColumn,
+  TableRow,
+  TableRowColumn
+} from 'material-ui/Table'
 import { formattedDate, getId } from '../../util'
 
 import Carregando from '../../components/Carregando'
@@ -154,13 +162,13 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
       }
 
       return (
-        <tr key={i}>
-          <td>{tipo}</td>
-          <td>{nome}</td>
-          <td>{matricula}</td>
-          <td>{data}</td>
-          <td>{parecer}</td>
-        </tr>
+        <TableRow key={i}>
+          <TableRowColumn>{tipo}</TableRowColumn>
+          <TableRowColumn>{nome}</TableRowColumn>
+          <TableRowColumn>{matricula}</TableRowColumn>
+          <TableRowColumn>{data}</TableRowColumn>
+          <TableRowColumn>{parecer}</TableRowColumn>
+        </TableRow>
       )
     })
   }
@@ -185,18 +193,20 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
         </div>
         {renderTable ? (
           <div>
-            <table>
-              <thead>
-                <tr>
-                  <th>Tipo</th>
-                  <th>Nome Aluno</th>
-                  <th>Matrícula Aluno</th>
-                  <th>Data</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>{this.renderLines()}</tbody>
-            </table>
+            <Table>
+              <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                <TableRow>
+                  <TableHeaderColumn>Tipo</TableHeaderColumn>
+                  <TableHeaderColumn>Nome Aluno</TableHeaderColumn>
+                  <TableHeaderColumn>Matrícula</TableHeaderColumn>
+                  <TableHeaderColumn>Data</TableHeaderColumn>
+                  <TableHeaderColumn>Status</TableHeaderColumn>
+                </TableRow>
+              </TableHeader>
+              <TableBody displayRowCheckbox={false}>
+                {this.renderLines()}
+              </TableBody>
+            </Table>
             <Paginator
               pageableEntity={requerimentos.payload}
               currentPage={this.state.currentPage}
