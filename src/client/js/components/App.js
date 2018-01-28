@@ -15,7 +15,18 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import Navbar from './Navbar'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
-export const muiTheme = getMuiTheme({
+export type Theme = {
+  palette: {
+    primary1Color: string,
+    primary2Color: string,
+    primary3Color: string,
+    accent1Color: string,
+    accent2Color: string,
+    accent3Color: string
+  }
+}
+
+export const muiTheme: Theme = getMuiTheme({
   palette: {
     primary1Color: green500,
     primary2Color: green700,

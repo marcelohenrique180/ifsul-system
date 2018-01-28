@@ -18,6 +18,7 @@ import {
 import {
   Table,
   TableBody,
+  TableFooter,
   TableHeader,
   TableHeaderColumn,
   TableRow,
@@ -28,6 +29,7 @@ import { gray500, green500, red500 } from 'material-ui/styles/colors'
 import Carregando from '../../components/Carregando'
 import FontIcon from 'material-ui/FontIcon'
 import Paginator from '../../components/Paginator'
+import Subheader from 'material-ui/Subheader'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import { getAluno } from '../../actions/aluno'
@@ -204,7 +206,7 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
     return (
       <div>
         <div>
-          <h4>Todos os Requerimentos</h4>
+          <Subheader>Todos os Requerimentos</Subheader>
         </div>
         {renderTable ? (
           <div>
@@ -221,14 +223,20 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
               <TableBody displayRowCheckbox={false}>
                 {this.renderLines()}
               </TableBody>
+              <TableFooter adjustForCheckbox={false}>
+                <TableRow>
+                  <TableRowColumn colSpan="5">
+                    <Paginator
+                      pageableEntity={requerimentos.payload}
+                      currentPage={this.state.currentPage}
+                      location={this.props.location}
+                      api={requerimentosAbertosApi}
+                      onClickHandler={this.getRequerimentoByPage}
+                    />
+                  </TableRowColumn>
+                </TableRow>
+              </TableFooter>
             </Table>
-            <Paginator
-              pageableEntity={requerimentos.payload}
-              currentPage={this.state.currentPage}
-              location={this.props.location}
-              api={requerimentosAbertosApi}
-              onClickHandler={this.getRequerimentoByPage}
-            />
           </div>
         ) : (
           <Carregando />
