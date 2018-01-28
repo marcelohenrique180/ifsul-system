@@ -179,13 +179,13 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
     }
 
     return (
-      <div className="panel panel-default">
-        <div className="panel-heading">
+      <div>
+        <div>
           <h4>Todos os Requerimentos</h4>
         </div>
         {renderTable ? (
-          <div className="panel-body table-responsive">
-            <table className="table table-hover">
+          <div>
+            <table>
               <thead>
                 <tr>
                   <th>Tipo</th>
