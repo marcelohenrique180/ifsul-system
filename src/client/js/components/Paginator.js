@@ -2,7 +2,6 @@
 
 import Carregando from '../components/Carregando'
 import FlatButton from 'material-ui/FlatButton'
-import { Link } from 'react-router'
 import React from 'react'
 import type { RequerimentoPage } from '../reducers/types/index'
 import type { Theme } from './App'
@@ -23,8 +22,7 @@ type Props = {
   pageableEntity: RequerimentoPage,
   currentPage: number,
   onClickHandler: string => () => void,
-  api: string,
-  location: { pathname: string }
+  api: string
 } & {
   muiTheme?: Theme
 }
@@ -36,7 +34,6 @@ export default class Paginator extends React.Component<Props> {
 
   render() {
     const { pageableEntity, currentPage, onClickHandler, api } = this.props
-    const { pathname } = this.props.location
 
     if (typeof pageableEntity.page !== 'undefined') {
       const { _links, page } = pageableEntity
