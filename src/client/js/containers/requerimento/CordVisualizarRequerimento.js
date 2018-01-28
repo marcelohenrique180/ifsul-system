@@ -23,7 +23,6 @@ import {
   TableRow,
   TableRowColumn
 } from 'material-ui/Table'
-import { formattedDate, getId } from '../../util'
 import { gray500, green500, red500 } from 'material-ui/styles/colors'
 
 import Carregando from '../../components/Carregando'
@@ -32,6 +31,7 @@ import Paginator from '../../components/Paginator'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import { getAluno } from '../../actions/aluno'
+import { getId } from '../../util'
 import { getRequerimentoByPage } from '../../actions/requerimento'
 import { requestTipos } from '../../actions/tipo'
 
@@ -148,7 +148,7 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
       const tipo = tipos[i]
       let parecer = pareceres[i]
       const aluno = alunos[i]
-      const data = formattedDate(requerimento.data)
+      const data = requerimento.data
       let nome = ''
       let matricula = ''
 
