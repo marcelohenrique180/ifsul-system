@@ -24,8 +24,10 @@ import {
   TableRowColumn
 } from 'material-ui/Table'
 import { formattedDate, getId } from '../../util'
+import { gray500, green500, red500 } from 'material-ui/styles/colors'
 
 import Carregando from '../../components/Carregando'
+import FontIcon from 'material-ui/FontIcon'
 import Paginator from '../../components/Paginator'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
@@ -156,9 +158,22 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
       }
 
       if (parecer !== null) {
-        parecer = parecer === true ? 'Deferido' : 'Indeferido'
+        parecer =
+          parecer === true ? (
+            <FontIcon className="material-icons" style={{ color: green500 }}>
+              done
+            </FontIcon>
+          ) : (
+            <FontIcon className="material-icons" style={{ color: red500 }}>
+              not_interested
+            </FontIcon>
+          )
       } else {
-        parecer = 'Em Andamento'
+        parecer = (
+          <FontIcon className="material-icons" style={{ color: gray500 }}>
+            settings_ethernet
+          </FontIcon>
+        )
       }
 
       return (
