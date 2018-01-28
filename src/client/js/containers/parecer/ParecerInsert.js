@@ -117,7 +117,11 @@ class ParecerInsert extends React.Component<Props, State> {
             floatingLabelText="Nº do Memorando"
             fullWidth={true}
           />
-          <a href="#" target="_blank" style={{ float: 'right' }}>
+          <a
+            href="#"
+            target="_blank"
+            style={{ float: 'right', margin: '.5em auto' }}
+          >
             Gerar Memorando
           </a>
           <RadioButtonGroup name="deferido">

@@ -57,7 +57,7 @@ class CordMenu extends AuthorizedContainer<States> {
 
     return (
       <div>
-        <div>
+        <div style={{ maxWidth: 525, margin: '0 auto' }}>
           <RouterHandler {...this.props} />
         </div>
         <BottomNavigation
