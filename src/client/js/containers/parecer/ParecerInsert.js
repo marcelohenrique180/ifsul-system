@@ -9,15 +9,23 @@ import type {
   Requerimento,
   Store
 } from '../../reducers/types/index'
+import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
 
-import Alerta from '../../components/Alerta'
-import FloatInput from '../../components/FloatInput'
+import RaisedButton from 'material-ui/RaisedButton'
+import Subheader from 'material-ui/Subheader'
+import TextField from 'material-ui/TextField'
 import { areFieldsEmpty } from '../../util'
 import autobind from 'autobind-decorator'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { getRequerimentosEmAberto } from '../../actions/requerimento'
 import { sendParecer } from '../../actions/parecer'
+
+const style = {
+  radioButton: {
+    marginBottom: 16
+  }
+}
 
 type StateProps = {
   requerimento: DefaultState<Requerimento>
@@ -34,7 +42,7 @@ type State = {
   deferido: string,
   parecer: string,
   memorando: string,
-  erro: { message: string, erro: boolean }
+  formComplete: boolean
 }
 
 class ParecerInsert extends React.Component<Props, State> {
@@ -45,121 +53,102 @@ class ParecerInsert extends React.Component<Props, State> {
     deferido: '',
     parecer: '',
     memorando: '',
-    erro: { message: '', erro: false }
+    formComplete: false
   }
 
   @autobind
-  handleChange(event: SyntheticInputEvent<HTMLButtonElement>) {
+  handleChange(event: SyntheticInputEvent<HTMLInputElement>) {
     const { value, name } = event.target
 
-    this.setState({ [name]: value })
+    const { deferido, parecer, memorando } = { ...this.state, [name]: value }
+    const notNullFields = [deferido, parecer, memorando]
+    const error = areFieldsEmpty(notNullFields)
+    if (!error) {
+      this.setState({ formComplete: true, [name]: value })
+    } else {
+      this.setState({ formComplete: false, [name]: value })
+    }
   }
 
   @autobind
   handleSubmit(e: SyntheticInputEvent<HTMLInputElement>) {
     e.preventDefault()
 
-    const { deferido, parecer, memorando } = this.state
-    const notNullFields = [deferido, parecer, memorando]
-
     if (typeof this.props.requerimento.payload._links !== 'undefined') {
       const requerimentoLink: string = this.props.requerimento.payload._links
         .self.href
 
-      const error = areFieldsEmpty(notNullFields)
-      if (error) {
-        this.setState({
-          erro: {
-            erro: true,
-            message: 'Algum campo obrigatório não foi preenchido.'
-          }
-        })
-      } else {
-        this.setState({ erro: { message: '', erro: false } })
+      const { deferido, parecer, memorando } = this.state
 
-        this.props
-          .sendParecer({
-            deferido: deferido === 'true',
-            parecer,
-            memorando,
-            requerimento: requerimentoLink
-          })
-          .then(() => {
-            this.props.getRequerimentosEmAberto()
-          })
-        this.props.router.push('/menu/cordcurso') // TODO pegar caminho correto
-      }
+      this.props
+        .sendParecer({
+          deferido: deferido === 'true',
+          parecer,
+          memorando,
+          requerimento: requerimentoLink
+        })
+        .then(() => {
+          this.props.getRequerimentosEmAberto()
+        })
+      this.props.router.push('/menu/cordcurso') // TODO pegar caminho correto
     }
   }
 
   render() {
-    const { erro } = this.state
-
     return (
       <div>
-        <h3 className="text-center">Parecer</h3>
-        <form className="form-group">
-          <div className="form-group">
-            <label htmlFor="parecer">Parecer</label>
-            <textarea
-              name="parecer"
-              id="parecer"
-              rows="5"
-              className="form-control"
-              value={this.state.parecer}
-              onChange={this.handleChange}
-            />
-          </div>
-          <div className="form-group radio-inline-flex">
-            <div className="radio-inline">
-              <label>
-                <input
-                  type="radio"
-                  name="deferido"
-                  value="true"
-                  checked={this.state.deferido === 'true'}
-                  onChange={this.handleChange}
-                />Deferir
-              </label>
-            </div>
-            <div className="radio-inline">
-              <label>
-                <input
-                  type="radio"
-                  name="deferido"
-                  value="false"
-                  checked={this.state.deferido === 'false'}
-                  onChange={this.handleChange}
-                />Não Deferir
-              </label>
-            </div>
-          </div>
-          <div className="input-group">
-            <FloatInput
-              name="memorando"
-              type="text"
-              value={this.state.memorando}
-              handleChange={this.handleChange}
-              textLabel="Nº do Memorando"
-            />
-          </div>
-          <a href="#" target="_blank" className="pull-right">
+        <Subheader style={{ color: 'black' }}>Parecer</Subheader>
+        <form>
+          <TextField
+            name="parecer"
+            rows={1}
+            floatingLabelText="Parecer"
+            multiLine={true}
+            floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.57)' }}
+            defaultValue={this.state.parecer}
+            onChange={this.handleChange}
+            fullWidth={true}
+          />
+          <TextField
+            name="memorando"
+            defaultValue={this.state.memorando}
+            onChange={this.handleChange}
+            floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.57)' }}
+            floatingLabelText="Nº do Memorando"
+            fullWidth={true}
+          />
+          <a
+            href="#"
+            target="_blank"
+            style={{ float: 'right', margin: '.5em auto' }}
+          >
             Gerar Memorando
           </a>
-          <Alerta
-            show={erro.erro}
-            alertClass="alert alert-danger"
-            message={erro.message}
+          <RadioButtonGroup name="deferido">
+            <RadioButton
+              value="true"
+              label="Deferir"
+              onClick={this.handleChange}
+              style={style.radioButton}
+            />
+            <RadioButton
+              value="false"
+              onClick={this.handleChange}
+              label="Não Deferir"
+              style={style.radioButton}
+            />
+          </RadioButtonGroup>
+          <RaisedButton
+            primary={true}
+            label="Enviar"
+            onClick={this.handleSubmit}
+            disabled={!this.state.formComplete}
+            style={{
+              display: 'block',
+              width: '4em',
+              margin: '0 auto'
+            }}
           />
-          <div className="input-group text-center">
-            <button
-              type="submit"
-              className="btn btn-custom"
-              onClick={this.handleSubmit}
-            >
-              Enviar
-            </button>
-          </div>
         </form>
       </div>
     )

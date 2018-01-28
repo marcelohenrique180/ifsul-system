@@ -2,9 +2,7 @@
 
 import * as React from 'react'
 
-type Props = { children: React$Node }
-
-export default class RouterHandler extends React.Component<Props> {
+export default class RouterHandler extends React.Component<any> {
   render() {
     const { children } = this.props
 

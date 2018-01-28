@@ -1,25 +1,20 @@
-import React, {Component} from 'react'
+// @flow
 
-export default class Carregando extends Component {
-  render () {
-    return (
-      <div className="loadingbox">
-        <div className="loadingbox__ball" id="loading_ball_1">
-          <div className="loadingbox__ball__innerball" />
-        </div>
-        <div className="loadingbox__ball" id="loading_ball_2">
-          <div className="loadingbox__ball__innerball" />
-        </div>
-        <div className="loadingbox__ball" id="loading_ball_3">
-          <div className="loadingbox__ball__innerball" />
-        </div>
-        <div className="loadingbox__ball" id="loading_ball_4">
-          <div className="loadingbox__ball__innerball" />
-        </div>
-        <div className="loadingbox__ball" id="loading_ball_5">
-          <div className="loadingbox__ball__innerball" />
-        </div>
-      </div>
-    )
+import * as React from 'react'
+
+import CircularProgress from 'material-ui/CircularProgress'
+
+const style = {
+  progress: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)'
+  }
+}
+
+export default class Carregando extends React.Component<{}> {
+  render() {
+    return <CircularProgress size={60} thickness={7} style={style.progress} />
   }
 }

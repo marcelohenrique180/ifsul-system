@@ -15,14 +15,28 @@ import {
   FAILURE_PARECER,
   getParecerByRequerimentoId
 } from '../../actions/parecer'
-import { formattedDate, getId } from '../../util'
+import {
+  Table,
+  TableBody,
+  TableFooter,
+  TableHeader,
+  TableHeaderColumn,
+  TableRow,
+  TableRowColumn
+} from 'material-ui/Table'
+import { gray500, green500, red500 } from 'material-ui/styles/colors'
 
 import Carregando from '../../components/Carregando'
+import FontIcon from 'material-ui/FontIcon'
 import Paginator from '../../components/Paginator'
+import Subheader from 'material-ui/Subheader'
+import type { Theme } from '../../components/App'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import { getAluno } from '../../actions/aluno'
+import { getId } from '../../util'
 import { getRequerimentoByPage } from '../../actions/requerimento'
+import muiThemable from 'material-ui/styles/muiThemeable'
 import { requestTipos } from '../../actions/tipo'
 
 const requerimentosAbertosApi = 'requerimentos?size=5&'
@@ -40,7 +54,8 @@ type DispatchProps = {
 
 type Props = StateProps &
   DispatchProps & {
-    location: Object
+    location: Object,
+    muiTheme?: Theme
   }
 
 type State = {
@@ -50,6 +65,7 @@ type State = {
   alunos: Array<{ nome: string, matricula: string }>
 }
 
+@muiThemable()
 class CordVisualizarRequerimento extends React.Component<Props, State> {
   state = { currentPage: 0, tipos: [], pareceres: [], alunos: [] }
 
@@ -138,7 +154,7 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
       const tipo = tipos[i]
       let parecer = pareceres[i]
       const aluno = alunos[i]
-      const data = formattedDate(requerimento.data)
+      const data = requerimento.data
       let nome = ''
       let matricula = ''
 
@@ -148,24 +164,42 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
       }
 
       if (parecer !== null) {
-        parecer = parecer === true ? 'Deferido' : 'Indeferido'
+        parecer =
+          parecer === true ? (
+            <FontIcon className="material-icons" style={{ color: green500 }}>
+              done
+            </FontIcon>
+          ) : (
+            <FontIcon className="material-icons" style={{ color: red500 }}>
+              not_interested
+            </FontIcon>
+          )
       } else {
-        parecer = 'Em Andamento'
+        parecer = (
+          <FontIcon className="material-icons" style={{ color: gray500 }}>
+            settings_ethernet
+          </FontIcon>
+        )
       }
 
       return (
-        <tr key={i}>
-          <td>{tipo}</td>
-          <td>{nome}</td>
-          <td>{matricula}</td>
-          <td>{data}</td>
-          <td>{parecer}</td>
-        </tr>
+        <TableRow key={i}>
+          <TableRowColumn>{tipo}</TableRowColumn>
+          <TableRowColumn>{nome}</TableRowColumn>
+          <TableRowColumn>{matricula}</TableRowColumn>
+          <TableRowColumn>{data}</TableRowColumn>
+          <TableRowColumn>{parecer}</TableRowColumn>
+        </TableRow>
       )
     })
   }
 
   render() {
+    if (typeof this.props.muiTheme === 'undefined') {
+      return <div />
+    }
+    const { primary2Color } = this.props.muiTheme.palette
+
     const { requerimentos } = this.props
     const { tipos, pareceres, alunos } = this.state
     let renderTable = false
@@ -179,31 +213,69 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
     }
 
     return (
-      <div className="panel panel-default">
-        <div className="panel-heading">
-          <h4>Todos os Requerimentos</h4>
+      <div>
+        <div>
+          <Subheader>Todos os Requerimentos</Subheader>
         </div>
         {renderTable ? (
-          <div className="panel-body table-responsive">
-            <table className="table table-hover">
-              <thead>
-                <tr>
-                  <th>Tipo</th>
-                  <th>Nome Aluno</th>
-                  <th>Matrícula Aluno</th>
-                  <th>Data</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>{this.renderLines()}</tbody>
-            </table>
-            <Paginator
-              pageableEntity={requerimentos.payload}
-              currentPage={this.state.currentPage}
-              location={this.props.location}
-              api={requerimentosAbertosApi}
-              onClickHandler={this.getRequerimentoByPage}
-            />
+          <div>
+            <Table>
+              <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                <TableRow>
+                  <TableHeaderColumn
+                    style={{
+                      color: primary2Color
+                    }}
+                  >
+                    Tipo
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    style={{
+                      color: primary2Color
+                    }}
+                  >
+                    Nome Aluno
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    style={{
+                      color: primary2Color
+                    }}
+                  >
+                    Matrícula
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    style={{
+                      color: primary2Color
+                    }}
+                  >
+                    Data
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    style={{
+                      color: primary2Color
+                    }}
+                  >
+                    Status
+                  </TableHeaderColumn>
+                </TableRow>
+              </TableHeader>
+              <TableBody displayRowCheckbox={false}>
+                {this.renderLines()}
+              </TableBody>
+              <TableFooter adjustForCheckbox={false}>
+                <TableRow>
+                  <TableRowColumn colSpan="5">
+                    <Paginator
+                      pageableEntity={requerimentos.payload}
+                      currentPage={this.state.currentPage}
+                      location={this.props.location}
+                      api={requerimentosAbertosApi}
+                      onClickHandler={this.getRequerimentoByPage}
+                    />
+                  </TableRowColumn>
+                </TableRow>
+              </TableFooter>
+            </Table>
           </div>
         ) : (
           <Carregando />

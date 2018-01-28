@@ -7,8 +7,8 @@ import type {
   Store,
   Tipo
 } from '../../reducers/types'
+import { Divider, Subheader, TextField } from 'material-ui'
 
-import FloatInput from '../../components/FloatInput'
 import ParecerInsert from '../../containers/parecer/ParecerInsert'
 import React from 'react'
 import { connect } from 'react-redux'
@@ -48,42 +48,34 @@ class RequerimentoView extends React.Component<Props> {
 
     return (
       <div>
-        <h3 className="text-center">Requerimento</h3>
+        <Subheader>Requerimento</Subheader>
         <div>
           {tipoFetched &&
             requerimentoFetched && (
               <div>
-                <div className="input-group">
-                  <FloatInput
-                    name="tipo"
-                    type="text"
-                    value={tipo.tipo}
-                    textLabel="Tipo"
-                    readOnly="true"
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="requerimento">Requerimento</label>
-                  <textarea
-                    name="requerimento"
-                    id="requerimento"
-                    rows="5"
-                    className="form-control"
-                    value={requerimento.requerimento}
-                    readOnly="true"
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="justificativa">Justificativa</label>
-                  <textarea
-                    name="justificativa"
-                    id="justificativa"
-                    rows="5"
-                    className="form-control"
-                    value={requerimento.justificativa}
-                    readOnly="true"
-                  />
-                </div>
+                <TextField
+                  defaultValue={tipo.tipo}
+                  floatingLabelText="Tipo"
+                  fullWidth={true}
+                  disabled={true}
+                />
+                <TextField
+                  rows={1}
+                  floatingLabelText="Requerimento"
+                  multiLine={true}
+                  defaultValue={requerimento.requerimento}
+                  fullWidth={true}
+                  disabled={true}
+                />
+                <TextField
+                  rows={1}
+                  floatingLabelText="Justificativa"
+                  multiLine={true}
+                  defaultValue={requerimento.justificativa}
+                  fullWidth={true}
+                  disabled={true}
+                />
+                <Divider />
                 <ParecerInsert requerimento={this.props.requerimento} />
               </div>
             )}

@@ -10,12 +10,23 @@ import type {
 } from '../../reducers/types'
 import { FAILURE_ALUNO_SENHA, sendAlunoSenha } from '../../actions/aluno'
 
-import Alerta from '../../components/Alerta'
-import Carregando from '../../components/Carregando'
-import FloatInput from '../../components/FloatInput'
+import RaisedButton from 'material-ui/RaisedButton'
+import TextField from 'material-ui/TextField'
 import autobind from 'autobind-decorator'
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
+
+const styles = {
+  height: '100%',
+  display: 'grid',
+  gridTemplateRows: 'repeat(2, 1fr) 2fr'
+}
+
+const buttonStyle = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center'
+}
 
 type StateProps = {
   usuario: DefaultState<AlunoUsuario>
@@ -49,7 +60,7 @@ class AlunoCadastro extends React.Component<Props, State> {
   }
 
   @autobind
-  handleChange(event: SyntheticInputEvent<HTMLButtonElement>) {
+  handleChange(event: SyntheticInputEvent<HTMLInputElement>) {
     const { name, value } = event.target
 
     this.setState({ [name]: value })
@@ -110,49 +121,39 @@ class AlunoCadastro extends React.Component<Props, State> {
   render() {
     const { senha, confirmaSenha, formError } = this.state
     const { error, hasError } = this.props.usuario
-    const usuario = this.props.usuario
 
     return (
-      <form className="form-group col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-4">
-        <div className="input-group ">
-          <FloatInput
+      <form style={styles}>
+        <h1>Cadastre-se</h1>
+        <div>
+          <TextField
             name="senha"
-            value={senha}
-            textLabel="Nova Senha"
+            defaultValue={senha}
+            floatingLabelText="Nova Senha"
             type="password"
-            handleChange={this.handleChange}
+            onChange={this.handleChange}
+            errorText={formError.senha || hasError ? ' ' : ''}
           />
-        </div>
-        <div className="input-group ">
-          <FloatInput
+          <TextField
             name="confirmaSenha"
-            value={confirmaSenha}
-            textLabel="Confirmar Nova Senha"
+            defaultValue={confirmaSenha}
+            floatingLabelText="Confirmar Nova Senha"
             type="password"
-            handleChange={this.handleChange}
+            onChange={this.handleChange}
+            errorText={
+              formError.senha
+                ? formError.message
+                : hasError ? error.message : ''
+            }
           />
         </div>
-        {formError.senha === true ? (
-          <Alerta alertClass="alert-danger" message={formError.message} />
-        ) : (
-          <Alerta
-            show={hasError}
-            alertClass="alert-danger"
-            message={error.message}
+        <div style={buttonStyle}>
+          <RaisedButton
+            primary={true}
+            onClick={this.handleClickSenha}
+            type="submit"
+            label="Pronto"
           />
-        )}
-        <div className="input-group text-center">
-          {!usuario.isFetching ? (
-            <button
-              onClick={this.handleClickSenha}
-              type="submit"
-              className="btn btn-primary"
-            >
-              Enviar
-            </button>
-          ) : (
-            <Carregando />
-          )}
         </div>
       </form>
     )

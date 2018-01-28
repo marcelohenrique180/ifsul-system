@@ -2,11 +2,175 @@
 <html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <base href="/" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <!--/*/ <th:block th:include="fragments/header :: head"></th:block> /*/-->
 </head>
 <body>
 
-    <div id="root" ></div>
+    <div id="loading-box" class="loading-box">
+        <span class="dot dot-p"></span>
+        <span class="dot dot-s dot-s--12"></span>
+        <span class="dot dot-s dot-s--13"></span>
+        <span class="dot dot-s dot-s--21"></span>
+        <span class="dot dot-s dot-s--22"></span>
+        <span class="dot dot-s dot-s--31"></span>
+        <span class="dot dot-s dot-s--32"></span>
+        <span class="dot dot-s dot-s--33"></span>
+        <span class="dot dot-s dot-s--41"></span>
+        <span class="dot dot-s dot-s--42"></span>
+    </div>
+
+    <div id="root" />
+
+    <style media="screen">
+    .loading-box {
+      display: grid;
+      grid-template-areas:
+        'p11 s12 s13'
+        's21 s22 .'
+        's31 s32 s33'
+        's41 s42 .';
+      grid-gap: 0.3em;
+      transform: translate(-50%, -50%);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+    }
+
+    .loading-box .dot {
+      padding: 1em;
+      background-color: rgb(76, 175, 80);
+      height: 1em;
+      width: 1em;
+    }
+
+    .loading-box .dot-p {
+      grid-area: p11;
+      background-color: red;
+      border-radius: 100%;
+      animation: primary-ball 0.7s ease;
+    }
+
+    .loading-box .dot-s {
+      border-radius: 10px;
+    }
+
+    .loading-box .dot-s--12 {
+      grid-area: s12;
+      animation: secondary-ball 1.5s;
+    }
+
+    .loading-box .dot-s--13 {
+      grid-area: s13;
+      animation: secondary-ball 1.8s;
+    }
+
+    .loading-box .dot-s--21 {
+      grid-area: s21;
+      animation: secondary-ball 2s;
+    }
+
+    .loading-box .dot-s--22 {
+      grid-area: s22;
+      animation: secondary-ball 2s;
+    }
+
+    .loading-box .dot-s--31 {
+      grid-area: s31;
+      animation: secondary-ball 2.5s;
+    }
+
+    .loading-box .dot-s--32 {
+      grid-area: s32;
+      animation: secondary-ball 2.5s;
+    }
+
+    .loading-box .dot-s--33 {
+      grid-area: s33;
+      animation: secondary-ball 2.5s;
+    }
+
+    .loading-box .dot-s--41 {
+      grid-area: s41;
+      animation: secondary-ball 2.9s;
+    }
+
+    .loading-box .dot-s--42 {
+      grid-area: s42;
+      animation: secondary-ball 3s;
+    }
+
+    @keyframes primary-ball {
+      0% {
+        transform: translateY(-4em);
+      }
+
+      49% {
+        transform: translateY(-2em);
+        transition: all 1s ease-in;
+      }
+
+      91% {
+        transform: translateY(-0.5em);
+        transition: all 1s ease-in;
+      }
+
+      33%,
+      82%,
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes secondary-ball {
+      from {
+        transform: scale(0);
+      }
+      50% {
+        transform: scale(0);
+      }
+      to {
+        transform: scale(1);
+        transform-origin: 0 middle;
+      }
+    }
+    </style>
+
+
+<script type="text/javascript">
+function onReady(callback) {
+  var intervalID = window.setInterval(checkReady, 1000)
+  var newAnim = true
+
+  function checkReady() {
+    if (document.getElementById('root').children.length > 0) {
+      window.clearInterval(intervalID)
+      callback.call(this)
+    } else {
+      if (newAnim) {
+        newAnim = false
+        document.getElementById('loading-box').classList.add('loading-box')
+        window.setTimeout(function() {
+          newAnim = true
+          document.getElementById('loading-box').classList.remove('loading-box')
+        }, 3000)
+      }
+    }
+  }
+}
+
+function show(id, value) {
+  document.getElementById(id).style.display = value ? 'block' : 'none'
+}
+
+onReady(function() {
+  show('root', true)
+  show('loading-box', false)
+})
+</script>
+
     <script th:src="@{js/bundle.min.js}"></script>
     <link rel="stylesheet" th:href="@{css/bundle.css}" />
 

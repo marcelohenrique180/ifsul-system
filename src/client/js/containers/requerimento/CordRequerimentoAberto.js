@@ -4,25 +4,36 @@ import type { Action, Dispatch } from '../../actions/types/index'
 import type {
   Aluno,
   State as DefaultState,
+  Requerimento,
   RequerimentoAberto,
-  Store
+  Store,
+  Tipo
 } from '../../reducers/types/index'
+import { List, ListItem } from 'material-ui/List'
 
-import Carregando from '../../components/Carregando'
-import { Link } from 'react-router'
+import FontIcon from 'material-ui/FontIcon'
 import React from 'react'
+import Subheader from 'material-ui/Subheader'
+import TextField from 'material-ui/TextField'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import { getAluno } from '../../actions/aluno'
 import { getId } from '../../util'
 import { getRequerimentosEmAberto } from '../../actions/requerimento'
 import { reloadCordRequerimento } from '../../containers/requerimento/CordRequerimento'
+import { requestTipos } from '../../actions/tipo'
+
+const searchStyle = {
+  display: 'flex',
+  alignItems: 'center'
+}
 
 type StateProps = {
   requerimentosAbertos: DefaultState<RequerimentoAberto>
 }
 
 type DispatchProps = {
+  requestTipos: string => Promise<Action<Tipo>>,
   getRequerimentosEmAberto: () => Promise<Action<RequerimentoAberto>>,
   getAluno: string => Promise<Action<Aluno>>,
   loadRequerimento: ({
@@ -41,43 +52,77 @@ type Props = StateProps &
 
 type State = {
   search: string,
-  requerimentos: Array<{ result: string, requerimento_id: string }>,
-  filteredRequerimentos: Array<{ result: string, requerimento_id: string }>
+  requerimentos: Array<{
+    requerimento: Requerimento,
+    aluno: Aluno,
+    requerimento_id: string,
+    search: string,
+    tipo: Tipo
+  }>,
+  filteredRequerimentos: Array<{
+    requerimento: Requerimento,
+    aluno: Aluno,
+    requerimento_id: string,
+    search: string,
+    tipo: Tipo
+  }>
 }
 
 class CordRequerimentoAberto extends React.Component<Props, State> {
-  state = { search: '', requerimentos: [], filteredRequerimentos: [] }
+  state = {
+    search: '',
+    requerimentos: [],
+    filteredRequerimentos: [],
+    viewData: []
+  }
 
   constructor(props: Props) {
     super(props)
 
     this.props.getRequerimentosEmAberto().then(reqsAbertos => {
       if (typeof reqsAbertos.payload !== 'undefined') {
-        reqsAbertos.payload._embedded.requerimentos.forEach(requerimento => {
-          this.props
-            .getAluno(requerimento._links.aluno.href)
-            .then(alunoResponse => {
-              const aluno =
-                typeof alunoResponse.payload !== 'undefined'
-                  ? alunoResponse.payload
-                  : { nome: '', matricula: '' }
-              this.setState({
-                requerimentos: this.state.requerimentos.concat([
-                  {
-                    result:
-                      'Req.Nº' +
-                      getId(requerimento._links.self.href) +
-                      ' ' +
-                      aluno.nome +
-                      ' ' +
-                      aluno.matricula,
-                    requerimento_id: getId(requerimento._links.self.href)
-                  }
-                ])
+        reqsAbertos.payload._embedded.requerimentos.forEach(
+          (requerimento: Requerimento) => {
+            this.props
+              .getAluno(requerimento._links.aluno.href)
+              .then((alunoResponse: Action<Aluno>) => {
+                this.props
+                  .requestTipos(requerimento._links.tipo.href)
+                  .then(tipo => {
+                    if (
+                      typeof alunoResponse.payload !== 'undefined' &&
+                      typeof tipo.payload !== 'undefined'
+                    ) {
+                      this.setState({
+                        requerimentos: this.state.requerimentos.concat([
+                          {
+                            search:
+                              getId(requerimento._links.self.href) +
+                              ' ' +
+                              alunoResponse.payload.nome +
+                              ' ' +
+                              alunoResponse.payload.matricula +
+                              ' ' +
+                              requerimento.data +
+                              ' ' +
+                              tipo.payload.tipo,
+                            requerimento: requerimento,
+                            aluno: alunoResponse.payload,
+                            requerimento_id: getId(
+                              requerimento._links.self.href
+                            ),
+                            tipo: tipo.payload
+                          }
+                        ])
+                      })
+                    }
+                    this.setState({
+                      filteredRequerimentos: this.state.requerimentos
+                    })
+                  })
               })
-              this.setState({ filteredRequerimentos: this.state.requerimentos })
-            })
-        })
+          }
+        )
       }
     })
   }
@@ -106,16 +151,26 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
     )
 
     return filteredRequerimentos.map((reqAberto, i) => {
+      const icon = (
+        <FontIcon className="material-icons" style={{ margin: '30px 12px' }}>
+          description
+        </FontIcon>
+      )
       return (
-        <li
+        <ListItem
           key={i}
-          className="list-group-item list-group-item--clickable"
-          tabIndex={0}
-          onKeyPress={this.onItemClick(reqAberto.requerimento_id)}
+          primaryText={reqAberto.aluno.nome}
+          secondaryText={
+            <p>
+              {reqAberto.requerimento.data} - {reqAberto.tipo.tipo}
+              <br />
+              {reqAberto.requerimento.requerimento}
+            </p>
+          }
+          secondaryTextLines={2}
+          leftIcon={icon}
           onClick={this.onItemClick(reqAberto.requerimento_id)}
-        >
-          {reqAberto.result}{' '}
-        </li>
+        />
       )
     })
   }
@@ -126,7 +181,7 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
 
     this.setState({
       filteredRequerimentos: this.state.requerimentos.filter(req =>
-        req.result.toLowerCase().includes(event.target.value.toLowerCase())
+        req.search.toLowerCase().includes(event.target.value.toLowerCase())
       ),
       [name]: value
     })
@@ -137,37 +192,23 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
 
     return (
       <div>
-        <div className="panel panel-default panel--requerimentos">
-          <div className="panel-heading">Requerimentos em Aberto</div>
-          <div className="panel-body">
-            <div className="panel panel-default">
-              <div className="panel-heading">
-                <div className="input-group">
-                  <input
-                    id="search"
-                    className="form-control"
-                    type="text"
-                    placeholder="Pesquisar"
-                    name="search"
-                    onChange={this.handleSearch}
-                    value={this.state.search}
-                  />
-                </div>
-              </div>
-              <div className="panel-body panel-body--requerimentos">
-                {requerimentosAbertos.isFetching && <Carregando />}
-                {requerimentosAbertos.fetched && (
-                  <ul className="list-group">{this.renderRequerimentos()}</ul>
-                )}
-              </div>
-            </div>
-            <Link
-              to="/menu/cordcurso/requerimento/visualizar"
-              className="center-block text-center"
-            >
-              <b>Ver Todos</b>
-            </Link>
-          </div>
+        <Subheader>Requerimentos em Aberto</Subheader>
+        <div style={searchStyle}>
+          <FontIcon className="material-icons" style={{ margin: '.5em' }}>
+            search
+          </FontIcon>
+          <TextField
+            name="search"
+            hintText="Pesquisar"
+            fullWidth={true}
+            onChange={this.handleSearch}
+            defaultValue={this.state.search}
+          />
+        </div>
+        <div>
+          {requerimentosAbertos.fetched && (
+            <List>{this.renderRequerimentos()}</List>
+          )}
         </div>
       </div>
     )
@@ -182,6 +223,7 @@ function mapStateToProps(state: Store): StateProps {
 
 function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
   return {
+    requestTipos: (url: string) => dispatch(requestTipos(url)),
     getRequerimentosEmAberto: () => dispatch(getRequerimentosEmAberto()),
     getAluno: url => dispatch(getAluno(url)),
     loadRequerimento: ({ push, id, reload }) => {

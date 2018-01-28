@@ -1,83 +1,80 @@
 // @flow
 
-import React, { Component } from 'react'
+import * as React from 'react'
 
+import type {
+  State as DefaultState,
+  Store,
+  Usuario
+} from '../reducers/types/index'
+
+import AppBar from 'material-ui/AppBar'
 import type { Dispatch } from '../actions/types/index'
-import { Link } from 'react-router'
-import type { Store } from '../reducers/types/index'
+import FlatButton from 'material-ui/FlatButton'
+import autobind from 'autobind-decorator'
+import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
-import { indexRoute } from '../util'
 import { logoutUser } from '../actions/index'
 
-type StateProps = { isAuthenticated: boolean }
+type StateProps = {
+  usuario: DefaultState<Usuario>
+}
 
 type DispatchProps = { logoutUser: () => any }
 
-type Props = StateProps & DispatchProps
+type Props = StateProps &
+  DispatchProps & {
+    isAuthenticated: boolean
+  }
 
-class Navbar extends Component<Props> {
+class Navbar extends React.Component<Props> {
+  static defaultProps = {
+    isAuthenticated: localStorage.getItem('id_token') !== null
+  }
+
+  @autobind
+  handleLogout(event: SyntheticInputEvent<HTMLInputElement>) {
+    event.preventDefault()
+
+    this.props.logoutUser()
+    browserHistory.push('/login')
+  }
+
+  @autobind
+  handleLogin(event: SyntheticInputEvent<HTMLInputElement>) {
+    event.preventDefault()
+
+    browserHistory.push('/login')
+  }
+
   render() {
-    const { isAuthenticated } = this.props
+    const { isAuthenticated } = this.props.isAuthenticated
+      ? this.props
+      : this.props.usuario.payload
 
-    return (
-      <nav className="navbar navbar-inverse">
-        <div className="container-fluid">
-          <div className="navbar-header">
-            <button
-              type="button"
-              className="navbar-toggle collapsed"
-              data-toggle="collapse"
-              data-target="#bs-example-navbar-collapse-1"
-              aria-expanded="false"
-            >
-              <span className="sr-only">Toggle navigation</span>
-              <span className="icon-bar" />
-              <span className="icon-bar" />
-              <span className="icon-bar" />
-            </button>
-            <Link to={indexRoute()} className="navbar-brand">
-              LOGO
-            </Link>
-          </div>
-
-          <div
-            className="collapse navbar-collapse"
-            id="bs-example-navbar-collapse-1"
-          >
-            <ul className="nav navbar-nav navbar-right">
-              <li>
-                <a className="nav-link" href="#">
-                  <img src="img/config.png" width="21" height="18" /> Perfil
-                </a>
-              </li>
-              <li>
-                {isAuthenticated ? (
-                  <Link
-                    className="nav-link"
-                    to="/login"
-                    onClick={() => {
-                      this.props.logoutUser()
-                    }}
-                  >
-                    <img src="img/glyphicons-388-log-out.png" alt="" /> Logout
-                  </Link>
-                ) : (
-                  <Link className="nav-link" to="/login">
-                    <img src="img/glyphicons-388-log-out.png" alt="" /> Login
-                  </Link>
-                )}
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
+    const Logo = (
+      <img
+        alt="IFSul"
+        width="45"
+        height="57"
+        src="/img/logo.png"
+        style={{ margin: '.1em .1em .4em .1em' }}
+      />
     )
+
+    const rightButton = isAuthenticated ? (
+      <FlatButton label="Logout" onClick={this.handleLogout} />
+    ) : (
+      <FlatButton label="Login" onClick={this.handleLogin} />
+    )
+
+    return <AppBar iconElementLeft={Logo} iconElementRight={rightButton} />
   }
 }
 
-function mapStateToProps(state: Store): StateProps {
+function mapStateToProps(store: Store): StateProps {
   return {
-    isAuthenticated: state.usuario.payload.isAuthenticated
+    usuario: store.usuario
   }
 }
 

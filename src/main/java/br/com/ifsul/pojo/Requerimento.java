@@ -103,8 +103,9 @@ public class Requerimento {
         this.requerimento = requerimento;
     }
 
-    public Date getData() {
-        return data;
+    public String getData() {
+        DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern("dd/MM/yyyy");
+        return dateTimeFormat.print(data.getTime());
     }
 
     public void setData(String data) {

@@ -1,21 +1,39 @@
 // @flow
 
 import Carregando from '../components/Carregando'
-import { Link } from 'react-router'
+import FlatButton from 'material-ui/FlatButton'
 import React from 'react'
 import type { RequerimentoPage } from '../reducers/types/index'
+import type { Theme } from './App'
+import autobind from 'autobind-decorator'
+import muiThemeable from 'material-ui/styles/muiThemeable'
+
+const style = {
+  paginator: {
+    listStyle: 'none',
+    display: 'flex',
+    justifyContent: 'center',
+    padding: 0
+  },
+  pageItem: {}
+}
 
 type Props = {
   pageableEntity: RequerimentoPage,
   currentPage: number,
   onClickHandler: string => () => void,
-  api: string,
-  location: { pathname: string }
+  api: string
+} & {
+  muiTheme?: Theme
 }
+
+@muiThemeable()
 export default class Paginator extends React.Component<Props> {
+  @autobind
+  onClickHandler(i: number) {}
+
   render() {
     const { pageableEntity, currentPage, onClickHandler, api } = this.props
-    const { pathname } = this.props.location
 
     if (typeof pageableEntity.page !== 'undefined') {
       const { _links, page } = pageableEntity
@@ -52,28 +70,32 @@ export default class Paginator extends React.Component<Props> {
           })()
 
           for (let i = pageControl.start; i <= pageControl.end; i++) {
-            if (i !== currentPage) {
+            if (
+              i === currentPage &&
+              typeof this.props.muiTheme !== 'undefined'
+            ) {
               array.push(
-                <li key={i}>
-                  <Link
-                    to={pathname}
-                    onClick={onClickHandler(api + 'page=' + i)}
-                  >
-                    {i + 1}
-                  </Link>
+                <li key={i} style={style.pageItem}>
+                  <FlatButton
+                    backgroundColor={this.props.muiTheme.palette.primary1Color}
+                    hoverColor={this.props.muiTheme.palette.primary2Color}
+                    style={{ color: 'white' }}
+                    fullWidth={true}
+                    onClick={() => {
+                      onClickHandler(api + 'page=' + i)
+                    }}
+                    label={i + 1}
+                  />
                 </li>
               )
             } else {
               array.push(
-                <li className="active" key={i}>
-                  <Link
-                    to={pathname}
-                    onClick={() => {
-                      onClickHandler(api + 'page=' + i)
-                    }}
-                  >
-                    {i + 1}
-                  </Link>
+                <li key={i} style={style.pageItem}>
+                  <FlatButton
+                    fullWidth={true}
+                    onClick={onClickHandler(api + 'page=' + i)}
+                    label={i + 1}
+                  />
                 </li>
               )
             }
@@ -84,23 +106,21 @@ export default class Paginator extends React.Component<Props> {
         if (_links.first) {
           pagination = (
             <div>
-              <ul className="pagination">
-                <li>
-                  <Link
-                    to={pathname}
+              <ul style={style.paginator}>
+                <li style={style.pageItem}>
+                  <FlatButton
                     onClick={onClickHandler(_links.first.href)}
-                  >
-                    &laquo;
-                  </Link>
+                    fullWidth={true}
+                    label="&laquo;"
+                  />
                 </li>
                 {itens()}
-                <li>
-                  <Link
-                    to={pathname}
+                <li style={style.pageItem}>
+                  <FlatButton
+                    fullWidth={true}
                     onClick={onClickHandler(_links.last.href)}
-                  >
-                    &raquo;
-                  </Link>
+                    label="&raquo;"
+                  />
                 </li>
               </ul>
             </div>

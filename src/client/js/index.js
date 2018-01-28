@@ -1,4 +1,5 @@
 import 'babel-polyfill'
+import '../scss/style.scss'
 
 import { IndexRedirect, Route, Router, browserHistory } from 'react-router'
 import { applyMiddleware, createStore } from 'redux'
@@ -9,13 +10,14 @@ import AlunoMenu from './containers/menu/AlunoMenu'
 import AlunoRequerimento from './containers/requerimento/AlunoRequerimento'
 import AlunoVisualizarRequerimento from './containers/requerimento/AlunoVisualizarRequerimento'
 import App from './components/App'
-import Cadastro from './components/cadastro/Cadastro'
 import CordMenu from './containers/menu/CordMenu'
 import CordRequerimento from './containers/requerimento/CordRequerimento'
+import CordRequerimentoAberto from './containers/requerimento/CordRequerimentoAberto'
 import CordVisualizarRequerimento from './containers/requerimento/CordVisualizarRequerimento'
 import Login from './containers/Login'
 import Menu from './containers/menu/Menu'
 import NaoAutorizado from './components/NaoAutorizado'
+import PlainPaper from './components/PlainPaper'
 import { Provider } from 'react-redux'
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -26,11 +28,6 @@ import { createLogger } from 'redux-logger'
 import { indexRoute } from './util'
 import logged from './actions/middleware/logged'
 import thunk from 'redux-thunk'
-
-require('bootstrap-loader')
-require('../scss/floating-label.scss')
-require('../scss/style.scss')
-require('../scss/loading.scss')
 
 const logger = createLogger()
 const store = createStore(
@@ -52,6 +49,12 @@ const index = indexRoute()
 ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory}>
+      <Router path="/" component={PlainPaper}>
+        <IndexRedirect to={index} />
+        <Route path="/login" component={Login} />
+        <Route path="cadastro/aluno" component={AlunoCadastro} />
+        <Route path="cadastro/aluno/:token" component={AlunoConfirmar} />
+      </Router>
       <Route path="/" component={App}>
         <IndexRedirect to={index} />
         <Route path="menu" component={Menu} onEnter={requireAuth}>
@@ -60,6 +63,10 @@ ReactDOM.render(
             authorize={['CORDCURSO']}
             component={CordMenu}
           >
+            <Route
+              path="requerimento/abertos"
+              component={CordRequerimentoAberto}
+            />
             <Route
               path="requerimento/visualizar"
               component={CordVisualizarRequerimento}
@@ -84,12 +91,8 @@ ReactDOM.render(
             />
           </Route>
         </Route>
-        <Route path="cadastro" component={Cadastro}>
-          <Route path="aluno" component={AlunoCadastro} />
-          <Route path="aluno/:token" component={AlunoConfirmar} />
-        </Route>
         <Route path="/nao-autorizado" component={NaoAutorizado} />
-        <Route path="/login" component={Login} />
+        <Route path="/logout" component={Login} />
       </Route>
     </Router>
   </Provider>,

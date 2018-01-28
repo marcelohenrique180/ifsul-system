@@ -3,7 +3,6 @@
 import type { Action, ActionApi } from './types/index'
 
 import { CALL_API } from './middleware/api'
-import type { Requerimento } from '../reducers/types/index'
 
 export const RECEIVE_REQUERIMENTO: string = 'RECEIVE_REQUERIMENTO'
 export const FAILURE_REQUERIMENTO: string = 'FAILURE_REQUERIMENTO'
@@ -19,9 +18,10 @@ export const FAILURE_REQUERIMENTOS_ABERTOS: string =
   'FAILURE_REQUERIMENTOS_ABERTOS'
 export const RESET_REQUERIMENTO: string = 'RESET_REQUERIMENTO'
 
-export function resetRequerimento(): Action<Requerimento> {
+export function resetRequerimento(): Action<{}> {
   return {
-    type: RESET_REQUERIMENTO
+    type: RESET_REQUERIMENTO,
+    payload: {}
   }
 }
 

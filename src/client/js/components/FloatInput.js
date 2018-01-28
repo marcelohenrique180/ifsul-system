@@ -1,15 +1,15 @@
 // @flow
 
-import React from 'react'
+import * as React from 'react'
 
 type Props = {
-  name: string,
-  type: string,
-  value: string,
-  textLabel: string,
-  handleChange: string,
-  readOnly: string,
-  autofocus: string
+  name?: string,
+  type?: string,
+  value?: string,
+  textLabel?: string,
+  handleChange?: (SyntheticInputEvent<HTMLInputElement>) => void,
+  readOnly?: string,
+  autofocus?: string
 }
 
 class FloatInput extends React.Component<Props> {

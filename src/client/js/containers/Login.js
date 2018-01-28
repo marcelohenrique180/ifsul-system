@@ -7,14 +7,25 @@ import type {
   Usuario
 } from '../reducers/types/index'
 
-import Alerta from '../components/Alerta'
-import FloatInput from '../components/FloatInput'
 import { Link } from 'react-router'
 import type { LoginType } from '../actions/index'
+import RaisedButton from 'material-ui/RaisedButton'
 import React from 'react'
+import TextField from 'material-ui/TextField'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import { loginUser } from '../actions/'
+
+const styleLogin = {
+  display: 'grid',
+  gridTemplateRows: '1fr 3em',
+  height: '100%'
+}
+
+const styleLoginBox = {
+  display: 'grid',
+  gridTemplateRows: '.5fr 2fr auto 1fr'
+}
 
 type StateProps = {
   user: DefaultState<Usuario>
@@ -53,43 +64,32 @@ class Login extends React.Component<Props, State> {
     const { email, senha } = this.state
 
     return (
-      <div>
-        <h2 className="text-center">Login</h2>
-        <form
-          id="login-form"
-          className="form-group col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-4"
-        >
-          <div className="input-group">
-            <FloatInput
+      <section style={styleLogin}>
+        <form id="login-form" style={styleLoginBox} onSubmit={this.handleClick}>
+          <h2>Login</h2>
+          <div>
+            <TextField
               name="email"
-              value={email}
-              textLabel="E-mail"
-              handleChange={this.handleChange}
-              autofocus="true"
+              floatingLabelText="E-mail"
+              defaultValue={email}
+              onChange={this.handleChange}
+              errorText={hasError ? ' ' : ''}
             />
-          </div>
-          <div className="input-group">
-            <FloatInput
+            <TextField
               name="senha"
-              value={senha}
+              defaultValue={senha}
               type="password"
-              textLabel="Senha"
-              handleChange={this.handleChange}
+              floatingLabelText="Senha"
+              onChange={this.handleChange}
+              errorText={hasError ? error.message : ''}
             />
           </div>
-          {hasError && (
-            <Alerta alertClass="alert-danger" message={error.message} />
-          )}
-          <div className="input-group text-center">
-            <button onClick={this.handleClick} className="btn btn-primary">
-              Login
-            </button>
-          </div>
-          <div className="text-center">
-            <Link to="/cadastro/aluno">Ainda não tem conta?</Link>
+          <div>
+            <RaisedButton primary={true} label="Login" type="submit" />
           </div>
         </form>
-      </div>
+        <Link to="/cadastro/aluno">Ainda não tem conta?</Link>
+      </section>
     )
   }
 }
