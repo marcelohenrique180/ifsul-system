@@ -30,11 +30,13 @@ import Carregando from '../../components/Carregando'
 import FontIcon from 'material-ui/FontIcon'
 import Paginator from '../../components/Paginator'
 import Subheader from 'material-ui/Subheader'
+import type { Theme } from '../../components/App'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import { getAluno } from '../../actions/aluno'
 import { getId } from '../../util'
 import { getRequerimentoByPage } from '../../actions/requerimento'
+import muiThemable from 'material-ui/styles/muiThemeable'
 import { requestTipos } from '../../actions/tipo'
 
 const requerimentosAbertosApi = 'requerimentos?size=5&'
@@ -52,7 +54,8 @@ type DispatchProps = {
 
 type Props = StateProps &
   DispatchProps & {
-    location: Object
+    location: Object,
+    muiTheme?: Theme
   }
 
 type State = {
@@ -62,6 +65,7 @@ type State = {
   alunos: Array<{ nome: string, matricula: string }>
 }
 
+@muiThemable()
 class CordVisualizarRequerimento extends React.Component<Props, State> {
   state = { currentPage: 0, tipos: [], pareceres: [], alunos: [] }
 
@@ -191,6 +195,11 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
   }
 
   render() {
+    if (typeof this.props.muiTheme === 'undefined') {
+      return <div />
+    }
+    const { primary2Color } = this.props.muiTheme.palette
+
     const { requerimentos } = this.props
     const { tipos, pareceres, alunos } = this.state
     let renderTable = false
@@ -213,11 +222,41 @@ class CordVisualizarRequerimento extends React.Component<Props, State> {
             <Table>
               <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                 <TableRow>
-                  <TableHeaderColumn>Tipo</TableHeaderColumn>
-                  <TableHeaderColumn>Nome Aluno</TableHeaderColumn>
-                  <TableHeaderColumn>Matrícula</TableHeaderColumn>
-                  <TableHeaderColumn>Data</TableHeaderColumn>
-                  <TableHeaderColumn>Status</TableHeaderColumn>
+                  <TableHeaderColumn
+                    style={{
+                      color: primary2Color
+                    }}
+                  >
+                    Tipo
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    style={{
+                      color: primary2Color
+                    }}
+                  >
+                    Nome Aluno
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    style={{
+                      color: primary2Color
+                    }}
+                  >
+                    Matrícula
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    style={{
+                      color: primary2Color
+                    }}
+                  >
+                    Data
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    style={{
+                      color: primary2Color
+                    }}
+                  >
+                    Status
+                  </TableHeaderColumn>
                 </TableRow>
               </TableHeader>
               <TableBody displayRowCheckbox={false}>
