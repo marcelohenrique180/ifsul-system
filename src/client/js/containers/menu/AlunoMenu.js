@@ -7,28 +7,10 @@ class AlunoMenu extends AuthorizedContainer {
   render() {
     return (
       <div>
-        <div>
-          <div>
-            <div>Requerimentos</div>
-            <div>
-              <ul>
-                <li>
-                  <span />
-                  <Link to="/menu/aluno/requerimento/solicitar">Solicitar</Link>
-                </li>
-                <li>
-                  <span />
-                  <Link to="/menu/aluno/requerimento/visualizar">
-                    Visualizar
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div>
-          <RouterHandler {...this.props} />
-        </div>
+        <div>Requerimentos</div>
+        <Link to="/menu/aluno/requerimento/solicitar">Solicitar</Link>
+        <Link to="/menu/aluno/requerimento/visualizar">Visualizar</Link>
+        <RouterHandler {...this.props} />
       </div>
     )
   }
