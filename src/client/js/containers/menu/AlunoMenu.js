@@ -1,9 +1,11 @@
+// @flow
+
 import AuthorizedContainer from '../AuthorizedContainer'
 import { Link } from 'react-router'
 import React from 'react'
 import RouterHandler from '../RouterHandler'
 
-class AlunoMenu extends AuthorizedContainer {
+class AlunoMenu extends AuthorizedContainer<{}> {
   render() {
     return (
       <div>
