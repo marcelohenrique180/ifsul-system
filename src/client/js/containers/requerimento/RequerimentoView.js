@@ -7,9 +7,8 @@ import type {
   Store,
   Tipo
 } from '../../reducers/types'
-import { Divider, Subheader, TextField } from 'material-ui'
+import { Subheader, TextField } from 'material-ui'
 
-import ParecerInsert from '../../containers/parecer/ParecerInsert'
 import React from 'react'
 import { connect } from 'react-redux'
 import { getRequerimento } from '../../actions/requerimento'
@@ -75,8 +74,6 @@ class RequerimentoView extends React.Component<Props> {
                   fullWidth={true}
                   disabled={true}
                 />
-                <Divider />
-                <ParecerInsert requerimento={this.props.requerimento} />
               </div>
             )}
         </div>
