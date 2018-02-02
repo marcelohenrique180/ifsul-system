@@ -1,16 +1,5 @@
 // @flow
 
-/** Exibir 3 campos
-    - select tipos
-    - textarea requerimentos
-    - textarea justificativa
-    - raisedButton enviar
-
-    Receber props tipos, aluno
-
-    importar sendRequerimento para enviar onSubmit
-*/
-
 import * as React from 'react'
 
 import type { Action, Dispatch } from '../../actions/types/index'
