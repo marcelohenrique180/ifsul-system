@@ -1,8 +1,9 @@
 // @flow
 
+import * as React from 'react'
+
 import AlunoInfo from '../containers/aluno/AlunoInfo'
-import React from 'react'
-import RequerimentoView from '../containers/requerimento/RequerimentoView'
+import RequerimentoForm from '../containers/requerimento/RequerimentoForm'
 
 type Props = {
   params: { requerimento: string }
@@ -10,8 +11,6 @@ type Props = {
 
 class VisualizarRequerimento extends React.Component<Props> {
   render() {
-    const reqId = this.props.params['requerimento']
-
     return (
       <div>
         <div className="panel panel-ifsul">
@@ -21,7 +20,9 @@ class VisualizarRequerimento extends React.Component<Props> {
           <div className="panel-body">
             <div>
               <AlunoInfo />
-              <RequerimentoView requerimentoId={reqId} />
+              <RequerimentoForm
+                requerimentoId={this.props.params.requerimento}
+              />
             </div>
           </div>
         </div>

@@ -1,100 +1,76 @@
 // @flow
 
-import type { Action, Dispatch } from '../../actions/types/index'
+import * as React from 'react'
+
+import type { Action, Dispatch } from '../../actions/types'
 import type {
-  Aluno,
   State as DefaultState,
+  Parecer,
   Requerimento,
   Store
 } from '../../reducers/types/index'
-import { getAluno, resetAluno } from '../../actions/aluno'
-import { getRequerimento, resetRequerimento } from '../../actions/requerimento'
-import { requestCursos, resetCurso } from '../../actions/curso'
-import { requestTipos, resetTipo } from '../../actions/tipo'
 
-import AlunoInfo from '../../containers/aluno/AlunoInfo'
-import { Divider } from 'material-ui'
-import React from 'react'
-import RequerimentoView from '../../containers/requerimento/RequerimentoView'
+import Carregando from '../../components/Carregando'
+import ParecerInsert from '../parecer/ParecerInsert'
+import ParecerView from '../parecer/ParecerView'
+import RequerimentoForm from './RequerimentoForm'
 import { connect } from 'react-redux'
+import { getParecerByRequerimentoId } from '../../actions/parecer'
 
-export function reloadCordRequerimento(
-  dispatch: Dispatch,
-  requerimentoId: string
-): void {
-  dispatch(resetRequerimento())
-  dispatch(resetTipo())
-  dispatch(resetAluno())
-  dispatch(resetCurso())
+type DispatchProps = {
+  getParecerByRequerimentoId: string => Promise<Action<Requerimento>>
+}
 
-  dispatch(getRequerimento(requerimentoId)).then(
-    (requerimento: Action<Requerimento>) => {
-      if (typeof requerimento.payload !== 'undefined') {
-        dispatch(requestTipos(requerimento.payload._links.tipo.href))
-      }
-      if (typeof requerimento.payload !== 'undefined') {
-        dispatch(getAluno(requerimento.payload._links.aluno.href)).then(
-          (aluno: Action<Aluno>) => {
-            if (typeof aluno.payload !== 'undefined') {
-              dispatch(requestCursos(aluno.payload._links.curso.href))
-            }
-          }
-        )
-      }
-    }
-  )
+type ExternalProps = {
+  requerimento: Requerimento
 }
 
 type StateProps = {
-  requerimento: DefaultState<Requerimento>,
-  aluno: Object,
-  tipo: Object,
-  curso: Object
+  parecer: DefaultState<Parecer>
 }
 
-type DispatchProps = {}
-
 type Props = StateProps &
-  DispatchProps & {
-    params: { requerimento: string },
-    dispatch: Dispatch
+  DispatchProps &
+  ExternalProps & {
+    params: { requerimento: string }
   }
 
-class CordRequerimento extends React.Component<Props> {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class CordVisualizarRequerimento extends React.Component<Props> {
   constructor(props: Props) {
     super(props)
-    const { dispatch } = this.props
 
-    if (
-      this.props.requerimento.fetched === false &&
-      this.props.requerimento.isFetching === false
-    ) {
-      reloadCordRequerimento.bind(this)(
-        dispatch,
-        this.props.params['requerimento']
-      )
-    }
+    this.props.getParecerByRequerimentoId(this.props.params.requerimento)
   }
 
   render() {
+    const { parecer } = this.props
+    let parecerComponent: React$Node = <Carregando />
+
+    if (parecer.hasError) {
+      parecerComponent = <ParecerInsert />
+    } else if (!parecer.isFetching) {
+      parecerComponent = <ParecerView parecer={parecer} />
+    }
+
+    console.log(this.props.parecer.hasError)
     return (
-      <div style={{ margin: '0 1em' }}>
-        <h3 style={{ textAlign: 'center' }}>Requerimento</h3>
-        <AlunoInfo />
-        <Divider />
-        <RequerimentoView requerimentoId={this.props.params['requerimento']} />
-      </div>
+      <RequerimentoForm requerimentoId={this.props.params.requerimento}>
+        {parecerComponent}
+      </RequerimentoForm>
     )
   }
 }
 
 function mapStateToProps(store: Store): StateProps {
   return {
-    requerimento: store.requerimento,
-    aluno: store.aluno,
-    tipo: store.tipos,
-    curso: store.curso
+    parecer: store.parecer
   }
 }
 
-export default connect(mapStateToProps)(CordRequerimento)
+function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
+  return {
+    getParecerByRequerimentoId: requerimento =>
+      dispatch(getParecerByRequerimentoId(requerimento))
+  }
+}

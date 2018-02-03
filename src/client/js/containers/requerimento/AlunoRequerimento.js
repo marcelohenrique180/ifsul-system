@@ -12,12 +12,10 @@ import type {
   Tipo
 } from '../../reducers/types/index'
 
-import Alerta from '../../components/Alerta'
 import AlunoInfo from '../../containers/aluno/AlunoInfo'
 import Carregando from '../../components/Carregando'
 import RequerimentoInsert from './RequerimentoInsert'
 import type { SendRequerimento } from '../../actions/requerimento'
-import { areFieldsEmpty } from '../../util'
 import autobind from 'autobind-decorator'
 import { connect } from 'react-redux'
 import { requestAluno } from '../../actions/aluno'

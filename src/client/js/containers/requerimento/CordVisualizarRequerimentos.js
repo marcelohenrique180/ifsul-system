@@ -66,7 +66,7 @@ type State = {
 }
 
 @muiThemable()
-class CordVisualizarRequerimento extends React.Component<Props, State> {
+class CordVisualizarRequerimentos extends React.Component<Props, State> {
   state = { currentPage: 0, tipos: [], pareceres: [], alunos: [] }
 
   constructor(props: Props) {
@@ -302,5 +302,5 @@ function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  CordVisualizarRequerimento
+  CordVisualizarRequerimentos
 )

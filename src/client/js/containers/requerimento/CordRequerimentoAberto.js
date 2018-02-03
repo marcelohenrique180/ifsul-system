@@ -20,7 +20,6 @@ import { connect } from 'react-redux'
 import { getAluno } from '../../actions/aluno'
 import { getId } from '../../util'
 import { getRequerimentosEmAberto } from '../../actions/requerimento'
-import { reloadCordRequerimento } from '../../containers/requerimento/CordRequerimento'
 import { requestTipos } from '../../actions/tipo'
 
 const searchStyle = {
@@ -38,8 +37,7 @@ type DispatchProps = {
   getAluno: string => Promise<Action<Aluno>>,
   loadRequerimento: ({
     push: string => void,
-    id: string,
-    reload: (Dispatch, string) => void
+    id: string
   }) => void
 }
 
@@ -133,8 +131,7 @@ class CordRequerimentoAberto extends React.Component<Props, State> {
       return () => {
         this.props.loadRequerimento({
           push: this.props.router.push,
-          id,
-          reload: reloadCordRequerimento
+          id
         })
       }
     }
@@ -226,9 +223,8 @@ function mapDispatchToProps(dispatch: Dispatch): DispatchProps {
     requestTipos: (url: string) => dispatch(requestTipos(url)),
     getRequerimentosEmAberto: () => dispatch(getRequerimentosEmAberto()),
     getAluno: url => dispatch(getAluno(url)),
-    loadRequerimento: ({ push, id, reload }) => {
+    loadRequerimento: ({ push, id }) => {
       push('/menu/cordcurso/requerimento/' + id)
-      reload(dispatch, id)
     }
   }
 }
