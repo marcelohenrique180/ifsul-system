@@ -3,6 +3,7 @@
 import * as React from 'react'
 
 import type { State as DefaultState, Parecer } from '../../reducers/types'
+import { Subheader, TextField } from 'material-ui'
 
 import Carregando from '../../components/Carregando'
 import FloatInput from '../../components/FloatInput'
@@ -28,31 +29,19 @@ export default class ParecerView extends React.Component<Props> {
 
     return (
       <div>
-        <h3 style={{ textAlign: 'center' }}>Parecer</h3>
-        <div>
-          <div>
-            <div>
-              <div className="input-group">
-                <FloatInput
-                  name="parecer"
-                  type="text"
-                  value={parecer.payload.parecer}
-                  textLabel="Parecer"
-                  readOnly="true"
-                />
-              </div>
-              <div className="input-group">
-                <FloatInput
-                  name="deferimento"
-                  type="text"
-                  value={deferido}
-                  textLabel="Deferimento"
-                  readOnly="true"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+        <Subheader>Parecer</Subheader>
+        <TextField
+          defaultValue={parecer.payload.parecer}
+          floatingLabelText="Parecer"
+          fullWidth={true}
+          disabled={true}
+        />
+        <TextField
+          value={deferido}
+          floatingLabelText="Deferimento"
+          fullWidth={true}
+          disabled={true}
+        />
       </div>
     )
   }
