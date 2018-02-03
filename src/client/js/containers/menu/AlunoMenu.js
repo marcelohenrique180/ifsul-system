@@ -7,7 +7,6 @@ import {
 
 import AuthorizedContainer from '../AuthorizedContainer'
 import FontIcon from 'material-ui/FontIcon'
-import { Link } from 'react-router'
 import React from 'react'
 import RouterHandler from '../RouterHandler'
 import autobind from 'autobind-decorator'
