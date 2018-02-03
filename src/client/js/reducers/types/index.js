@@ -57,7 +57,7 @@ export type AlunoUsuario = {}
 export type Tipo = {
   tipo: string,
   _links: { self: { href: string } },
-  _embedded: {
+  _embedded?: {
     tipos: Array<Tipo>
   }
 }

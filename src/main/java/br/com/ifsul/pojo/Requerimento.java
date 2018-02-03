@@ -23,7 +23,7 @@ public class Requerimento {
     private Tipo tipo;
 
     @NotNull
-    @Size(min = 1, max = 80)
+    @Size(min = 1, max = 500)
     private String requerimento;
 
     @Temporal(TemporalType.DATE)

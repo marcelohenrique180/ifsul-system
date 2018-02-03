@@ -61,13 +61,8 @@ class ParecerInsert extends React.Component<Props, State> {
     const { value, name } = event.target
 
     const { deferido, parecer, memorando } = { ...this.state, [name]: value }
-    const notNullFields = [deferido, parecer, memorando]
-    const error = areFieldsEmpty(notNullFields)
-    if (!error) {
-      this.setState({ formComplete: true, [name]: value })
-    } else {
-      this.setState({ formComplete: false, [name]: value })
-    }
+    const error = areFieldsEmpty([deferido, parecer, memorando])
+    this.setState({ formComplete: !error, [name]: value })
   }
 
   @autobind

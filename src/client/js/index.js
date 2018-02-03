@@ -9,11 +9,12 @@ import AlunoConfirmar from './containers/cadastro/AlunoConfirmar'
 import AlunoMenu from './containers/menu/AlunoMenu'
 import AlunoRequerimento from './containers/requerimento/AlunoRequerimento'
 import AlunoVisualizarRequerimento from './containers/requerimento/AlunoVisualizarRequerimento'
+import AlunoVisualizarRequerimentos from './containers/requerimento/AlunoVisualizarRequerimentos'
 import App from './components/App'
 import CordMenu from './containers/menu/CordMenu'
 import CordRequerimento from './containers/requerimento/CordRequerimento'
 import CordRequerimentoAberto from './containers/requerimento/CordRequerimentoAberto'
-import CordVisualizarRequerimento from './containers/requerimento/CordVisualizarRequerimento'
+import CordVisualizarRequerimentos from './containers/requerimento/CordVisualizarRequerimentos'
 import Login from './containers/Login'
 import Menu from './containers/menu/Menu'
 import NaoAutorizado from './components/NaoAutorizado'
@@ -21,7 +22,6 @@ import PlainPaper from './components/PlainPaper'
 import { Provider } from 'react-redux'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import VisualizarRequerimento from './components/VisualizarRequerimento'
 import allReducers from './reducers'
 import api from './actions/middleware/api'
 import { createLogger } from 'redux-logger'
@@ -69,7 +69,7 @@ ReactDOM.render(
             />
             <Route
               path="requerimento/visualizar"
-              component={CordVisualizarRequerimento}
+              component={CordVisualizarRequerimentos}
             />
             <Route
               path="requerimento/:requerimento"
@@ -83,11 +83,11 @@ ReactDOM.render(
             />
             <Route
               path="requerimento/visualizar"
-              component={AlunoVisualizarRequerimento}
+              component={AlunoVisualizarRequerimentos}
             />
             <Route
               path="requerimento/visualizar/:requerimento"
-              component={VisualizarRequerimento}
+              component={AlunoVisualizarRequerimento}
             />
           </Route>
         </Route>
