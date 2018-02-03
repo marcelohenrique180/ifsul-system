@@ -14,13 +14,13 @@ type Props = {
 export default class ParecerView extends React.Component<Props> {
   render() {
     const { parecer } = this.props
-    if (parecer.hasError)
+    if (parecer.hasError) {
       return (
         <p style={{ textAlign: 'center' }}>
           Nenhum parecer foi dado até agora.
         </p>
       )
-    if (!parecer.fetched) {
+    } else if (!parecer.fetched) {
       return <Carregando />
     }
 
