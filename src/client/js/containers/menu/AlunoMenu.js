@@ -68,7 +68,7 @@ class AlunoMenu extends AuthorizedContainer<States> {
             onClick={() => this.select(0)}
           />
           <BottomNavigationItem
-            label="Meus Requerimentos"
+            label="Requerimentos"
             icon={menuIcon}
             onClick={() => this.select(1)}
           />
