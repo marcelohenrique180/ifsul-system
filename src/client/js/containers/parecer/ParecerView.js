@@ -6,7 +6,6 @@ import type { State as DefaultState, Parecer } from '../../reducers/types'
 import { Subheader, TextField } from 'material-ui'
 
 import Carregando from '../../components/Carregando'
-import FloatInput from '../../components/FloatInput'
 
 type Props = {
   parecer: DefaultState<Parecer>

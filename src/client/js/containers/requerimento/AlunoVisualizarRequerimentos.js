@@ -23,7 +23,6 @@ import { gray500, green500, red500 } from 'material-ui/styles/colors'
 
 import Carregando from '../../components/Carregando'
 import FontIcon from 'material-ui/FontIcon'
-import { Link } from 'react-router'
 import Paginator from '../../components/Paginator'
 import Subheader from 'material-ui/Subheader'
 import type { Theme } from '../../components/App'
