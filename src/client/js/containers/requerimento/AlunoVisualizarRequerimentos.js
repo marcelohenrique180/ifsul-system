@@ -10,16 +10,29 @@ import type {
   Store,
   Tipo
 } from '../../reducers/types/index'
+import {
+  Table,
+  TableBody,
+  TableFooter,
+  TableHeader,
+  TableHeaderColumn,
+  TableRow,
+  TableRowColumn
+} from 'material-ui/Table'
+import { gray500, green500, red500 } from 'material-ui/styles/colors'
 
 import Carregando from '../../components/Carregando'
+import FontIcon from 'material-ui/FontIcon'
 import { Link } from 'react-router'
 import Paginator from '../../components/Paginator'
 import Subheader from 'material-ui/Subheader'
+import type { Theme } from '../../components/App'
 import autobind from 'autobind-decorator'
 import { callApi } from '../../actions/middleware/api'
 import { connect } from 'react-redux'
 import { getId } from '../../util'
 import { getRequerimentoByPage } from '../../actions/requerimento'
+import muiThemable from 'material-ui/styles/muiThemeable'
 import { requestTipos } from '../../actions/tipo'
 
 const requerimentoApi = 'requerimentos/search/findAllAlunoEndpoint?size=5&'
@@ -35,7 +48,8 @@ type DispatchProps = {
 
 type Props = StateProps &
   DispatchProps & {
-    location: Object
+    location: Object,
+    muiTheme?: Theme
   }
 
 type State = {
@@ -44,6 +58,7 @@ type State = {
   pareceres: Array<?Parecer> // TODO Criar Reducer para essa prop
 }
 
+@muiThemable()
 class AlunoVisualizarRequerimentos extends React.Component<Props, State> {
   state = { currentPage: 0, tipos: [], pareceres: [] }
 
@@ -112,79 +127,105 @@ class AlunoVisualizarRequerimentos extends React.Component<Props, State> {
     const { requerimentos } = this.props.requerimentos.payload._embedded
     const { tipos, pareceres } = this.state
 
-    return (
-      <tbody>
-        {requerimentos.map((requerimento, i) => {
-          const tipo = tipos[i]
-          const parecer = pareceres[i]
-          const requerimentoId = getId(requerimento._links.self.href)
+    return requerimentos.map((requerimento, i) => {
+      const tipo = tipos[i] ? tipos[i].payload.tipo : ''
+      let parecer = pareceres[i]
+      const requerimentoId = getId(requerimento._links.self.href)
 
-          return (
-            <tr key={i}>
-              <td>
-                {typeof tipo !== 'undefined' && tipo !== null ? (
-                  <Link
-                    to={'/menu/aluno/requerimento/visualizar/' + requerimentoId}
-                  >
-                    {tipo.payload !== null &&
-                    typeof tipo.payload !== 'undefined'
-                      ? tipo.payload.tipo
-                      : ''}
-                  </Link>
-                ) : (
-                  <p>&nbsp;</p>
-                )}
-              </td>
-              <td>{requerimento.requerimento}</td>
-              {parecer ? (
-                <td>
-                  {parecer.deferido === true ? 'Deferido' : 'Não Deferido'}
-                </td>
-              ) : (
-                <td>Em Andamento</td>
-              )}
-              <td>
-                {parecer === null || typeof parecer === 'undefined' ? (
-                  <span>&nbsp;</span>
-                ) : (
-                  parecer.parecer
-                )}
-              </td>
-            </tr>
+      if (typeof parecer !== 'undefined' && parecer !== null) {
+        parecer =
+          parecer.deferido === true ? (
+            <FontIcon className="material-icons" style={{ color: green500 }}>
+              done
+            </FontIcon>
+          ) : (
+            <FontIcon className="material-icons" style={{ color: red500 }}>
+              not_interested
+            </FontIcon>
           )
-        })}
-      </tbody>
-    )
+      } else {
+        parecer = (
+          <FontIcon className="material-icons" style={{ color: gray500 }}>
+            settings_ethernet
+          </FontIcon>
+        )
+      }
+
+      return (
+        <TableRow key={i}>
+          <TableRowColumn>{tipo}</TableRowColumn>
+          <TableRowColumn>{requerimento.requerimento}</TableRowColumn>
+          <TableRowColumn>{requerimento.data}</TableRowColumn>
+          <TableRowColumn>{parecer}</TableRowColumn>
+        </TableRow>
+      )
+    })
   }
 
   render() {
     const requerimentosProp = this.props.requerimentos
     let data = <Carregando />
 
+    const primary2Color = this.props.muiTheme
+      ? this.props.muiTheme.palette.primary2Color
+      : 'black'
+
     if (requerimentosProp.fetched) {
       const { requerimentos } = requerimentosProp.payload._embedded
 
       if (requerimentos.length > 0) {
         data = (
-          <div className="panel-body table-responsive">
-            <table className="table table-hover">
-              <thead>
-                <tr>
-                  <th>Tipo</th>
-                  <th>Requerimento</th>
-                  <th>Status</th>
-                  <th>Parecer</th>
-                </tr>
-              </thead>
-              {this.renderLines()}
-            </table>
-            <Paginator
-              pageableEntity={this.props.requerimentos.payload}
-              currentPage={this.state.currentPage}
-              location={this.props.location}
-              api={requerimentoApi}
-              onClickHandler={this.getRequerimentoByPage}
-            />
+          <div>
+            <Table>
+              <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                <TableRow>
+                  <TableHeaderColumn
+                    style={{
+                      color: primary2Color
+                    }}
+                  >
+                    Tipo
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    style={{
+                      color: primary2Color
+                    }}
+                  >
+                    Requerimento
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    style={{
+                      color: primary2Color
+                    }}
+                  >
+                    Status
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    style={{
+                      color: primary2Color
+                    }}
+                  >
+                    Parecer
+                  </TableHeaderColumn>
+                </TableRow>
+              </TableHeader>
+              <TableBody displayRowCheckbox={false}>
+                {this.renderLines()}
+              </TableBody>
+              <TableFooter adjustForCheckbox={false}>
+                <TableRow>
+                  <TableRowColumn colSpan="5">
+                    <Paginator
+                      pageableEntity={this.props.requerimentos.payload}
+                      currentPage={this.state.currentPage}
+                      location={this.props.location}
+                      api={requerimentoApi}
+                      onClickHandler={this.getRequerimentoByPage}
+                    />
+                  </TableRowColumn>
+                </TableRow>
+              </TableFooter>
+            </Table>
           </div>
         )
       } else if (requerimentos.length === 0) {
