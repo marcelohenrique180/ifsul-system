@@ -1,34 +1,83 @@
-import React from 'react'
-import { Link } from 'react-router'
-import RouterHandler from '../RouterHandler'
-import AuthorizedContainer from '../AuthorizedContainer'
+// @flow
 
-class AlunoMenu extends AuthorizedContainer {
+import {
+  BottomNavigation,
+  BottomNavigationItem
+} from 'material-ui/BottomNavigation'
+
+import AuthorizedContainer from '../AuthorizedContainer'
+import FontIcon from 'material-ui/FontIcon'
+import React from 'react'
+import RouterHandler from '../RouterHandler'
+import autobind from 'autobind-decorator'
+import { browserHistory } from 'react-router'
+import { gray500 } from 'material-ui/styles/colors'
+import { indexRoute } from '../../util'
+
+const NavigationStyle = {
+  position: 'fixed',
+  bottom: 0
+}
+
+type States = {
+  selectedIndex: number,
+  history: Array<string>
+}
+
+class AlunoMenu extends AuthorizedContainer<States> {
+  state = {
+    selectedIndex: 0,
+    history: [
+      `${indexRoute()}/requerimento/solicitar`,
+      `${indexRoute()}/requerimento/visualizar`
+    ]
+  }
+
+  componentDidMount() {
+    this.locate(window.location.pathname)
+  }
+
+  @autobind
+  locate(path: string) {
+    this.setState({ selectedIndex: this.state.history.indexOf(path) })
+  }
+
+  @autobind
+  select(i: number) {
+    browserHistory.push(this.state.history[i])
+    this.setState({ selectedIndex: i })
+  }
+
   render() {
+    const addIcon = <FontIcon className="material-icons">add</FontIcon>
+    const menuIcon = <FontIcon className="material-icons">menu</FontIcon>
+    const codeIcon = <FontIcon className="material-icons">code</FontIcon>
+
     return (
       <div>
-        <div className="col-xs-10 col-sm-4 col-lg-2 col-xs-offset-1 col-sm-offset-0">
-          <div className="panel panel-default">
-            <div className="panel-heading">Requerimentos</div>
-            <div className="panel-body side-menu">
-              <ul className="list-group">
-                <li className="list-group-item side-item">
-                  <span className="glyphicon glyphicon glyphicon-plus" />
-                  <Link to="/menu/aluno/requerimento/solicitar">Solicitar</Link>
-                </li>
-                <li className="list-group-item side-item">
-                  <span className="glyphicon glyphicon glyphicon-search" />
-                  <Link to="/menu/aluno/requerimento/visualizar">
-                    Visualizar
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div className="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-sm-offset-1 col-md-offset-1 col-lg-offset-2">
+        <div style={{ maxWidth: 525, margin: '0 auto' }}>
           <RouterHandler {...this.props} />
         </div>
+        <BottomNavigation
+          selectedIndex={this.state.selectedIndex}
+          style={NavigationStyle}
+        >
+          <BottomNavigationItem
+            label="Novo"
+            icon={addIcon}
+            onClick={() => this.select(0)}
+          />
+          <BottomNavigationItem
+            label="Requerimentos"
+            icon={menuIcon}
+            onClick={() => this.select(1)}
+          />
+          <BottomNavigationItem
+            color={gray500}
+            label="Em Progresso"
+            icon={codeIcon}
+          />
+        </BottomNavigation>
       </div>
     )
   }

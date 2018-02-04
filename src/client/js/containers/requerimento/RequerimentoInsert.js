@@ -4,6 +4,7 @@ import * as React from 'react'
 
 import type { Action, Dispatch } from '../../actions/types/index'
 import type { Aluno, Requerimento, Tipo } from '../../reducers/types/index'
+import { areFieldsEmpty, indexRoute } from '../../util'
 
 import MenuItem from 'material-ui/MenuItem'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -11,8 +12,8 @@ import SelectField from 'material-ui/SelectField'
 import type { SendRequerimento } from '../../actions/requerimento'
 import Subheader from 'material-ui/Subheader'
 import TextField from 'material-ui/TextField'
-import { areFieldsEmpty } from '../../util'
 import autobind from 'autobind-decorator'
+import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { sendRequerimento } from '../../actions/requerimento'
 
@@ -57,6 +58,7 @@ class AlunoRequerimento extends React.Component<Props, State> {
         .sendRequerimento({ tipo, requerimento, justificativa, aluno })
         .then(() => this.setState({ enviado: true }))
     }
+    browserHistory.push(`${indexRoute()}/requerimento/visualizar`)
   }
 
   @autobind

@@ -24,6 +24,7 @@ import {
   TableRow,
   TableRowColumn
 } from 'material-ui/Table'
+import { getId, indexRoute } from '../../util'
 import { gray500, green500, red500 } from 'material-ui/styles/colors'
 
 import Carregando from '../../components/Carregando'
@@ -32,9 +33,9 @@ import Paginator from '../../components/Paginator'
 import Subheader from 'material-ui/Subheader'
 import type { Theme } from '../../components/App'
 import autobind from 'autobind-decorator'
+import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import { getAluno } from '../../actions/aluno'
-import { getId } from '../../util'
 import { getRequerimentoByPage } from '../../actions/requerimento'
 import muiThemable from 'material-ui/styles/muiThemeable'
 import { requestTipos } from '../../actions/tipo'
@@ -75,6 +76,17 @@ class CordVisualizarRequerimentos extends React.Component<Props, State> {
     this.props
       .getRequerimentoByPage(requerimentosAbertosApi + 'page=0')
       .then(this.requestTableContent)
+  }
+
+  @autobind
+  onRowClick(rowNumber) {
+    const { requerimentos } = this.props.requerimentos.payload._embedded
+
+    browserHistory.push(
+      `${indexRoute()}/requerimento/${getId(
+        requerimentos[rowNumber]._links.self.href
+      )}`
+    )
   }
 
   @autobind
@@ -219,7 +231,7 @@ class CordVisualizarRequerimentos extends React.Component<Props, State> {
         </div>
         {renderTable ? (
           <div>
-            <Table>
+            <Table onCellClick={this.onRowClick}>
               <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                 <TableRow>
                   <TableHeaderColumn
