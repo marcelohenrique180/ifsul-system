@@ -13,7 +13,9 @@ import Subheader from 'material-ui/Subheader'
 import TextField from 'material-ui/TextField'
 import { areFieldsEmpty } from '../../util'
 import autobind from 'autobind-decorator'
+import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
+import { indexRoute } from '../../util'
 import { sendRequerimento } from '../../actions/requerimento'
 
 type DispatchProps = {
@@ -57,6 +59,7 @@ class AlunoRequerimento extends React.Component<Props, State> {
         .sendRequerimento({ tipo, requerimento, justificativa, aluno })
         .then(() => this.setState({ enviado: true }))
     }
+    browserHistory.push(`${indexRoute()}/requerimento/visualizar`)
   }
 
   @autobind
