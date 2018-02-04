@@ -14,6 +14,7 @@ import type {
 import Carregando from '../../components/Carregando'
 import { Link } from 'react-router'
 import Paginator from '../../components/Paginator'
+import Subheader from 'material-ui/Subheader'
 import autobind from 'autobind-decorator'
 import { callApi } from '../../actions/middleware/api'
 import { connect } from 'react-redux'
@@ -197,10 +198,8 @@ class AlunoVisualizarRequerimentos extends React.Component<Props, State> {
 
     return (
       <div>
-        <div className="panel panel-default">
-          <div className="panel-heading">Meus Requerimentos</div>
-          {data}
-        </div>
+        <Subheader>Meus Requerimentos</Subheader>
+        {data}
       </div>
     )
   }
